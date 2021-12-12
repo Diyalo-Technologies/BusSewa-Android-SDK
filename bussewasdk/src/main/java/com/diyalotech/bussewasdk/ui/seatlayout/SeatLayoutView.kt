@@ -1,6 +1,7 @@
 package com.diyalotech.bussewasdk.ui.seatlayout
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -11,8 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -74,24 +78,21 @@ fun Seat(
         }
 
         var tint = Color.Transparent
-        var textColor = Color.Black
+        val textColor = MaterialTheme.colors.onSurface
 
-        if (bookingStatus == BookingStatus.AVAILABLE) {
+        tint = if (bookingStatus == BookingStatus.AVAILABLE) {
             if (selected) {
-                tint = MaterialTheme.colors.primary
-                textColor = MaterialTheme.colors.onPrimary
+                MaterialTheme.colors.primary
             } else {
-                tint = MaterialTheme.colors.primary.copy(alpha = 0.6f)
-                textColor = MaterialTheme.colors.onSurface.copy(alpha = 0.85f)
+                MaterialTheme.colors.primary.copy(alpha = 0.6f)
             }
         } else {
-            tint = MaterialTheme.colors.primary.copy(alpha = 0.6f)
-            textColor = MaterialTheme.colors.onPrimary
+            MaterialTheme.colors.primary.copy(alpha = 0.5f)
         }
 
-        Box(
+        Column(
             modifier = Modifier
-                .size(56.dp, 56.dp)
+                .size(52.dp, 66.dp)
                 .clip(shape = Shapes.small)
                 .clickable(clickable) {
                     onClick(displayName)
@@ -101,7 +102,8 @@ fun Seat(
                 Icon(
                     painter = painterResource(id = resId),
                     contentDescription = "Booked",
-                    tint = tint
+                    tint = tint,
+                    modifier = Modifier.size(52.dp, 52.dp)
                 )
                 Text(
                     text = displayName,
@@ -110,14 +112,14 @@ fun Seat(
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .fillMaxWidth(0.55f)
-                        .absoluteOffset(y = 10.dp),
+                        .fillMaxWidth()
+                        .offset(y = (-12).dp),
                 )
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

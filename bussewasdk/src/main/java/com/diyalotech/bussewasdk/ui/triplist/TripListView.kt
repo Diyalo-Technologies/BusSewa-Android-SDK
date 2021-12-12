@@ -1,5 +1,6 @@
 package com.diyalotech.bussewasdk.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.network.Trip
 import com.diyalotech.bussewasdk.network.singleTrip
@@ -27,6 +29,7 @@ import com.diyalotech.bussewasdk.ui.theme.Shapes
 import com.diyalotech.bussewasdk.ui.triplist.DateChangeView
 import java.util.*
 
+@ExperimentalAnimationApi
 @Composable
 fun TripListView(tripList: List<Trip>) {
     Column {
@@ -109,7 +112,13 @@ fun TripView(trip: Trip) {
             contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp)
         ) {
             items(trip.amenities, { it }) {
-                Chip(it.trim(), modifier = Modifier.padding(end = 4.dp))
+                Chip(Modifier.padding(end = 4.dp), content = {
+                    Text(
+                        it.trim(),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colors.onSurface.copy(0.55f)
+                    )
+                })
             }
         }
     }
@@ -135,6 +144,7 @@ fun DefaultPreview2() {
     }
 }*/
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
 fun TripListPreview() {
