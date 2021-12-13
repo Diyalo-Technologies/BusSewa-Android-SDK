@@ -128,7 +128,7 @@ fun DefaultPreview() {
     val parsedSeatLayout = Gson().fromJson(testString, SeatLayoutDTO::class.java)
     println(parsedSeatLayout)
 
-    BusSewaSDKTheme(darkTheme = false) {
+    BusSewaSDKTheme {
 
         Surface {
 
@@ -154,7 +154,7 @@ fun DefaultPreview2() {
     val parsedSeatLayout = Gson().fromJson(testString, SeatLayoutDTO::class.java)
     println(parsedSeatLayout)
 
-    BusSewaSDKTheme(darkTheme = true) {
+    BusSewaSDKTheme {
 
         Surface {
 

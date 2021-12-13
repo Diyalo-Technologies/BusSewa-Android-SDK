@@ -4,12 +4,20 @@
 
     <application>
         <activity
+            android:name=".ui.locationlist.LocationListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.triplist.TripListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BusSewaSDK.NoActionBar" />
+        <activity
             android:name=".BusSewaSDKActivity"
             android:exported="true"
             android:label="@string/title_activity_bus_sewa_sdkactivity"
-            android:theme="@style/Theme.BusSewaSDK.NoActionBar" >
+            android:theme="@style/Theme.BusSewaSDK.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.intent.action.LaunchSDK" />
             </intent-filter>
         </activity>

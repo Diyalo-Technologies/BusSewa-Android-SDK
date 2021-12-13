@@ -5,7 +5,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.LocalDate
 
-data class SearchTripModel(val source: String, val destination: String, val date: LocalDate?)
+data class SearchTripModel(val source: String, val destination: String, val date: LocalDate?) {
+    fun swapLocation() {
+        TODO("Not yet implemented")
+    }
+}
 
 class SearchTripViewModel : ViewModel() {
 
@@ -25,6 +29,14 @@ class SearchTripViewModel : ViewModel() {
 
     fun setSearchDate(date: LocalDate) {
         _searchTripState.value = searchTripState.value.copy(date = date)
+    }
+
+    fun swapLocation() {
+        val source = searchTripState.value.source
+        _searchTripState.value = searchTripState.value.copy(
+            source = searchTripState.value.destination,
+            destination = source
+        )
     }
 
 }

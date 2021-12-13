@@ -44,7 +44,7 @@ fun Chip(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    BusSewaSDKTheme(darkTheme = true) {
+    BusSewaSDKTheme {
         Surface {
             Chip(onClick = {}) {
                 Text("test")

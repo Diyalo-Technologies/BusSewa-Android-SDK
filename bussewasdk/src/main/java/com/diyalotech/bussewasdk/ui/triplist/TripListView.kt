@@ -1,5 +1,6 @@
 package com.diyalotech.bussewasdk.ui
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -145,10 +146,10 @@ fun DefaultPreview2() {
 }*/
 
 @ExperimentalAnimationApi
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun TripListPreview() {
-    BusSewaSDKTheme(darkTheme = true) {
+    BusSewaSDKTheme {
         Surface {
             TripListView(tripList())
         }

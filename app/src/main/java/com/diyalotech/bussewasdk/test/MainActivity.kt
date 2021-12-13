@@ -10,7 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.diyalotech.bussewasdk.BusSewaSDKActivity
+import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_CLIENT_INFO
+import com.diyalotech.bussewasdk.sdkbuilders.BusSewaClient
 import com.diyalotech.bussewasdk.test.ui.theme.BusSewaSDKTheme
+import com.diyalotech.bussewasdk.ui.locationlist.LocationListActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +27,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        startActivity(Intent(this, BusSewaSDKActivity::class.java))
+        val intent = Intent(this, LocationListActivity::class.java)
+        val client = BusSewaClient(
+            clientId = ""
+        )
+        intent.putExtra(BUS_SDK_CLIENT_INFO, client)
+        startActivity(intent)
     }
 }
 
