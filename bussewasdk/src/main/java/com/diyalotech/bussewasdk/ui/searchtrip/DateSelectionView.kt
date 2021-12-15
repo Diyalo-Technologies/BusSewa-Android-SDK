@@ -83,15 +83,7 @@ fun DateSelectionView(
 fun DateSelectionPreview() {
     BusSewaSDKTheme {
         Surface {
-            SearchTripView(
-                SearchTripModel(
-                    "Ktm",
-                    "Pokhara",
-                    localDateNow()
-                ), {
-
-                }) {
-            }
+            DateSelectionView(label = "Date", date = "", onDateSelected = {})
         }
     }
 }

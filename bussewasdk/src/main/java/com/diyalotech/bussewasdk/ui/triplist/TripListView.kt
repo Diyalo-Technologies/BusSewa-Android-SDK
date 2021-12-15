@@ -1,6 +1,7 @@
-package com.diyalotech.bussewasdk.ui
+package com.diyalotech.bussewasdk.ui.triplist
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -21,28 +23,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.R
-import com.diyalotech.bussewasdk.network.Trip
-import com.diyalotech.bussewasdk.network.singleTrip
-import com.diyalotech.bussewasdk.network.tripList
 import com.diyalotech.bussewasdk.ui.sharedcomposables.Chip
+import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
-import com.diyalotech.bussewasdk.ui.triplist.DateChangeView
 import java.util.*
 
-@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TripListView(tripList: List<Trip>) {
+fun TripListView(tripListViewModel: TripListViewModel) {
+    val uiState = tripListViewModel.uiState.collectAsState().value
     Column {
         DateChangeView(
             Calendar.getInstance(),
         )
-        LazyColumn(contentPadding = PaddingValues(top = 12.dp)) {
-            items(tripList, { it.id }) {
-                TripView(trip = it)
-                Divider(modifier = Modifier.padding(bottom = 12.dp))
+
+        Crossfade(targetState = uiState) { it ->
+            when (it) {
+                TripListState.Loading -> {
+                    LoadingView()
+                }
+                is TripListState.Success -> {
+                    LazyColumn(contentPadding = PaddingValues(top = 12.dp)) {
+                        items(it.tripList, { trip -> trip.id }) {
+                            TripView(trip = it)
+                            Divider(modifier = Modifier.padding(bottom = 12.dp))
+                        }
+                    }
+                }
             }
         }
+
     }
 }
 
@@ -61,7 +72,7 @@ fun TripView(trip: Trip) {
             ) {
                 Row {
                     Text(
-                        text = trip.operator_name,
+                        text = trip.operatorName,
                         style = MaterialTheme.typography.subtitle1,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -75,7 +86,7 @@ fun TripView(trip: Trip) {
                     )
                 }
                 Text(
-                    text = trip.busType.trim(),
+                    text = trip.busType,
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.onSurface.copy(0.55f)
                 )
@@ -88,7 +99,7 @@ fun TripView(trip: Trip) {
 
                     Text(
                         text = buildAnnotatedString {
-                            append("${trip.availableSeat()}")
+                            append("${trip.availableSeat}")
                             withStyle(SpanStyle(MaterialTheme.colors.onSurface.copy(0.55f))) {
                                 append(" seats available")
                             }
@@ -100,7 +111,7 @@ fun TripView(trip: Trip) {
                 }
 
                 LinearProgressIndicator(
-                    progress = trip.availablePercent(),
+                    progress = trip.availablePercent,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(Shapes.small)
@@ -151,7 +162,7 @@ fun DefaultPreview2() {
 fun TripListPreview() {
     BusSewaSDKTheme {
         Surface {
-            TripListView(tripList())
+            //TripListView()
         }
     }
 }

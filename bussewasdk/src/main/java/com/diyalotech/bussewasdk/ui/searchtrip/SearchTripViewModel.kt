@@ -1,43 +1,40 @@
 package com.diyalotech.bussewasdk.ui.searchtrip
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.diyalotech.bussewasdk.repo.SearchParamRepository
+import com.diyalotech.bussewasdk.ui.models.LocationType
+import com.diyalotech.bussewasdk.utils.localDateNow
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import javax.inject.Inject
 
-data class SearchTripModel(val source: String, val destination: String, val date: LocalDate?) {
-    fun swapLocation() {
-        TODO("Not yet implemented")
-    }
-}
+data class SearchTripModel(val source: String, val destination: String, val date: LocalDate)
 
-class SearchTripViewModel : ViewModel() {
+@HiltViewModel
+class SearchTripViewModel @Inject constructor(
+    private val searchParamRepository: SearchParamRepository
+) : ViewModel() {
 
-    private val _searchTripState: MutableStateFlow<SearchTripModel> = MutableStateFlow(
-        SearchTripModel("", "", null)
-    )
-    val searchTripState: StateFlow<SearchTripModel>
-        get() = _searchTripState
-
-    fun setSourceLocation(location: String) {
-        _searchTripState.value = searchTripState.value.copy(source = location)
-    }
-
-    fun setDestinationLocation(location: String) {
-        _searchTripState.value = searchTripState.value.copy(destination = location)
-    }
+    val searchTripState = searchParamRepository.searchTripStore
 
     fun setSearchDate(date: LocalDate) {
-        _searchTripState.value = searchTripState.value.copy(date = date)
+        searchParamRepository.setSearchDate(date)
     }
 
     fun swapLocation() {
-        val source = searchTripState.value.source
-        _searchTripState.value = searchTripState.value.copy(
-            source = searchTripState.value.destination,
-            destination = source
-        )
+        searchParamRepository.swapLocation()
     }
+
+    fun setLocationSelectionMode(locationSelectionMode: LocationType) {
+        viewModelScope.launch {
+            searchParamRepository.setLocationSelectionMode(locationSelectionMode)
+        }
+    }
+
 
 }
 

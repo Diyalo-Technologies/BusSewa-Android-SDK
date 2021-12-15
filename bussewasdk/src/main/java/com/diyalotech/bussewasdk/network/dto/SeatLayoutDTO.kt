@@ -1,4 +1,4 @@
-package com.diyalotech.bussewasdk.network
+package com.diyalotech.bussewasdk.network.dto
 
 import com.diyalotech.bussewasdk.ui.models.BookingStatus
 

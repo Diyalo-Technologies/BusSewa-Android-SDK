@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val intent = Intent(this, LocationListActivity::class.java)
+        val intent = Intent(this, BusSewaSDKActivity::class.java)
         val client = BusSewaClient(
             clientId = ""
         )

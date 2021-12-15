@@ -23,18 +23,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
+import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun SearchBarView(text: String, onValueChanged: (String) -> Unit, onBackPressed: () -> Unit) {
-    Row {
+    Row(Modifier.statusBarsPadding()) {
         Icon(
             Icons.Outlined.ArrowBack,
             "",
             modifier = Modifier
-                .padding(16.dp)
+                .padding(8.dp)
+                .clip(CircleShape)
                 .clickable {
                     onBackPressed()
                 }
+                .padding(8.dp)
+
         )
 
         Box(
@@ -47,13 +51,12 @@ fun SearchBarView(text: String, onValueChanged: (String) -> Unit, onBackPressed:
                 onValueChanged,
                 Modifier
                     .fillMaxWidth(),
-                textStyle = MaterialTheme.typography.body2
+                textStyle = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onSurface)
             )
             if (text.isEmpty())
                 Text(
                     "Search locations",
                     color = MaterialTheme.colors.onSurface.copy(0.5f),
-                    fontSize = 14.sp
                 )
         }
 
@@ -76,7 +79,7 @@ fun SearchBarView(text: String, onValueChanged: (String) -> Unit, onBackPressed:
 fun SearchBarPreview() {
     BusSewaSDKTheme {
         Surface {
-            SearchBarView("",{}) {
+            SearchBarView("", {}) {
 
             }
         }

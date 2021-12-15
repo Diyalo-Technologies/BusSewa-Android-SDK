@@ -1,7 +1,6 @@
 package com.diyalotech.bussewasdk.ui.seatlayout
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -9,20 +8,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.R
-import com.diyalotech.bussewasdk.network.SeatLayout
-import com.diyalotech.bussewasdk.network.SeatLayoutDTO
+import com.diyalotech.bussewasdk.network.dto.SeatLayout
+import com.diyalotech.bussewasdk.network.dto.SeatLayoutDTO
 import com.diyalotech.bussewasdk.ui.models.BookingStatus
 import com.diyalotech.bussewasdk.ui.sharedcomposables.dpToSp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme

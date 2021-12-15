@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.diyalotech.bussewasdk.ui.models.LocationType
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.utils.localDateNow
 import kotlinx.datetime.LocalDate
@@ -27,6 +28,8 @@ fun SearchTripView(
     state: SearchTripModel,
     onDateSelected: (LocalDate?) -> Unit,
     onSwap: () -> Unit,
+    onLocationClicked: (LocationType) -> Unit,
+    onSearchClicked: () -> Unit
 ) {
 
     var shouldRotate by remember { mutableStateOf(false) }
@@ -47,7 +50,7 @@ fun SearchTripView(
                     "Source",
                     Icons.Outlined.MyLocation
                 ) {
-
+                    onLocationClicked(LocationType.SOURCE)
                 }
                 Divider(Modifier.padding(vertical = 8.dp))
                 LocationView(
@@ -55,7 +58,7 @@ fun SearchTripView(
                     "Destination",
                     Icons.Outlined.Place
                 ) {
-
+                    onLocationClicked(LocationType.DESTINATION)
                 }
             }
 
@@ -88,7 +91,7 @@ fun SearchTripView(
         }
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onSearchClicked() },
             modifier = Modifier
                 .padding(16.dp)
                 .widthIn(320.dp, 480.dp)
@@ -110,7 +113,7 @@ fun DateChangePreview() {
                 "Ktm",
                 "Pokhara",
                 localDateNow()
-            ), {}) {
+            ), {}, {}, {}) {
         }
     }
 }
@@ -125,7 +128,7 @@ fun DateChangePreview2() {
                     "Ktm",
                     "Pokhara",
                     localDateNow()
-                ), {}) {
+                ), {}, {}, {}) {
             }
         }
     }

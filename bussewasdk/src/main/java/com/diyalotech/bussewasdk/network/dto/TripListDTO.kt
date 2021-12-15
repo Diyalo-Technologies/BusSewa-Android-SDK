@@ -1,45 +1,61 @@
-package com.diyalotech.bussewasdk.network
+package com.diyalotech.bussewasdk.network.dto
 
+import com.diyalotech.bussewasdk.ui.triplist.Trip
 import com.google.gson.Gson
 
-data class Trip(
+data class TripListDTO(
+    val status: Int,
+    val trips: List<TripDTO>?
+)
+
+data class TripDTO(
     val amenities: List<String>,
+    val availableSeat: Int,
     val busNo: String,
     val busType: String,
     val date: String,
     val dateEn: String,
     val departureTime: String,
-    val detailImage: List<String>,
-    val faceImage: String,
     val id: String,
-    val imgList: List<String>,
+    val imgList: List<Any>,
     val inputTypeCode: Int,
-    val journeyHour: Int,
     val lockStatus: Boolean,
     val multiPrice: Boolean,
-    val noOfColumn: Int,
     val operator: String,
     val operator_name: String,
+    val passengerDetail: List<Any>,
     val rating: Double,
-    val seatLayout: List<SeatLayout>,
     val shift: String,
-    val ticketPrice: Double
-) {
-    fun availableSeat() = seatLayout.count { it.bookingStatus.equals("no", true) }
-    fun totalSeats() = seatLayout.count { !it.bookingStatus.equals("na", true) }
-    fun availablePercent():Float = availableSeat()/totalSeats().toFloat()
-}
-
-data class TripListDTO(
-    val status: Int,
-    val trips: List<Trip>
+    val ticketPrice: Double,
+    val totalSeat: Int
 )
 
-//for test
-fun tripList() = Gson().fromJson(testTripListString, TripListDTO::class.java).trips
-fun singleTrip() = Gson().fromJson(testTripString, Trip::class.java)
+//
+data class TripListRequestDTO(
+    val from: String,
+    val to: String,
+    val date: String
+)
 
-val testTripString="""{
+//map to ui model
+fun TripListDTO.getTripList(): List<Trip> {
+    return trips?.map {
+        Trip(
+            it.id,
+            it.amenities,
+            it.operator_name,
+            it.departureTime,
+            it.busType,
+            it.ticketPrice,
+            it.availableSeat,
+            (it.availableSeat / it.totalSeat) * 100f
+        )
+    } ?: emptyList()
+}
+
+fun singleTrip() = Gson().fromJson(testTripString, TripDTO::class.java)
+
+val testTripString = """{
             "id": "NTgxNzUzOjU1NjY5MDk6MA==",
             "operator": "Namaste Kapilvastug Air-Suspension A/C Deluxe",
             "date": "2078-Mangsir-23",
