@@ -8,8 +8,8 @@ import com.diyalotech.bussewasdk.utils.localDateNow
 import kotlinx.datetime.LocalDate
 
 class SearchTripStore {
-    private var source by mutableStateOf("")
-    private var destination by mutableStateOf("")
+    private var source by mutableStateOf("Kathmandu")
+    private var destination by mutableStateOf("Pokhara")
     private var date by mutableStateOf(localDateNow())
     private var selectionMode by mutableStateOf(LocationType.SOURCE)
 

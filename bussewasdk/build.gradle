@@ -83,6 +83,7 @@ dependencies {
     //hilt
     implementation "com.google.dagger:hilt-android:2.39"
     kapt "com.google.dagger:hilt-android-compiler:2.38.1"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
 
     //accompanist libs
     implementation "com.google.accompanist:accompanist-insets:0.21.4-beta"

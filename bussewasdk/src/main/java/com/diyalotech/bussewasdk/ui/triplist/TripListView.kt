@@ -23,19 +23,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.R
+import com.diyalotech.bussewasdk.repo.SearchParamRepository
+import com.diyalotech.bussewasdk.repo.TripRepository
 import com.diyalotech.bussewasdk.ui.sharedcomposables.Chip
 import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
+import com.google.accompanist.insets.statusBarsPadding
 import java.util.*
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TripListView(tripListViewModel: TripListViewModel) {
     val uiState = tripListViewModel.uiState.collectAsState().value
-    Column {
+    Column(Modifier.statusBarsPadding()) {
+
         DateChangeView(
-            Calendar.getInstance(),
+            tripListViewModel.searchTripState.getSearchTripModel().date,
         )
 
         Crossfade(targetState = uiState) { it ->
@@ -53,7 +57,6 @@ fun TripListView(tripListViewModel: TripListViewModel) {
                 }
             }
         }
-
     }
 }
 
@@ -132,37 +135,6 @@ fun TripView(trip: Trip) {
                     )
                 })
             }
-        }
-    }
-}
-/*
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    BusSewaSDKTheme(darkTheme = true) {
-        Surface {
-            TripView(singleTrip())
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview2() {
-    BusSewaSDKTheme(darkTheme = false) {
-        Surface {
-            TripView(singleTrip())
-        }
-    }
-}*/
-
-@ExperimentalAnimationApi
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun TripListPreview() {
-    BusSewaSDKTheme {
-        Surface {
-            //TripListView()
         }
     }
 }

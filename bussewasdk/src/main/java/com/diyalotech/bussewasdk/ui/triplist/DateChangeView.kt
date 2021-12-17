@@ -14,13 +14,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
+import com.diyalotech.bussewasdk.utils.localDateNow
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import java.util.*
 
 @ExperimentalAnimationApi
 @Composable
-fun DateChangeView(date: Calendar) {
+fun DateChangeView(date: LocalDate) {
     var dateRem by remember { mutableStateOf(date) }
-    val today = Calendar.getInstance()
+    val today = localDateNow()
     Card {
         Row(modifier = Modifier.height(48.dp)) {
             Box(
@@ -28,9 +33,7 @@ fun DateChangeView(date: Calendar) {
                     .width(48.dp)
                     .fillMaxHeight()
                     .clickable(enabled = dateRem >= today) {
-                        val temp: Calendar = dateRem.clone() as Calendar
-                        temp.add(Calendar.DAY_OF_MONTH, -1)
-                        dateRem = temp
+                        dateRem -= DatePeriod(days = 1)
                     }
             ) {
                 if (dateRem >= today) {
@@ -65,11 +68,9 @@ fun DateChangeView(date: Calendar) {
                 }
             ) { targetDate ->
                 Text(
-                    text = "${targetDate.get(Calendar.DAY_OF_MONTH)}-${targetDate.get(Calendar.MONTH)}-${
-                        targetDate.get(
-                            Calendar.YEAR
-                        )
-                    }",
+                    text = "${targetDate.year}-${
+                        targetDate.month.name.substring(0, 3)
+                    }-${targetDate.dayOfMonth}",
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.primary
                 )
@@ -79,9 +80,7 @@ fun DateChangeView(date: Calendar) {
                     .width(48.dp)
                     .fillMaxHeight()
                     .clickable {
-                        val temp: Calendar = dateRem.clone() as Calendar
-                        temp.add(Calendar.DAY_OF_MONTH, 1)
-                        dateRem = temp
+                        dateRem += DatePeriod(days = 1)
                     }
             ) {
                 Icon(
@@ -103,7 +102,7 @@ fun DateChangePreview() {
         Surface {
             val calendar = Calendar.getInstance()
             calendar.set(2021, 11, 9)
-            DateChangeView(calendar)
+            DateChangeView(localDateNow())
         }
     }
 }

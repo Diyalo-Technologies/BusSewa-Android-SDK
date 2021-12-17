@@ -1,42 +1,63 @@
 package com.diyalotech.bussewasdk.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.diyalotech.bussewasdk.ui.models.LocationType
+import com.diyalotech.bussewasdk.ui.calendar.DatePicker
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripView
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripViewModel
 import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
-import kotlinx.datetime.LocalDate
+import com.diyalotech.bussewasdk.R
 
 
 @Composable
 fun HomeView(
     searchTripViewModel: SearchTripViewModel,
-    onDateSelected: (LocalDate?) -> Unit,
-    onLocationClicked: (LocationType) -> Unit,
-    onSearchClicked: () -> Unit
+    onSearchClicked: () -> Unit,
+    onLocationClicked: () -> Unit
 ) {
-    BusSewaSDKTheme {
+    val searchTripModel = searchTripViewModel.searchTripState.getSearchTripModel()
+    var showDatePicker: Boolean by remember {
+        mutableStateOf(false)
+    }
 
-        Column {
-            val searchTripModel = searchTripViewModel.searchTripState.getSearchTripModel()
-            TopAppBar(
-                title = "BusSewa - Find trips",
-                showBack = true
-            ) {
+    Column(Modifier.fillMaxSize()) {
+        TopAppBar(
+            title = stringResource(R.string.find_trips_title),
+            showBack = true
+        ) {
 
-            }
-            SearchTripView(
-                searchTripModel,
-                onDateSelected,
-                { searchTripViewModel.swapLocation() },
-                onLocationClicked,
-                onSearchClicked
-            )
         }
+        SearchTripView(
+            state = searchTripModel,
+            onSearchClicked = onSearchClicked,
+            onSwap = {
+                searchTripViewModel.swapLocation()
+            },
+            onDateSelected = {
+                if (it == null) {
+                    showDatePicker = true
+                } else {
+                    searchTripViewModel.setSearchDate(it)
+                }
+            },
+            onLocationClicked = {
+                searchTripViewModel.setLocationSelectionMode(it)
+                onLocationClicked()
+            }
+        )
+    }
 
+    if (showDatePicker) {
+        DatePicker(onDateSelected = {
+            searchTripViewModel.setSearchDate(it)
+        }) {
+            showDatePicker = false
+        }
     }
 }
 

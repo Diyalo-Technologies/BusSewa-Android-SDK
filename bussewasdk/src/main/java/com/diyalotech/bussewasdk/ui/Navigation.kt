@@ -5,16 +5,26 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 
 object NavDestinations {
     const val HOME_ROUTE = "home"
+    const val SEARCH_LOCATION_ROUTE = "search_location"
     const val TRIP_LIST_ROUTE = "trip_list"
-    const val SEAT_LAYOUT = "seat_layout"
+    const val SEAT_LAYOUT_ROUTE = "seat_layout"
 }
 
-class Navigation(navController: NavController) {
+class BusNavigationActions(navController: NavController) {
     val navigateToHome: () -> Unit = {
         navController.navigate(NavDestinations.HOME_ROUTE) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    val navigateToSearchLocation: () -> Unit = {
+        println("Navigating")
+        navController.navigate(NavDestinations.SEARCH_LOCATION_ROUTE) {
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
             launchSingleTop = true
             restoreState = true
         }

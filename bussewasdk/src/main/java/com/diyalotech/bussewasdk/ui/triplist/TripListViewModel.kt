@@ -38,6 +38,8 @@ class TripListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TripListState>(TripListState.Loading)
     val uiState: StateFlow<TripListState> = _uiState
 
+    val searchTripState = searchParamRepository.searchTripStore
+
     init {
         findTrips()
     }

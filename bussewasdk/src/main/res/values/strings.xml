@@ -1,3 +1,7 @@
 <resources>
     <string name="title_activity_bus_sewa_sdkactivity">BusSewaSDKActivity</string>
+    <string name="cancel">Cancel</string>
+    <string name="find_trips_title">BusSewa - Find trips</string>
+    <string name="okay">Ok</string>
+    <string name="departure_date">Departure Date</string>
 </resources>
