@@ -1,13 +1,19 @@
 package com.diyalotech.bussewasdk.ui.seatlayout
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
@@ -24,27 +30,49 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
 import com.google.gson.Gson
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SeatLayoutView(noOfColumn: Int, seatLayout: List<SeatLayout>, selectedSeats: List<String>) {
+fun SeatLayoutView(
+    noOfColumn: Int,
+    seatLayout: List<SeatLayout>,
+    selectedSeats: List<SeatLayout>,
+    paddingValues: PaddingValues = PaddingValues(),
+    onSeatClicked: (String) -> Unit = {},
+) {
 
     val layoutChunked = seatLayout.chunked(noOfColumn)
-    var selected by remember {
-        mutableStateOf<List<String>>(listOf())
-    }
 
-    for (row in layoutChunked) {
-        Row {
-            for (seat in row) {
-                Seat(
-                    seat.bookingStatusE(),
-                    selected.contains(seat.displayName),
-                    seat.displayName
-                ) {
-                    println("clicked: $it, $selected")
-                    selected = if (selected.contains(it)) {
-                        (selected - it)
-                    } else {
-                        (selected + it)
+    /*LazyVerticalGrid(
+        cells = GridCells.Fixed(noOfColumn),
+        horizontalArrangement = Arrangement.spacedBy(0.dp),
+        contentPadding = paddingValues
+    ) {
+        items(seatLayout) { seat ->
+            Seat(
+                seat.bookingStatusE(),
+                selectedSeats.any { it.displayName.equals(seat.displayName, true) },
+                seat.displayName,
+                onSeatClicked
+            )
+        }
+    }*/
+
+
+    LazyColumn(
+        Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = paddingValues
+    ) {
+        for (row in layoutChunked) {
+            item {
+                Row {
+                    for (seat in row) {
+                        Seat(
+                            seat.bookingStatusE(),
+                            selectedSeats.any { it.displayName.equals(seat.displayName, true) },
+                            seat.displayName,
+                            onSeatClicked
+                        )
                     }
                 }
             }
@@ -131,7 +159,7 @@ fun DefaultPreview() {
                 SeatLayoutView(
                     parsedSeatLayout.noOfColumn,
                     parsedSeatLayout.seatLayout,
-                    listOf("B12")
+                    listOf(SeatLayout("", "no", ""))
                 )
                 /*Seat(BookingStatus.AVAILABLE, isSelected = true, displayName = "B11") {
 

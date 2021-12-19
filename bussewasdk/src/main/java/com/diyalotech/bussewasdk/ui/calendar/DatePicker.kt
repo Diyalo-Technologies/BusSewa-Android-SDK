@@ -27,7 +27,6 @@ fun DatePicker(
 ) {
     val selDate = remember { mutableStateOf(localDateNow()) }
 
-    //todo - add strings to resource after POC
     Dialog(onDismissRequest = { onDismissRequest() }, properties = DialogProperties()) {
         Column(
             modifier = Modifier
@@ -55,11 +54,13 @@ fun DatePicker(
 
                 Spacer(modifier = Modifier.size(24.dp))
 
-                /*Text(
-                    text = selDate.value.format(DateTimeFormatter.ofPattern("MMM d, YYYY")),
+                Text(
+                    text = "${selDate.value.year}-${
+                        selDate.value.month.name.substring(0, 3)
+                    }-${selDate.value.dayOfMonth}",
                     style = MaterialTheme.typography.h4,
                     color = MaterialTheme.colors.onPrimary
-                )*/
+                )
 
                 Spacer(modifier = Modifier.size(16.dp))
             }
@@ -78,7 +79,6 @@ fun DatePicker(
                 TextButton(
                     onClick = onDismissRequest
                 ) {
-                    //TODO - hardcode string
                     Text(
                         text = stringResource(id = R.string.cancel).uppercase(),
                         style = MaterialTheme.typography.button,
@@ -92,7 +92,6 @@ fun DatePicker(
                         onDismissRequest()
                     }
                 ) {
-                    //TODO - hardcode string
                     Text(
                         text = stringResource(id = R.string.okay).uppercase(),
                         style = MaterialTheme.typography.button,

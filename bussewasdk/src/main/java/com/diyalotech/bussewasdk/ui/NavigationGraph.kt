@@ -10,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import com.diyalotech.bussewasdk.ui.locationlist.SearchLocationView
 import com.diyalotech.bussewasdk.ui.locationlist.SearchLocationViewModel
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripViewModel
+import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatsView
+import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatsViewModel
 import com.diyalotech.bussewasdk.ui.triplist.TripListView
 import com.diyalotech.bussewasdk.ui.triplist.TripListViewModel
 
@@ -44,12 +46,23 @@ fun NavigationGraph(
 
         composable(NavDestinations.TRIP_LIST_ROUTE) {
             val tripLisViewModel: TripListViewModel = hiltViewModel()
-            TripListView(tripListViewModel = tripLisViewModel)
+            TripListView(
+                tripListViewModel = tripLisViewModel,
+                onBackPressed = { navController.popBackStack() },
+                onTripClicked = {
+                    tripLisViewModel.onTripClicked(it)
+                    navActions.navigateToSeatSelection()
+                }
+            )
         }
 
-        /*composable(NavDestinations.SEAT_LAYOUT_ROUTE) {
-            SeatLayoutView(noOfColumn =, seatLayout =, selectedSeats =)
-        }*/
+        composable(NavDestinations.SEAT_LAYOUT_ROUTE) {
+            val selectSeatsViewModel: SelectSeatsViewModel = hiltViewModel()
+            SelectSeatsView(
+                selectSeatsViewModel,
+                onBackPressed = { navController.popBackStack() }
+            )
+        }
 
     }
 }

@@ -5,7 +5,8 @@ import com.google.gson.Gson
 
 data class TripListDTO(
     val status: Int,
-    val trips: List<TripDTO>?
+    val trips: List<TripDTO>?,
+    val message: String?
 )
 
 data class TripDTO(
@@ -53,265 +54,41 @@ fun TripListDTO.getTripList(): List<Trip> {
     } ?: emptyList()
 }
 
-fun singleTrip() = Gson().fromJson(testTripString, TripDTO::class.java)
+fun TripDTO.getTrip(): Trip {
+    return Trip(
+        id,
+        amenities,
+        operator_name,
+        departureTime,
+        busType,
+        ticketPrice,
+        availableSeat,
+        (availableSeat / totalSeat) * 100f
+    )
+}
+
+fun singleTrip() = Gson().fromJson(testTripString, TripDTO::class.java).getTrip()
 
 val testTripString = """{
-            "id": "NTgxNzUzOjU1NjY5MDk6MA==",
-            "operator": "Namaste Kapilvastug Air-Suspension A/C Deluxe",
-            "date": "2078-Mangsir-23",
-            "faceImage": "",
-            "busNo": "n/a",
-            "busType": "Namaste  Kapilvastu A/C",
-            "departureTime": "07:00 PM",
-            "shift": "Night",
-            "journeyHour": 10,
-            "dateEn": "2021-12-09",
-            "lockStatus": false,
-            "multiPrice": false,
-            "inputTypeCode": 1,
-            "noOfColumn": 5,
-            "rating": 0.0,
-            "imgList": [],
-            "amenities": [
-                "A/C",
-                "  Wifi",
-                "  TV",
-                "  Mobile Charger",
-                "  Water",
-                "  Music",
-                "  Seat Belt",
-                "  Mini Shop",
-                "  Cold Drinks",
-                "  Bus Hostess",
-                "  Air Suspension",
-                "  "
-            ],
-            "detailImage": [],
-            "ticketPrice": 1000.0,
-            "passengerDetail": [],
-            "seatLayout": [
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B1",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B2",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A1",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "A2",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B3",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B4",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A3",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A4",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B5",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B6",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A5",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A6",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B7",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B8",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A7",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "A8",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B9",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B10",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A9",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "A10",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B11",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B12",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A11",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "A12",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B13",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B14",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A13",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "A14",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B15",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B16",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "A15",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "A16",
-                    "bookingStatus": "No"
-                },
-                {
-                    "displayName": "na",
-                    "bookingStatus": "na"
-                },
-                {
-                    "displayName": "B17",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "B18",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "L5",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "L4",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "L3",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "L2",
-                    "bookingStatus": "Yes"
-                },
-                {
-                    "displayName": "L1",
-                    "bookingStatus": "Yes"
-                }
-            ],
-            "operator_name": "Namaste Kapilvastug Air-Suspension A/C Deluxe"
+    "id" : "NTgwNzc3OjA6MA==",
+"operator" : "Desh Darshan Bus Sewa",
+"date" : "2078-Paush-5",
+"busNo" : "n/a",
+"busType" : "Tourist AC",
+"departureTime" : "07:00 AM",
+"shift" : "Day",
+"dateEn" : "2021-12-20",
+"lockStatus" : false,
+"multiPrice" : false,
+"totalSeat" : 37,
+"inputTypeCode" : 1,
+"availableSeat" : 37,
+"rating" : 0.0,
+"imgList" : [ ],
+"amenities" : [ "Surgical Mask", " Sanitizer", " Water Bottle", " AC" ],
+"ticketPrice" : 900.0,
+"passengerDetail" : [ ],
+"operator_name" : "Desh Darshan Bus Sewa"
         }"""
 
 val testTripListString = """{

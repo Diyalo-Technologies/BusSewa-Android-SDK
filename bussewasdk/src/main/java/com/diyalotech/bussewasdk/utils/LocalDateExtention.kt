@@ -11,7 +11,7 @@ fun localDateNow(): LocalDate {
 * Only for dates
 * */
 fun LocalDate.toLocalDateTime(): LocalDateTime {
-    return LocalDateTime(year, monthNumber - 1, dayOfMonth, 0, 0, 0)
+    return LocalDateTime(year, month, dayOfMonth, 1, 1, 1)
 }
 
 /*

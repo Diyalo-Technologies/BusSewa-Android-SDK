@@ -26,9 +26,6 @@ fun Calendar(date: LocalDate, onDateSelected: (LocalDate) -> Unit) {
                     )
                 }
             }
-        },
-        update = { view ->
-            view.date = date.toInstant().epochSeconds
         }
     )
 }

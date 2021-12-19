@@ -62,7 +62,7 @@ fun DateSelectionView(
                 .align(Alignment.CenterVertically)
                 .padding(start = 16.dp)
         ) {
-            Text(label, fontSize = 12.sp)
+            Text(label, fontSize = 12.sp, color = MaterialTheme.colors.onSurface.copy(0.6f))
             Text(
                 if (date.isEmpty()) "yyyy-MM-dd" else date,
                 color = if (date.isEmpty()) MaterialTheme.colors.onSurface.copy(0.5f) else MaterialTheme.colors.primary,

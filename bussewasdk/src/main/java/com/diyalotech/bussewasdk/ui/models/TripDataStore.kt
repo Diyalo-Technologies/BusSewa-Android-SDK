@@ -7,11 +7,12 @@ import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import com.diyalotech.bussewasdk.utils.localDateNow
 import kotlinx.datetime.LocalDate
 
-class SearchTripStore {
+class TripDataStore {
     private var source by mutableStateOf("Kathmandu")
     private var destination by mutableStateOf("Pokhara")
     private var date by mutableStateOf(localDateNow())
     private var selectionMode by mutableStateOf(LocationType.SOURCE)
+    private var selectedTripId by mutableStateOf("")
 
     fun saveSource(source: String) {
         this.source = source
@@ -34,6 +35,14 @@ class SearchTripStore {
         )
         println("Reading data: $temp")
         return temp
+    }
+
+    fun saveSelectedTrip(id: String) {
+        this.selectedTripId = id
+    }
+
+    fun getSelectedTrip(): String {
+        return this.selectedTripId
     }
 
     fun changeSelectionMode(locationSelectionMode: LocationType) {

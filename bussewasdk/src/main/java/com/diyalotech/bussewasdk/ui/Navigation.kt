@@ -39,4 +39,14 @@ class BusNavigationActions(navController: NavController) {
             restoreState = true
         }
     }
+
+    val navigateToSeatSelection: () -> Unit = {
+        navController.navigate(NavDestinations.SEAT_LAYOUT_ROUTE) {
+            /*popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }*/
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
 }

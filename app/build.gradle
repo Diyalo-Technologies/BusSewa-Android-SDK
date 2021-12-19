@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/diyalo/diyaloprojects/keystores/diyaloKeyStoreMetermarkV2')
+            storePassword 'D!y@l0@metermarkv2'
+            keyPassword 'D!y@l0@metermarkv2'
+            keyAlias 'key0'
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -20,9 +28,14 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

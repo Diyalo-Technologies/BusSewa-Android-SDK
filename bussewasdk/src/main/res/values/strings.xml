@@ -4,4 +4,6 @@
     <string name="find_trips_title">BusSewa - Find trips</string>
     <string name="okay">Ok</string>
     <string name="departure_date">Departure Date</string>
+    <string name="selected_seats">Selected Seats</string>
+    <string name="total_price">Total Price</string>
 </resources>

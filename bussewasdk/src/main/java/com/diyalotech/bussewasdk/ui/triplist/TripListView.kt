@@ -1,9 +1,10 @@
 package com.diyalotech.bussewasdk.ui.triplist
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,8 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -23,47 +26,83 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.R
-import com.diyalotech.bussewasdk.repo.SearchParamRepository
-import com.diyalotech.bussewasdk.repo.TripRepository
+import com.diyalotech.bussewasdk.network.dto.singleTrip
 import com.diyalotech.bussewasdk.ui.sharedcomposables.Chip
+import com.diyalotech.bussewasdk.ui.sharedcomposables.ErrorMessage
 import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
+import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
-import com.google.accompanist.insets.statusBarsPadding
-import java.util.*
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.insets.navigationBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TripListView(tripListViewModel: TripListViewModel) {
+fun TripListView(
+    tripListViewModel: TripListViewModel,
+    onBackPressed: () -> Unit,
+    onTripClicked: (String) -> Unit
+) {
+
     val uiState = tripListViewModel.uiState.collectAsState().value
-    Column(Modifier.statusBarsPadding()) {
+    val searchParams = tripListViewModel.searchTripState.getSearchTripModel()
+    val insets = LocalWindowInsets.current
 
-        DateChangeView(
-            tripListViewModel.searchTripState.getSearchTripModel().date,
-        )
+    Box(
+        Modifier
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp)
+    ) {
+        Column {
+            TopAppBar(
+                title = "Trips: ${searchParams.source} - ${searchParams.destination}",
+                showBack = true,
+                backAction = onBackPressed
+            )
 
-        Crossfade(targetState = uiState) { it ->
-            when (it) {
-                TripListState.Loading -> {
-                    LoadingView()
-                }
-                is TripListState.Success -> {
-                    LazyColumn(contentPadding = PaddingValues(top = 12.dp)) {
-                        items(it.tripList, { trip -> trip.id }) {
-                            TripView(trip = it)
-                            Divider(modifier = Modifier.padding(bottom = 12.dp))
+            Crossfade(targetState = uiState, animationSpec = tween(250)) { it ->
+                when (it) {
+                    TripListState.Loading -> {
+                        LoadingView()
+                    }
+                    is TripListState.Success -> {
+                        LazyColumn(
+                            contentPadding = PaddingValues(
+                                top = 16.dp,
+                                bottom = insets.navigationBars.bottom.dp + 48.dp
+                            )
+                        ) {
+                            items(it.tripList, { trip -> trip.id }) {
+                                TripView(trip = it, onTripClicked)
+                                Divider(modifier = Modifier.padding(bottom = 12.dp))
+                            }
                         }
+                    }
+                    is TripListState.Error -> {
+                        ErrorMessage(it.message)
                     }
                 }
             }
         }
+
+        DateChangeView(
+            searchParams.date,
+            Modifier
+                .align(Alignment.BottomCenter)
+                .widthIn(max = 480.dp)
+        ) {
+            tripListViewModel.onDateChanged(it)
+        }
     }
+
 }
 
 @Composable
-fun TripView(trip: Trip) {
-    Column {
-
+fun TripView(trip: Trip, onTripClicked: (String) -> Unit) {
+    Column(Modifier.clickable {
+        onTripClicked(trip.id)
+    }) {
         Row(modifier = Modifier.padding(horizontal = 16.dp)) {
             Image(
                 painter = painterResource(id = R.drawable.img),
@@ -135,6 +174,16 @@ fun TripView(trip: Trip) {
                     )
                 })
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun TripViewPreview() {
+    BusSewaSDKTheme {
+        Surface {
+            TripView(trip = singleTrip(), {})
         }
     }
 }

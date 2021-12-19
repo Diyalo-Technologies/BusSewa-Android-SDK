@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.google.accompanist.insets.statusBarsPadding
@@ -22,13 +23,14 @@ fun TopAppBar(
     title: String,
     subtitle: String = "",
     showBack: Boolean,
-    backAction: (() -> Unit)? = null
+    elevation: Dp = 4.dp,
+    backAction: () -> Unit = {}
 ) {
     Row(
         Modifier
             .heightIn(56.dp)
             .fillMaxWidth()
-            .shadow(4.dp)
+            .shadow(elevation)
             .background(MaterialTheme.colors.surface)
             .statusBarsPadding()
     ) {
