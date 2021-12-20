@@ -1,5 +1,6 @@
 package com.diyalotech.bussewasdk.ui.seatlayout
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -30,13 +31,11 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
 import com.google.gson.Gson
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SeatLayoutView(
     noOfColumn: Int,
     seatLayout: List<SeatLayout>,
     selectedSeats: List<SeatLayout>,
-    paddingValues: PaddingValues = PaddingValues(),
     onSeatClicked: (String) -> Unit = {},
 ) {
 
@@ -56,12 +55,9 @@ fun SeatLayoutView(
             )
         }
     }*/
-
-
     LazyColumn(
         Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = paddingValues
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         for (row in layoutChunked) {
             item {
@@ -90,55 +86,57 @@ fun Seat(
     val clickable = bookingStatus == BookingStatus.AVAILABLE && displayName != "na"
 
 
-    Crossfade(
-        targetState = isSelected,
-    ) { selected ->
+    var tint = Color.Transparent
+    val textColor = MaterialTheme.colors.onSurface
 
-        val resId = if (!selected && bookingStatus == BookingStatus.AVAILABLE) {
-            R.drawable.ic_stroke_seat
-        } else {
-            R.drawable.ic_fill_seat
-        }
+    tint = if (bookingStatus == BookingStatus.AVAILABLE) {
+        MaterialTheme.colors.primary.copy(alpha = 0.5f)
+            .compositeOver(Color.White)
+    } else {
+        MaterialTheme.colors.onSurface.copy(0.5f)
+    }
 
-        var tint = Color.Transparent
-        val textColor = MaterialTheme.colors.onSurface
+    Column(
+        modifier = Modifier
+            .size(52.dp, 66.dp)
+            .clip(shape = Shapes.small)
+            .clickable(clickable) {
+                onClick(displayName)
+            },
+    ) {
+        if (!displayName.equals("na", ignoreCase = true)) {
 
-        tint = if (bookingStatus == BookingStatus.AVAILABLE) {
-            if (selected) {
-                MaterialTheme.colors.primary
-            } else {
-                MaterialTheme.colors.primary.copy(alpha = 0.6f)
-            }
-        } else {
-            MaterialTheme.colors.primary.copy(alpha = 0.5f)
-        }
-
-        Column(
-            modifier = Modifier
-                .size(52.dp, 66.dp)
-                .clip(shape = Shapes.small)
-                .clickable(clickable) {
-                    onClick(displayName)
-                },
-        ) {
-            if (!displayName.equals("na", ignoreCase = true)) {
+            Box {
                 Icon(
-                    painter = painterResource(id = resId),
+                    painter = painterResource(id = R.drawable.ic_stroke_seat),
                     contentDescription = "Booked",
                     tint = tint,
                     modifier = Modifier.size(52.dp, 52.dp)
                 )
-                Text(
-                    text = displayName,
-                    color = textColor,
-                    fontSize = dpToSp(dp = 13.dp),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = (-12).dp),
-                )
+                Crossfade(
+                    targetState = isSelected,
+                ) { selected ->
+                    if (selected || bookingStatus == BookingStatus.BOOKED) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_fill_path),
+                            contentDescription = "",
+                            tint = tint,
+                            modifier = Modifier.size(52.dp, 52.dp)
+                        )
+                    }
+                }
             }
+
+            Text(
+                text = displayName,
+                color = textColor,
+                fontSize = dpToSp(dp = 13.dp),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = (-12).dp),
+            )
         }
     }
 }
@@ -170,7 +168,7 @@ fun DefaultPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun DefaultPreview2() {
 

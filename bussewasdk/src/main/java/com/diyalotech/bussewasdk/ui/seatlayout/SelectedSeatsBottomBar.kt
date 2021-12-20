@@ -10,8 +10,10 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,8 +26,7 @@ import com.diyalotech.bussewasdk.utils.toNPRString
 fun SelectedSeatsBottomBar(
     selectedSeats: List<String>,
     totalPrice: Double,
-    modifier: Modifier = Modifier,
-    seatsVisibility: MutableTransitionState<Boolean> = MutableTransitionState(false)
+    modifier: Modifier = Modifier
 ) {
 
     val text = if (selectedSeats.isEmpty()) "" else
@@ -39,21 +40,26 @@ fun SelectedSeatsBottomBar(
             .background(MaterialTheme.colors.surface)
             .padding(bottom = 8.dp)
             .navigationBarsPadding()
+            .onGloballyPositioned {
+
+            }
     ) {
 
         Divider(Modifier.padding(bottom = 12.dp))
         AnimatedVisibility(
-            seatsVisibility,
+            selectedSeats.isNotEmpty(),
             Modifier.fillMaxWidth(),
         ) {
             Row(Modifier.padding(horizontal = 20.dp)) {
                 Column(
                     Modifier
                         .weight(1f)
-                        .padding(end = 16.dp)) {
+                        .padding(end = 16.dp)
+                ) {
                     Text(
                         stringResource(id = R.string.selected_seats),
-                        style = MaterialTheme.typography.caption
+                        style = MaterialTheme.typography.caption,
+                        color = MaterialTheme.colors.primary
                     )
                     Text(
                         text,
@@ -67,7 +73,8 @@ fun SelectedSeatsBottomBar(
                 Column {
                     Text(
                         stringResource(id = R.string.total_price),
-                        style = MaterialTheme.typography.caption
+                        style = MaterialTheme.typography.caption,
+                        color = MaterialTheme.colors.primary
                     )
                     Text(totalPrice.toNPRString())
                 }

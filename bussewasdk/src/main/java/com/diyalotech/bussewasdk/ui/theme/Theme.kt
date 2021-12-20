@@ -37,7 +37,7 @@ fun createDefaultTheme() = BusTheme()
 @Composable
 fun BusSewaSDKTheme(busTheme: BusTheme = createDefaultTheme(), content: @Composable() () -> Unit) {
 
-    val systemUiController = rememberSystemUiController()
+//    val systemUiController = rememberSystemUiController()
 
     val isDarkTheme = when (busTheme.busThemeDarkLight) {
         BusThemeDarkLight.LIGHT -> false
@@ -59,10 +59,10 @@ fun BusSewaSDKTheme(busTheme: BusTheme = createDefaultTheme(), content: @Composa
         )
     }
 
-    systemUiController.setSystemBarsColor(
+   /* systemUiController.setSystemBarsColor(
         color = Color.Transparent,
         darkIcons = !isDarkTheme
-    )
+    )*/
 
     MaterialTheme(
         colors = colors,

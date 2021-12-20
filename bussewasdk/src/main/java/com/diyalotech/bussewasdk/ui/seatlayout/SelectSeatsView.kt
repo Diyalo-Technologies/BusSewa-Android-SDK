@@ -4,10 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -26,20 +23,17 @@ fun SelectSeatsView(viewModel: SelectSeatsViewModel, onBackPressed: () -> Unit =
     val selectedSeats = viewModel.selectSeatList
     val totalPrice = viewModel.totalPrice.value
 
-    //for padding purposes + includes insets
-    var bottomBarPadding: Int by remember { mutableStateOf(0) }
-    val visibility = remember {
-        MutableTransitionState(false)
-    }
-    visibility.targetState = selectedSeats.isNotEmpty()
-
     Column {
 
         TopAppBar(title = "Select Seats", showBack = true, backAction = onBackPressed)
-        Box(
+        Column(
             Modifier.fillMaxHeight()
         ) {
-            Crossfade(targetState = uiState, animationSpec = tween(250)) { state ->
+            Crossfade(
+                targetState = uiState,
+                animationSpec = tween(250),
+                modifier = Modifier.weight(1f)
+            ) { state ->
                 when (state) {
                     SelectSeatState.Loading -> {
                         LoadingView()
@@ -49,8 +43,7 @@ fun SelectSeatsView(viewModel: SelectSeatsViewModel, onBackPressed: () -> Unit =
                         SeatLayoutView(
                             noOfColumn = state.selectSeatModel.noOfColumn,
                             seatLayout = state.selectSeatModel.seatLayout,
-                            selectedSeats = selectedSeats,
-                            paddingValues = PaddingValues(bottom = with(LocalDensity.current) { bottomBarPadding.toDp() })
+                            selectedSeats = selectedSeats
                         ) {
                             viewModel.onSeatClicked(it)
                         }
@@ -63,15 +56,7 @@ fun SelectSeatsView(viewModel: SelectSeatsViewModel, onBackPressed: () -> Unit =
 
             SelectedSeatsBottomBar(
                 selectedSeats = selectedSeats.map { it.displayName },
-                totalPrice = totalPrice,
-                seatsVisibility = visibility,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .onGloballyPositioned {
-                        if(visibility.currentState == selectedSeats.isNotEmpty()) {
-                            bottomBarPadding = it.size.height
-                        }
-                    }
+                totalPrice = totalPrice
             )
         }
     }
