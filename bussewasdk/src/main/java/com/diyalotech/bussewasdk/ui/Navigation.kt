@@ -8,6 +8,7 @@ object NavDestinations {
     const val SEARCH_LOCATION_ROUTE = "search_location"
     const val TRIP_LIST_ROUTE = "trip_list"
     const val SEAT_LAYOUT_ROUTE = "seat_layout"
+    const val BOOKING_CONFIRMATION = "booking_confirm_layout"
 }
 
 class BusNavigationActions(navController: NavController) {
@@ -42,6 +43,16 @@ class BusNavigationActions(navController: NavController) {
 
     val navigateToSeatSelection: () -> Unit = {
         navController.navigate(NavDestinations.SEAT_LAYOUT_ROUTE) {
+            /*popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }*/
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    val navigateToBookConfirmation: () -> Unit = {
+        navController.navigate(NavDestinations.BOOKING_CONFIRMATION) {
             /*popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }*/

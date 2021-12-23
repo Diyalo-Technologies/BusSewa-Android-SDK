@@ -9,11 +9,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.diyalotech.bussewasdk.LibraryComponent
+import com.diyalotech.bussewasdk.ui.sharedcomposables.ExposedDropDown
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
-fun BusSewaSDKApp() {
+fun BusSewaSDKApp(component: LibraryComponent) {
     val navController = rememberNavController()
     val navigationActions = remember(navController) {
         BusNavigationActions(navController)
@@ -31,7 +33,7 @@ fun BusSewaSDKApp() {
         Surface(
             color = MaterialTheme.colors.background
         ) {
-            NavigationGraph(navigationActions, navController)
+            NavigationGraph(navigationActions, navController, component = component)
         }
     }
 

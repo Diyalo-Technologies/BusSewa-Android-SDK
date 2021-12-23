@@ -6,4 +6,11 @@
     <string name="departure_date">Departure Date</string>
     <string name="selected_seats">Selected Seats</string>
     <string name="total_price">Total Price</string>
+    <string name="full_name">Full name</string>
+    <string name="mobile_number">Mobile number</string>
+    <string name="email">Email</string>
+    <string name="booking_confirmation">Booking confirmation</string>
+    <string name="boarding_point">Boarding point</string>
+    <string name="select_boarding_point">Select boarding point</string>
+    <string name="book_seats">BOOK SEATS</string>
 </resources>

@@ -5,22 +5,23 @@ import androidx.lifecycle.viewModelScope
 import com.diyalotech.bussewasdk.network.dto.ApiResult
 import com.diyalotech.bussewasdk.repo.SearchParamRepository
 import com.diyalotech.bussewasdk.repo.LocationRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed class SearchLocationState {
     object Loading : SearchLocationState()
     class Success(val locationList: List<String>) : SearchLocationState()
 }
 
-@HiltViewModel
-class SearchLocationViewModel @Inject constructor(
+class SearchLocationViewModel(
     private val locationRepository: LocationRepository,
     private val searchParamRepo: SearchParamRepository
 ) : ViewModel() {
+
+    init {
+        println("Initialized sdlfkjlskdfjl locationsli st")
+    }
 
     //private data store
     private var locationList: List<String> = emptyList()

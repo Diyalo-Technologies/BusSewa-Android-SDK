@@ -1,6 +1,6 @@
 package com.diyalotech.bussewasdk.network.dto
 
-import com.diyalotech.bussewasdk.ui.models.BookingStatus
+import com.diyalotech.bussewasdk.ui.seatlayout.BookingStatus
 import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatModel
 
 data class SeatLayoutDTO(

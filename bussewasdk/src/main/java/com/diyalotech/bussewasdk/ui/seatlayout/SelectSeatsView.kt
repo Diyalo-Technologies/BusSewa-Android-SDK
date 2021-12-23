@@ -17,7 +17,7 @@ import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
 import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
 
 @Composable
-fun SelectSeatsView(viewModel: SelectSeatsViewModel, onBackPressed: () -> Unit = {}) {
+fun SelectSeatsView(viewModel: SelectSeatsViewModel, onBookClicked: () -> Unit, onBackPressed: () -> Unit = {}) {
 
     val uiState = viewModel.uiState.collectAsState().value
     val selectedSeats = viewModel.selectSeatList
@@ -56,7 +56,8 @@ fun SelectSeatsView(viewModel: SelectSeatsViewModel, onBackPressed: () -> Unit =
 
             SelectedSeatsBottomBar(
                 selectedSeats = selectedSeats.map { it.displayName },
-                totalPrice = totalPrice
+                totalPrice = totalPrice,
+                onBookClicked = onBookClicked
             )
         }
     }

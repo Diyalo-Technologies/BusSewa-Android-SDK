@@ -1,14 +1,14 @@
 package com.diyalotech.bussewasdk.repo
 
-import com.diyalotech.bussewasdk.ui.models.LocationType
-import com.diyalotech.bussewasdk.ui.models.TripDataStore
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import kotlinx.datetime.LocalDate
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class SearchParamRepository @Inject constructor() {
+class SearchParamRepository {
+
+    init {
+        println("Instance created")
+    }
+
     val searchTripStore = TripDataStore()
 
     suspend fun setLocationSelectionMode(locationSelectionMode: LocationType) {
@@ -44,5 +44,13 @@ class SearchParamRepository @Inject constructor() {
 
     fun getSelectedTripId(): String {
         return searchTripStore.getSelectedTrip()
+    }
+
+    fun saveSelectedSeats(seats: List<String>) {
+        searchTripStore.saveSelectedSeats(seats)
+    }
+
+    fun getSelectedSeats(): List<String> {
+        return searchTripStore.fetchSelectedSeats()
     }
 }

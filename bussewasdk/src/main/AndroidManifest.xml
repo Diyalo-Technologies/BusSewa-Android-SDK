@@ -2,11 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.diyalotech.bussewasdk">
 
-    <application
-        android:name=".BusSDKApplication">
-        <activity
-            android:name=".ui.locationlist.LocationListActivity"
-            android:exported="false" />
+    <application>
         <activity
             android:name=".BusSewaSDKActivity"
             android:exported="true"

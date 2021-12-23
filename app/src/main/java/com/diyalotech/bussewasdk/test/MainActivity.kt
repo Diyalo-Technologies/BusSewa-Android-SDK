@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -13,7 +14,6 @@ import com.diyalotech.bussewasdk.BusSewaSDKActivity
 import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_CLIENT_INFO
 import com.diyalotech.bussewasdk.sdkbuilders.BusSewaClient
 import com.diyalotech.bussewasdk.test.ui.theme.BusSewaSDKTheme
-import com.diyalotech.bussewasdk.ui.locationlist.LocationListActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,10 +23,17 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     Greeting("Android")
+                    Button(onClick = { launch() }) {
+                        Text("LCiclksjdlfkjsldf")
+                    }
                 }
             }
         }
 
+        launch()
+    }
+
+    fun launch() {
         val intent = Intent(this, BusSewaSDKActivity::class.java)
         val client = BusSewaClient(
             clientId = ""

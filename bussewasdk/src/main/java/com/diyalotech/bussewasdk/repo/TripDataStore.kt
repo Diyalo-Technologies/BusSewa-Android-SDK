@@ -1,4 +1,4 @@
-package com.diyalotech.bussewasdk.ui.models
+package com.diyalotech.bussewasdk.repo
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +13,7 @@ class TripDataStore {
     private var date by mutableStateOf(localDateNow())
     private var selectionMode by mutableStateOf(LocationType.SOURCE)
     private var selectedTripId by mutableStateOf("")
+    private var selectedSeats by mutableStateOf(listOf<String>())
 
     fun saveSource(source: String) {
         this.source = source
@@ -57,6 +58,14 @@ class TripDataStore {
         val source = this.source
         this.source = this.destination
         this.destination = source
+    }
+
+    fun saveSelectedSeats(seats: List<String>) {
+        this.selectedSeats = seats
+    }
+
+    fun fetchSelectedSeats(): List<String> {
+        return selectedSeats
     }
 }
 

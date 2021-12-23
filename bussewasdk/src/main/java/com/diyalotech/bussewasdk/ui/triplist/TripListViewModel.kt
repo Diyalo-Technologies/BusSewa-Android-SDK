@@ -2,18 +2,15 @@ package com.diyalotech.bussewasdk.ui.triplist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.diyalotech.bussewasdk.network.dto.ApiResult
 import com.diyalotech.bussewasdk.network.dto.getTripList
 import com.diyalotech.bussewasdk.repo.SearchParamRepository
 import com.diyalotech.bussewasdk.repo.TripRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import javax.inject.Inject
 
 data class Trip(
     val id: String,
@@ -32,8 +29,7 @@ sealed class TripListState {
     class Error(val message: String) : TripListState()
 }
 
-@HiltViewModel
-class TripListViewModel @Inject constructor(
+class TripListViewModel constructor(
     private val searchParamRepository: SearchParamRepository,
     private val tripRepository: TripRepository
 ) : ViewModel() {

@@ -1,19 +1,19 @@
 package com.diyalotech.bussewasdk.network.retrofit
 
-import com.diyalotech.bussewasdk.network.dto.RouteListDTO
-import com.diyalotech.bussewasdk.network.dto.SeatLayoutDTO
-import com.diyalotech.bussewasdk.network.dto.TripListDTO
-import com.diyalotech.bussewasdk.network.dto.TripListRequestDTO
+import com.diyalotech.bussewasdk.network.dto.*
 import retrofit2.http.*
 
 interface ApiService {
 
-    @GET("booking/routes/v2/")
+    @GET("v2/booking/routes")
     suspend fun getRoutes(): RouteListDTO
 
-    @POST("booking/trips/v2/")
+    @POST("v2/booking/trips")
     suspend fun findTrips(@Body requestDTO: TripListRequestDTO): TripListDTO
 
-    @GET("booking/refresh/{id}/")
+    @GET("v2/booking/refresh/{id}/")
     suspend fun refreshDetails(@Path("id") id: String): SeatLayoutDTO
+
+    @GET("v2/booking/inputDetailConfig/{id}/")
+    suspend fun inputDetailConfig(@Path("id") id: String): InputDetailConfigDTO
 }

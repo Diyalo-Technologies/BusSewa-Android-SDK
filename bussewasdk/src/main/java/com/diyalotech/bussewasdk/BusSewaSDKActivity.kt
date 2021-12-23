@@ -10,18 +10,22 @@ import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_MESSAGE
 import com.diyalotech.bussewasdk.sdkbuilders.BusSewaClient
 import com.diyalotech.bussewasdk.ui.BusSewaSDKApp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class BusSewaSDKActivity : AppCompatActivity() {
 
+    private lateinit var component: LibraryComponent
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        component = DaggerLibraryComponent.builder()
+            .build()
+        component.inject(this)
+
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val client = getClient()!!
         setContent {
             BusSewaSDKTheme(client.busTheme) {
-                BusSewaSDKApp()
+                BusSewaSDKApp(component)
             }
         }
     }

@@ -20,8 +20,7 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 @Composable
 fun SearchLocationView(
     viewModel: SearchLocationViewModel,
-    onBackPressed: () -> Unit,
-    onSelected: (String) -> Unit
+    onBackPressed: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     val searchString = viewModel.searchString.collectAsState().value
@@ -44,7 +43,8 @@ fun SearchLocationView(
                     LazyColumn {
                         items(it.locationList) {
                             ListItem(Modifier.clickable {
-                                onSelected(it)
+                                viewModel.saveSelectedLocation(it)
+                                onBackPressed()
                             }) {
                                 Text(text = it)
                             }

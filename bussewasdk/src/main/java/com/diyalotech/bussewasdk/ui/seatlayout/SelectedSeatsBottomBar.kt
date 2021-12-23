@@ -26,7 +26,8 @@ import com.diyalotech.bussewasdk.utils.toNPRString
 fun SelectedSeatsBottomBar(
     selectedSeats: List<String>,
     totalPrice: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBookClicked: () -> Unit
 ) {
 
     val text = if (selectedSeats.isEmpty()) "" else
@@ -38,19 +39,16 @@ fun SelectedSeatsBottomBar(
         modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.surface)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 16.dp)
             .navigationBarsPadding()
-            .onGloballyPositioned {
-
-            }
     ) {
 
-        Divider(Modifier.padding(bottom = 12.dp))
+        Divider(Modifier.padding(bottom = 16.dp))
         AnimatedVisibility(
             selectedSeats.isNotEmpty(),
             Modifier.fillMaxWidth(),
         ) {
-            Row(Modifier.padding(horizontal = 20.dp)) {
+            Row(Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp)) {
                 Column(
                     Modifier
                         .weight(1f)
@@ -86,10 +84,10 @@ fun SelectedSeatsBottomBar(
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            onClick = { /*TODO*/ },
+            onClick = onBookClicked,
             enabled = selectedSeats.isNotEmpty()
         ) {
-            Text(text = "Book Seats")
+            Text(text = stringResource(id = R.string.book_seats))
         }
 
     }
@@ -103,5 +101,7 @@ fun SelectedSeatsBottomBarPreview() {
             "12", "14", "16"
         ),
         1000.0
-    )
+    ) {
+
+    }
 }

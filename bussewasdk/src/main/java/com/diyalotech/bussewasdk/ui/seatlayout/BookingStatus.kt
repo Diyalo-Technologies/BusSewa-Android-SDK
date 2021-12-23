@@ -1,4 +1,4 @@
-package com.diyalotech.bussewasdk.ui.models
+package com.diyalotech.bussewasdk.ui.seatlayout
 
 import com.google.gson.annotations.SerializedName
 

@@ -2,13 +2,9 @@ package com.diyalotech.bussewasdk.ui.seatlayout
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.*
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -25,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.network.dto.SeatLayout
 import com.diyalotech.bussewasdk.network.dto.SeatLayoutDTO
-import com.diyalotech.bussewasdk.ui.models.BookingStatus
 import com.diyalotech.bussewasdk.ui.sharedcomposables.dpToSp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
