@@ -1,7 +1,8 @@
 package com.diyalotech.bussewasdk.ui.di
 
+import com.diyalotech.bussewasdk.repo.BookingRepository
 import com.diyalotech.bussewasdk.repo.LocationRepository
-import com.diyalotech.bussewasdk.repo.SearchParamRepository
+import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.repo.TripRepository
 import com.diyalotech.bussewasdk.ui.bookingcustomer.BookingConfirmViewModel
 import com.diyalotech.bussewasdk.ui.locationlist.SearchLocationViewModel
@@ -16,37 +17,37 @@ import javax.inject.Singleton
 class ViewModelModule {
 
     @Provides
-    fun provideSearchTripVM(searchParamRepository: SearchParamRepository): SearchTripViewModel {
-        return SearchTripViewModel(searchParamRepository)
+    fun provideSearchTripVM(dataStoreRepository: DataStoreRepository): SearchTripViewModel {
+        return SearchTripViewModel(dataStoreRepository)
     }
 
     @Provides
     fun provideTripListVM(
-        searchParamRepository: SearchParamRepository,
+        dataStoreRepository: DataStoreRepository,
         tripRepository: TripRepository
     ): TripListViewModel {
-        return TripListViewModel(searchParamRepository, tripRepository)
+        return TripListViewModel(dataStoreRepository, tripRepository)
     }
 
     @Provides
     @Singleton
     fun provideSearchLocationVM(
         locationRepository: LocationRepository,
-        searchParamRepo: SearchParamRepository
+        dataStoreRepo: DataStoreRepository
     ): SearchLocationViewModel {
-        return SearchLocationViewModel(locationRepository, searchParamRepo)
+        return SearchLocationViewModel(locationRepository, dataStoreRepo)
     }
 
     @Provides
     fun provideSeatsSelectVM(
         tripRepository: TripRepository,
-        searchParamRepo: SearchParamRepository
+        dataStoreRepo: DataStoreRepository
     ): SelectSeatsViewModel {
-        return SelectSeatsViewModel(tripRepository, searchParamRepo)
+        return SelectSeatsViewModel(tripRepository, dataStoreRepo)
     }
 
     @Provides
-    fun provideBookingConfirmViewModel(): BookingConfirmViewModel {
-        return BookingConfirmViewModel()
+    fun provideBookingConfirmViewModel(dataStoreRepo: DataStoreRepository, bookingRepo: BookingRepository): BookingConfirmViewModel {
+        return BookingConfirmViewModel(dataStoreRepo, bookingRepo)
     }
 }

@@ -57,8 +57,8 @@ fun NavigationGraph(
             TripListView(
                 tripListViewModel = tripLisViewModel,
                 onBackPressed = { navController.popBackStack() },
-                onTripClicked = {
-                    tripLisViewModel.onTripClicked(it)
+                onTripClicked = { trip ->
+                    tripLisViewModel.onTripClicked(trip)
                     navActions.navigateToSeatSelection()
                 }
             )
@@ -70,7 +70,7 @@ fun NavigationGraph(
             }
             SelectSeatsView(
                 selectSeatsViewModel,
-                onBookClicked = navActions.navigateToBookConfirmation,
+                onBooked = navActions.navigateToBookConfirmation,
                 onBackPressed = { navController.popBackStack() }
             )
         }

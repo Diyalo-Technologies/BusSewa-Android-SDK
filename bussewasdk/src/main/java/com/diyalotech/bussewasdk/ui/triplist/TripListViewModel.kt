@@ -3,9 +3,11 @@ package com.diyalotech.bussewasdk.ui.triplist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diyalotech.bussewasdk.network.dto.ApiResult
+import com.diyalotech.bussewasdk.network.dto.InputTypeCode
 import com.diyalotech.bussewasdk.network.dto.getTripList
-import com.diyalotech.bussewasdk.repo.SearchParamRepository
+import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.repo.TripRepository
+import com.diyalotech.bussewasdk.repo.model.SelectedTripDetails
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +22,7 @@ data class Trip(
     val busType: String,
     val ticketPrice: Double,
     val availableSeat: Int,
+    val inputTypeCode: Int,
     val availablePercent: Float,
 )
 
@@ -30,7 +33,7 @@ sealed class TripListState {
 }
 
 class TripListViewModel constructor(
-    private val searchParamRepository: SearchParamRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val tripRepository: TripRepository
 ) : ViewModel() {
 
@@ -40,7 +43,7 @@ class TripListViewModel constructor(
     private val _uiState = MutableStateFlow<TripListState>(TripListState.Loading)
     val uiState: StateFlow<TripListState> = _uiState
 
-    val searchTripState = searchParamRepository.searchTripStore
+    val searchTripState = dataStoreRepository.searchTripStore
 
     init {
         findTrips()
@@ -49,7 +52,7 @@ class TripListViewModel constructor(
     private fun findTrips() {
         job?.cancel()
         job = viewModelScope.launch {
-            val searchModel = searchParamRepository.searchTripStore.getSearchTripModel()
+            val searchModel = dataStoreRepository.searchTripStore.getSearchTripModel()
             val result = tripRepository.findTrips(
                 searchModel.source,
                 searchModel.destination,
@@ -73,13 +76,19 @@ class TripListViewModel constructor(
     }
 
     fun onDateChanged(date: LocalDate) {
-        searchParamRepository.setSearchDate(date)
+        dataStoreRepository.setSearchDate(date)
         _uiState.value = TripListState.Loading
         findTrips()
     }
 
-    fun onTripClicked(id: String) {
-        searchParamRepository.setSelectedTrip(id)
+    fun onTripClicked(trip: Trip) {
+        val selectedTripDetails = SelectedTripDetails(
+            id = trip.id,
+            inputTypeCode = InputTypeCode.getType(trip.inputTypeCode),
+            operatorName = trip.operatorName,
+            ticketPrice = trip.ticketPrice
+        )
+        dataStoreRepository.setSelectedTrip(selectedTripDetails)
     }
 
 

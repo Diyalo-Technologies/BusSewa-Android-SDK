@@ -42,7 +42,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 fun TripListView(
     tripListViewModel: TripListViewModel,
     onBackPressed: () -> Unit,
-    onTripClicked: (String) -> Unit
+    onTripClicked: (Trip) -> Unit
 ) {
 
     val uiState = tripListViewModel.uiState.collectAsState().value
@@ -68,6 +68,7 @@ fun TripListView(
                     }
                     is TripListState.Success -> {
                         LazyColumn(
+                            modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(
                                 top = 16.dp,
                                 bottom = insets.navigationBars.bottom.dp + 48.dp
@@ -88,6 +89,7 @@ fun TripListView(
 
         DateChangeView(
             searchParams.date,
+            uiState == TripListState.Loading,
             Modifier
                 .align(Alignment.BottomCenter)
                 .widthIn(max = 480.dp)
@@ -99,9 +101,9 @@ fun TripListView(
 }
 
 @Composable
-fun TripView(trip: Trip, onTripClicked: (String) -> Unit) {
+fun TripView(trip: Trip, onTripClicked: (Trip) -> Unit) {
     Column(Modifier.clickable {
-        onTripClicked(trip.id)
+        onTripClicked(trip)
     }) {
         Row(modifier = Modifier.padding(horizontal = 16.dp)) {
             Image(
@@ -183,7 +185,7 @@ fun TripView(trip: Trip, onTripClicked: (String) -> Unit) {
 fun TripViewPreview() {
     BusSewaSDKTheme {
         Surface {
-            TripView(trip = singleTrip(), {})
+            TripView(trip = singleTrip()) { }
         }
     }
 }

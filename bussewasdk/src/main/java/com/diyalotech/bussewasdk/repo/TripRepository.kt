@@ -1,5 +1,7 @@
 package com.diyalotech.bussewasdk.repo
 
+import com.diyalotech.bussewasdk.network.dto.BookSeatsRequestDTO
+import com.diyalotech.bussewasdk.network.dto.SeatLayout
 import com.diyalotech.bussewasdk.network.dto.SeatLayoutDTO
 import com.diyalotech.bussewasdk.network.dto.TripListRequestDTO
 import com.diyalotech.bussewasdk.network.retrofit.ApiService
@@ -19,9 +21,14 @@ class TripRepository @Inject constructor(
         )
     }
 
-    suspend fun refreshDetails(id: String)  = safeApiCall{
+    suspend fun refreshDetails(id: String) = safeApiCall {
         apiService.refreshDetails(id)
-        //Gson().fromJson(testString, SeatLayoutDTO::class.java)
-//        println(parsedSeatLayout)
+    }
+
+    suspend fun bookTrip(id: String, seats: List<String>) = safeApiCall {
+        apiService.bookSeats(BookSeatsRequestDTO(
+            id = id,
+            seat = seats
+        ))
     }
 }

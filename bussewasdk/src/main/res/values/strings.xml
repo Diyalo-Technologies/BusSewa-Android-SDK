@@ -2,15 +2,18 @@
     <string name="title_activity_bus_sewa_sdkactivity">BusSewaSDKActivity</string>
     <string name="cancel">Cancel</string>
     <string name="find_trips_title">BusSewa - Find trips</string>
-    <string name="okay">Ok</string>
+    <string name="okay">OK</string>
     <string name="departure_date">Departure Date</string>
     <string name="selected_seats">Selected Seats</string>
     <string name="total_price">Total Price</string>
     <string name="full_name">Full name</string>
     <string name="mobile_number">Mobile number</string>
     <string name="email">Email</string>
+    <string name="email_opt">Email (Optional)</string>
     <string name="booking_confirmation">Booking confirmation</string>
     <string name="boarding_point">Boarding point</string>
     <string name="select_boarding_point">Select boarding point</string>
     <string name="book_seats">BOOK SEATS</string>
+    <string name="passenger_detail">Passenger Detail</string>
+    <string name="failed_to_fetch_config">Could not load required details. Please try again.</string>
 </resources>

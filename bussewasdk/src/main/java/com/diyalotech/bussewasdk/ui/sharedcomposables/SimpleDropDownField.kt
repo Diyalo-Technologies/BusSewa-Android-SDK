@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.diyalotech.bussewasdk.ui.bookingcustomer.TextFieldModel
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
 
 @Composable
 fun SimpleDropDownField(

@@ -1,6 +1,5 @@
 package com.diyalotech.bussewasdk.ui.sharedcomposables
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -10,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
-import com.diyalotech.bussewasdk.ui.bookingcustomer.DynamicTextFieldModel
-import com.diyalotech.bussewasdk.ui.bookingcustomer.TextFieldModel
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.DynamicTextFieldModel
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
 
 @Composable
 fun SimpleTextField(

@@ -1,25 +1,26 @@
 package com.diyalotech.bussewasdk.network.dto
 
 data class InputDetailConfigDTO(
-    val price: Double,
+    val ticketPrice: Double,
     val ticketPriceList: List<MultiPrice>,
-    val passengerDetailList: List<PassengerDetail>
+    val inputDetailList: List<PassengerDetail>
 )
 
-data class MultiPrice(
+data class  MultiPrice(
     val id: Int,
     val passengerType: String,
-    val priceInDollar: String,
-    val priceInRs: String
+    val priceInDollar: Double = 0.0,
+    val priceInRs: Double = 0.0
 )
 
 data class PassengerDetail(
-    val id: Int,
-    val detail: String,
+    val tyepId: Int,
+    val detailName: String,
     val inputType: InputType,
     val rangeTo: Int = 0,
     val rangeFrom: Int = 0,
-    val values: List<String> = listOf()
+    val manditory: Boolean = false,
+    val valueList: List<String> = listOf()
 )
 
 enum class InputType(val key: String) {

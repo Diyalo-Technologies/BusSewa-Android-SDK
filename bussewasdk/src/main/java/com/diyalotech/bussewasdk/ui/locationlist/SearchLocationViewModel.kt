@@ -3,7 +3,7 @@ package com.diyalotech.bussewasdk.ui.locationlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diyalotech.bussewasdk.network.dto.ApiResult
-import com.diyalotech.bussewasdk.repo.SearchParamRepository
+import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.repo.LocationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ sealed class SearchLocationState {
 
 class SearchLocationViewModel(
     private val locationRepository: LocationRepository,
-    private val searchParamRepo: SearchParamRepository
+    private val dataStoreRepo: DataStoreRepository
 ) : ViewModel() {
 
     init {
@@ -67,7 +67,7 @@ class SearchLocationViewModel(
     }
 
     fun saveSelectedLocation(selectedLocation: String) {
-        searchParamRepo.saveSelectedLocation(selectedLocation)
+        dataStoreRepo.saveSelectedLocation(selectedLocation)
     }
 
 }

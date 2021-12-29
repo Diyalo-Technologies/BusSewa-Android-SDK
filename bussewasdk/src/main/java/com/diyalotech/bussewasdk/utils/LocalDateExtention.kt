@@ -22,3 +22,11 @@ fun LocalDate.toInstant(): Instant {
     return toLocalDateTime()
         .toInstant(TimeZone.currentSystemDefault())
 }
+
+fun localTimeNow(): LocalDateTime {
+    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+}
+
+fun LocalDateTime.toLocalInstant(): Instant {
+    return this.toInstant(TimeZone.currentSystemDefault())
+}

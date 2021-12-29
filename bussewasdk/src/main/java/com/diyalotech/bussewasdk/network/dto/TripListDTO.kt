@@ -2,6 +2,7 @@ package com.diyalotech.bussewasdk.network.dto
 
 import com.diyalotech.bussewasdk.ui.triplist.Trip
 import com.google.gson.Gson
+import java.lang.reflect.Type
 
 data class TripListDTO(
     val status: Int,
@@ -10,6 +11,8 @@ data class TripListDTO(
 )
 
 data class TripDTO(
+    val id: String,
+    val inputTypeCode: Int,
     val amenities: List<String>,
     val availableSeat: Int,
     val busNo: String,
@@ -17,17 +20,15 @@ data class TripDTO(
     val date: String,
     val dateEn: String,
     val departureTime: String,
-    val id: String,
-    val imgList: List<Any>,
-    val inputTypeCode: Int,
+    val imgList: List<String>,
     val lockStatus: Boolean,
     val multiPrice: Boolean,
     val operator: String,
     val operator_name: String,
-    val passengerDetail: List<Any>,
     val rating: Double,
     val shift: String,
     val ticketPrice: Double,
+    val ticketPriceList: List<MultiPrice>,
     val totalSeat: Int
 )
 
@@ -37,6 +38,25 @@ data class TripListRequestDTO(
     val to: String,
     val date: String
 )
+
+enum class InputTypeCode(val code: Int) {
+    BASIC(1),
+    DYNAMIC(2),
+    MULTI_PRICE(3),
+    MULTI_DYNAMIC(4);
+
+    companion object{
+        fun getType(code: Int): InputTypeCode {
+            return when (code) {
+                1 -> BASIC
+                2 -> DYNAMIC
+                3 -> MULTI_PRICE
+                4 -> MULTI_DYNAMIC
+                else -> BASIC
+            }
+        }
+    }
+}
 
 //map to ui model
 fun TripListDTO.getTripList(): List<Trip> {
@@ -49,7 +69,8 @@ fun TripListDTO.getTripList(): List<Trip> {
             it.busType,
             it.ticketPrice,
             it.availableSeat,
-            (it.availableSeat / it.totalSeat) * 100f
+            it.inputTypeCode,
+            (it.availableSeat / it.totalSeat) * 100f,
         )
     } ?: emptyList()
 }
@@ -63,6 +84,7 @@ fun TripDTO.getTrip(): Trip {
         busType,
         ticketPrice,
         availableSeat,
+        inputTypeCode,
         (availableSeat / totalSeat) * 100f
     )
 }

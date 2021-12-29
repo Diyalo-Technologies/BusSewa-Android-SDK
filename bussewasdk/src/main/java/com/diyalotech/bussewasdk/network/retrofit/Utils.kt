@@ -2,6 +2,8 @@ package com.diyalotech.bussewasdk.network.retrofit
 
 import com.diyalotech.bussewasdk.network.dto.ApiResult
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -9,7 +11,8 @@ suspend fun <T> safeApiCall(
     apiCall: suspend () -> T
 ): ApiResult<T> {
     return try {
-        ApiResult.Success(apiCall.invoke())
+        val result = withContext(Dispatchers.IO) { apiCall.invoke() }
+        ApiResult.Success(result)
     } catch (throwable: Throwable) {
         when (throwable) {
             is IOException -> {

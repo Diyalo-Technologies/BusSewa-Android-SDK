@@ -1,6 +1,6 @@
 package com.diyalotech.bussewasdk.di
 
-import com.diyalotech.bussewasdk.repo.SearchParamRepository
+import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Provides
     @Singleton
-    fun provideSearchParamRepo(): SearchParamRepository {
-        return SearchParamRepository()
+    fun provideSearchParamRepo(): DataStoreRepository {
+        return DataStoreRepository()
     }
 }

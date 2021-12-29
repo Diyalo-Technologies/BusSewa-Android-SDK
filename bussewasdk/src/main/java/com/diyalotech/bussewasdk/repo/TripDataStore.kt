@@ -3,17 +3,29 @@ package com.diyalotech.bussewasdk.repo
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.diyalotech.bussewasdk.network.dto.InputTypeCode
+import com.diyalotech.bussewasdk.repo.model.BookingInfo
+import com.diyalotech.bussewasdk.repo.model.SelectedTripDetails
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import com.diyalotech.bussewasdk.utils.localDateNow
-import kotlinx.datetime.LocalDate
+import com.diyalotech.bussewasdk.utils.localTimeNow
+import com.diyalotech.bussewasdk.utils.toLocalInstant
+import kotlinx.datetime.*
+import java.lang.Exception
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
+/*
+* working in memory cache object managed using singleton.
+* */
 class TripDataStore {
     private var source by mutableStateOf("Kathmandu")
     private var destination by mutableStateOf("Pokhara")
     private var date by mutableStateOf(localDateNow())
     private var selectionMode by mutableStateOf(LocationType.SOURCE)
-    private var selectedTripId by mutableStateOf("")
+    private var selectedTripDetails by mutableStateOf<SelectedTripDetails?>(null)
     private var selectedSeats by mutableStateOf(listOf<String>())
+    private var bookingInfo by mutableStateOf<BookingInfo?>(null)
 
     fun saveSource(source: String) {
         this.source = source
@@ -34,16 +46,15 @@ class TripDataStore {
             destination,
             date
         )
-        println("Reading data: $temp")
         return temp
     }
 
-    fun saveSelectedTrip(id: String) {
-        this.selectedTripId = id
+    fun saveSelectedTrip(trip: SelectedTripDetails) {
+        this.selectedTripDetails = trip
     }
 
-    fun getSelectedTrip(): String {
-        return this.selectedTripId
+    fun getSelectedTrip(): SelectedTripDetails? {
+        return this.selectedTripDetails
     }
 
     fun changeSelectionMode(locationSelectionMode: LocationType) {
@@ -67,6 +78,16 @@ class TripDataStore {
     fun fetchSelectedSeats(): List<String> {
         return selectedSeats
     }
+
+    fun saveBookingInfo(bookingInfo: BookingInfo) {
+        this.bookingInfo = bookingInfo
+    }
+
+    fun fetchBookingInfo(): BookingInfo? {
+        return bookingInfo
+    }
+
+
 }
 
 enum class LocationType {

@@ -14,6 +14,9 @@ interface ApiService {
     @GET("v2/booking/refresh/{id}/")
     suspend fun refreshDetails(@Path("id") id: String): SeatLayoutDTO
 
+    @POST("v2/booking/book/")
+    suspend fun bookSeats(@Body requestDTO: BookSeatsRequestDTO): BookSeatsDTO
+
     @GET("v2/booking/inputDetailConfig/{id}/")
     suspend fun inputDetailConfig(@Path("id") id: String): InputDetailConfigDTO
 }

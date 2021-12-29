@@ -16,15 +16,17 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.toSize
+import com.diyalotech.bussewasdk.network.dto.MultiPrice
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PriceFieldModel
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
-fun ExposedDropDown(
-    selectedItem: String,
+fun PriceExposedDropDown(
+    selectedItem: PriceFieldModel,
     label: String? = null,
-    dropDownItems: List<String>,
+    dropDownItems: List<MultiPrice>,
     leadingIcon: ImageVector? = null,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (MultiPrice) -> Unit
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -40,7 +42,7 @@ fun ExposedDropDown(
 
     Column {
         OutlinedTextField(
-            value = selectedItem,
+            value = selectedItem.value?.passengerType?:"",
             onValueChange = { },
             readOnly = true,
             modifier = Modifier
@@ -74,7 +76,7 @@ fun ExposedDropDown(
         ) {
             dropDownItems.forEach { item ->
                 DropdownMenuItem(onClick = { onItemSelected(item) }) {
-                    Text(text = item)
+                    Text(text = item.passengerType)
                 }
             }
         }
@@ -83,10 +85,13 @@ fun ExposedDropDown(
 
 @Preview
 @Composable
-fun DropDownPreview() {
+fun PriceDropDownPreview() {
     BusSewaSDKTheme {
         Surface {
-            ExposedDropDown("Test", "What", listOf("Hello", "Test", "Nepal", "What")) {
+
+            val multiPriceList = listOf(MultiPrice(1, "Adult", 10.0, 1000.0))
+
+            PriceExposedDropDown(PriceFieldModel(MultiPrice(1,"Adult", 0.0, 0.0)), "What", multiPriceList) {
 
             }
         }

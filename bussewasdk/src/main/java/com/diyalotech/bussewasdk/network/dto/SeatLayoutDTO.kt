@@ -13,8 +13,8 @@ data class SeatLayoutDTO(
 
 data class SeatLayout(
     val displayName: String,
-    val bookingStatus: String,
-    val bookedByCustomer: String
+    val bookingStatus: String = "na",
+    val bookedByCustomer: String? = null
 ) {
     fun bookingStatusE() =
         if (bookingStatus.equals("na", ignoreCase = true) || bookingStatus.equals(
@@ -28,11 +28,10 @@ data class SeatLayout(
         }
 }
 
-fun SeatLayoutDTO.getSelectedSeatModel() : SelectSeatModel {
+fun SeatLayoutDTO.getSelectedSeatModel(): SelectSeatModel {
     return SelectSeatModel(
         isLocked = isLocked,
         noOfColumn = noOfColumn,
-        seatLayout = seatLayout,
-        price = price
+        seatLayout = seatLayout
     )
 }

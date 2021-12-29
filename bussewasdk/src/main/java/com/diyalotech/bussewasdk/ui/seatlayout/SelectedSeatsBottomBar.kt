@@ -5,10 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,12 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.diyalotech.bussewasdk.R
+import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
 import com.diyalotech.bussewasdk.utils.toNPRString
 
 @Composable
 fun SelectedSeatsBottomBar(
+    bookingState: BookingState,
     selectedSeats: List<String>,
-    totalPrice: Double,
+    totalPrice: Double?,
     modifier: Modifier = Modifier,
     onBookClicked: () -> Unit
 ) {
@@ -68,28 +67,46 @@ fun SelectedSeatsBottomBar(
                     )
                 }
 
-                Column {
-                    Text(
-                        stringResource(id = R.string.total_price),
-                        style = MaterialTheme.typography.caption,
-                        color = MaterialTheme.colors.primary
-                    )
-                    Text(totalPrice.toNPRString())
+                totalPrice?.let {
+
+                    Column {
+                        Text(
+                            stringResource(id = R.string.total_price),
+                            style = MaterialTheme.typography.caption,
+                            color = MaterialTheme.colors.primary
+                        )
+                        Text(totalPrice.toNPRString())
+                    }
                 }
             }
         }
+
 
         Button(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .onGloballyPositioned {
+                    println(it.size.height)
+                },
             onClick = onBookClicked,
-            enabled = selectedSeats.isNotEmpty()
+            contentPadding = PaddingValues(vertical = 0.dp),
+            enabled = selectedSeats.isNotEmpty() && bookingState != BookingState.Loading,
         ) {
-            Text(text = stringResource(id = R.string.book_seats))
+            if (bookingState == BookingState.Loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .height(40.dp)
+                )
+            } else {
+                Text(
+                    text = stringResource(id = R.string.book_seats),
+                    Modifier.padding(vertical = 12.dp)
+                )
+            }
         }
-
     }
 }
 
@@ -97,6 +114,7 @@ fun SelectedSeatsBottomBar(
 @Composable
 fun SelectedSeatsBottomBarPreview() {
     SelectedSeatsBottomBar(
+        BookingState.Init,
         listOf(
             "12", "14", "16"
         ),

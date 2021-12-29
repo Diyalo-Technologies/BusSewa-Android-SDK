@@ -26,11 +26,17 @@ import java.util.*
 @Composable
 fun DateChangeView(
     date: LocalDate,
+    disable: Boolean,
     modifier: Modifier = Modifier,
     onDateChanged: (LocalDate) -> Unit = {}
 ) {
     var dateRem by remember { mutableStateOf(date) }
     val today = localDateNow()
+    val iconTint = if(disable) {
+        MaterialTheme.colors.surface.copy(0.5f)
+    } else {
+        MaterialTheme.colors.surface.copy(0.8f)
+    }
 
     Box(modifier.padding(horizontal = 16.dp)) {
 
@@ -45,7 +51,7 @@ fun DateChangeView(
                     modifier = Modifier
                         .width(48.dp)
                         .fillMaxHeight()
-                        .clickable(enabled = dateRem > today) {
+                        .clickable(enabled = (dateRem > today && !disable)) {
                             dateRem -= DatePeriod(days = 1)
                             onDateChanged(dateRem)
                         }
@@ -54,7 +60,7 @@ fun DateChangeView(
                         Icon(
                             imageVector = Icons.Rounded.NavigateBefore, contentDescription = "",
                             modifier = Modifier.align(Alignment.Center),
-                            tint = MaterialTheme.colors.surface.copy(0.7f)
+                            tint = iconTint
                         )
                     }
                 }
@@ -94,7 +100,7 @@ fun DateChangeView(
                     modifier = Modifier
                         .width(48.dp)
                         .fillMaxHeight()
-                        .clickable {
+                        .clickable(!disable) {
                             dateRem += DatePeriod(days = 1)
                             onDateChanged(dateRem)
                         }
@@ -103,7 +109,7 @@ fun DateChangeView(
                         Icons.Rounded.NavigateNext,
                         "",
                         modifier = Modifier.align(Alignment.Center),
-                        tint = MaterialTheme.colors.surface.copy(0.7f)
+                        tint = iconTint
                     )
                 }
 
@@ -118,7 +124,7 @@ fun DateChangeView(
 fun DateChangePreview() {
     BusSewaSDKTheme {
         Surface(modifier = Modifier.padding(vertical = 16.dp)) {
-            DateChangeView(localDateNow())
+            DateChangeView(localDateNow(),true)
         }
     }
 }
