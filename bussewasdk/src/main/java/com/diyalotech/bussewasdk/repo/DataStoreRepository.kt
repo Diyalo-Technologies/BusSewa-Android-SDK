@@ -18,49 +18,34 @@ class DataStoreRepository {
         println("Instance created")
     }
 
-    val searchTripStore = TripDataStore()
+    val tripDataStore = TripDataStore()
 
-    suspend fun setLocationSelectionMode(locationSelectionMode: LocationType) {
-        searchTripStore.changeSelectionMode(locationSelectionMode)
+    fun setLocationSelectionMode(locationSelectionMode: LocationType) {
+        tripDataStore.changeSelectionMode(locationSelectionMode)
     }
 
     fun saveSelectedLocation(selectedLocation: String) {
-        when (searchTripStore.fetchSelectionMode()) {
-            LocationType.SOURCE -> {
-                searchTripStore.saveSource(selectedLocation)
-            }
-            LocationType.DESTINATION -> {
-                searchTripStore.saveDestination(selectedLocation)
-            }
-        }
+        tripDataStore.saveRoute(selectedLocation)
     }
 
-    fun setSearchDate(date: LocalDate) {
-        searchTripStore.saveDate(date)
+    fun saveDate(date: LocalDate) {
+        tripDataStore.saveDate(date)
     }
 
     fun swapLocation() {
-        searchTripStore.swapLocation()
+        tripDataStore.swapLocation()
     }
 
     fun getSearchModel(): SearchTripModel {
-        return searchTripStore.getSearchTripModel()
+        return tripDataStore.getSearchTripModel()
     }
 
     fun setSelectedTrip(trip: SelectedTripDetails) {
-        searchTripStore.saveSelectedTrip(trip)
-    }
-
-    fun getSelectedTrip(): SelectedTripDetails? {
-        return searchTripStore.getSelectedTrip()
+        tripDataStore.saveSelectedTrip(trip)
     }
 
     fun saveSelectedSeats(seats: List<String>) {
-        searchTripStore.saveSelectedSeats(seats)
-    }
-
-    fun getSelectedSeats(): List<String> {
-        return searchTripStore.fetchSelectedSeats()
+        tripDataStore.saveSelectedSeats(seats)
     }
 
     @OptIn(ExperimentalTime::class)
@@ -78,10 +63,6 @@ class DataStoreRepository {
             }
         )
 
-        searchTripStore.saveBookingInfo(bookingInfo)
-    }
-
-    fun getBookingInfo(): BookingInfo? {
-        return searchTripStore.fetchBookingInfo()
+        tripDataStore.saveBookingInfo(bookingInfo)
     }
 }

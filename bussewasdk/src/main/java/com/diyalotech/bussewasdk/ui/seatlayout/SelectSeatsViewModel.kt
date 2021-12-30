@@ -10,8 +10,9 @@ import com.diyalotech.bussewasdk.network.dto.SeatLayout
 import com.diyalotech.bussewasdk.network.dto.getSelectedSeatModel
 import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.repo.TripRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.diyalotech.bussewasdk.ui.NavDirection
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 sealed class SelectSeatState {
@@ -26,8 +27,11 @@ sealed class SelectSeatState {
 sealed class BookingState {
     object Init : BookingState()
     object Loading : BookingState()
-    object Success : BookingState()
-    class Error(val message: String) : BookingState()
+}
+
+sealed class SelectSeatEvents {
+    class Error(val msg: String) : SelectSeatEvents()
+    class Navigation(val direction: NavDirection) : SelectSeatEvents()
 }
 
 data class SelectSeatModel(
@@ -54,6 +58,9 @@ class SelectSeatsViewModel(
 
     private val _bookingUiState = MutableStateFlow<BookingState>(BookingState.Init)
     val bookingUiState: StateFlow<BookingState> = _bookingUiState
+
+    private val eventsChannel = Channel<SelectSeatEvents>()
+    val eventsFlow: Flow<SelectSeatEvents> = eventsChannel.receiveAsFlow()
 
     init {
         loadSeatDetails()
@@ -116,7 +123,7 @@ class SelectSeatsViewModel(
 
             when (val result = tripRepository.bookTrip(trip?.id!!, seats)) {
                 is ApiResult.Error -> {
-                    _bookingUiState.value = BookingState.Error(result.error)
+                    eventsChannel.send(SelectSeatEvents.Error(result.error))
                 }
                 is ApiResult.Success -> {
                     dataStoreRepository.saveBookingInfo(
@@ -124,8 +131,8 @@ class SelectSeatsViewModel(
                         result.data.timeOut,
                         result.data.boardingPoints
                     )
-
-                    _bookingUiState.value = BookingState.Success
+                    _bookingUiState.value = BookingState.Init
+                    eventsChannel.send(SelectSeatEvents.Navigation(NavDirection.FORWARD))
                 }
             }
         }

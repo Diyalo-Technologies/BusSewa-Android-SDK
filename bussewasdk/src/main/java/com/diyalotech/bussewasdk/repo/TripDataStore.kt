@@ -19,21 +19,30 @@ import kotlin.time.ExperimentalTime
 * working in memory cache object managed using singleton.
 * */
 class TripDataStore {
-    private var source by mutableStateOf("Kathmandu")
-    private var destination by mutableStateOf("Pokhara")
-    private var date by mutableStateOf(localDateNow())
-    private var selectionMode by mutableStateOf(LocationType.SOURCE)
-    private var selectedTripDetails by mutableStateOf<SelectedTripDetails?>(null)
-    private var selectedSeats by mutableStateOf(listOf<String>())
-    private var bookingInfo by mutableStateOf<BookingInfo?>(null)
+    var source by mutableStateOf("Kathmandu")
+        private set
+    var destination by mutableStateOf("Pokhara")
+        private set
+    var date by mutableStateOf(localDateNow())
+        private set
+    var selectionMode by mutableStateOf(LocationType.SOURCE)
+        private set
+    var selectedTripDetails by mutableStateOf<SelectedTripDetails?>(null)
+        private set
+    var selectedSeats by mutableStateOf(listOf<String>())
+        private set
+    var bookingInfo by mutableStateOf<BookingInfo?>(null)
+        private set
 
-    fun saveSource(source: String) {
-        this.source = source
-        println("Saving: $source")
-    }
-
-    fun saveDestination(destination: String) {
-        this.destination = destination
+    fun saveRoute(route: String) {
+        when (selectionMode) {
+            LocationType.SOURCE -> {
+                source = route
+            }
+            LocationType.DESTINATION -> {
+                destination = route
+            }
+        }
     }
 
     fun saveDate(date: LocalDate) {
@@ -53,16 +62,8 @@ class TripDataStore {
         this.selectedTripDetails = trip
     }
 
-    fun getSelectedTrip(): SelectedTripDetails? {
-        return this.selectedTripDetails
-    }
-
     fun changeSelectionMode(locationSelectionMode: LocationType) {
         selectionMode = locationSelectionMode
-    }
-
-    fun fetchSelectionMode(): LocationType {
-        return selectionMode
     }
 
     fun swapLocation() {
@@ -75,19 +76,9 @@ class TripDataStore {
         this.selectedSeats = seats
     }
 
-    fun fetchSelectedSeats(): List<String> {
-        return selectedSeats
-    }
-
     fun saveBookingInfo(bookingInfo: BookingInfo) {
         this.bookingInfo = bookingInfo
     }
-
-    fun fetchBookingInfo(): BookingInfo? {
-        return bookingInfo
-    }
-
-
 }
 
 enum class LocationType {

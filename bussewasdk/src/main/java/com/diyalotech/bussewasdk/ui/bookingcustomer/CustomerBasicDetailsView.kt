@@ -4,10 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -42,11 +39,12 @@ fun CustomerBasicDetailsView(
     onValueChanged: (field: BasicFields, value: String) -> Unit
 ) {
 
-    Column {
-        Column(
-            Modifier
-                .shadow(6.dp)
-        ) {
+    Card(
+        elevation = 4.dp,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+    ) {
+
+        Column(Modifier.padding(8.dp)) {
 
             Text(
                 text = "Contact person details.",
@@ -69,7 +67,6 @@ fun CustomerBasicDetailsView(
                     icon = Icons.Outlined.AccountCircle,
                     onValueChange = { onValueChanged(BasicFields.NAME, it) },
                     modifier = Modifier
-                        .padding(bottom = 8.dp)
                         .fillMaxWidth()
                 )
             }
@@ -90,6 +87,7 @@ fun CustomerBasicDetailsView(
                 icon = Icons.Outlined.Phone,
                 onValueChange = { onValueChanged(BasicFields.PHONE, it) },
                 prefix = "+977-",
+                isNumberOnly = true,
                 modifier = Modifier
                     .padding(bottom = 8.dp)
                     .fillMaxWidth()
@@ -131,7 +129,7 @@ fun BoardingPointView(
 fun CustomerDetailsPreview() {
     BusSewaSDKTheme {
         val nameModel by remember {
-            mutableStateOf(TextFieldModel("", false, ""))
+            mutableStateOf(TextFieldModel())
         }
 
         val boardingPoints = listOf(
@@ -144,6 +142,7 @@ fun CustomerDetailsPreview() {
                 nameModel,
                 nameModel,
                 boardingPoints,
+                nameModel
             ) { a, b ->
 
             }

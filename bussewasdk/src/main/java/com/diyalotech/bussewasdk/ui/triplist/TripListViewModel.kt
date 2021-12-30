@@ -40,10 +40,10 @@ class TripListViewModel constructor(
     //cancellable jobs
     private var job: Job? = null
 
+    val tripDataStore = dataStoreRepository.tripDataStore
+
     private val _uiState = MutableStateFlow<TripListState>(TripListState.Loading)
     val uiState: StateFlow<TripListState> = _uiState
-
-    val searchTripState = dataStoreRepository.searchTripStore
 
     init {
         findTrips()
@@ -51,8 +51,9 @@ class TripListViewModel constructor(
 
     private fun findTrips() {
         job?.cancel()
+        _uiState.value = TripListState.Loading
         job = viewModelScope.launch {
-            val searchModel = dataStoreRepository.searchTripStore.getSearchTripModel()
+            val searchModel = dataStoreRepository.getSearchModel()
             val result = tripRepository.findTrips(
                 searchModel.source,
                 searchModel.destination,
@@ -76,8 +77,7 @@ class TripListViewModel constructor(
     }
 
     fun onDateChanged(date: LocalDate) {
-        dataStoreRepository.setSearchDate(date)
-        _uiState.value = TripListState.Loading
+        dataStoreRepository.saveDate(date)
         findTrips()
     }
 

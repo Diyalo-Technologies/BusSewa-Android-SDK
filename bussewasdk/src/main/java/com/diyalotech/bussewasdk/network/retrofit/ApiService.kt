@@ -19,4 +19,7 @@ interface ApiService {
 
     @GET("v2/booking/inputDetailConfig/{id}/")
     suspend fun inputDetailConfig(@Path("id") id: String): InputDetailConfigDTO
+
+    @POST("v2/booking/cancelQueue/")
+    suspend fun cancelQueue(@Body cancelQueueRequestDTO: CancelQueueRequestDTO): Any
 }

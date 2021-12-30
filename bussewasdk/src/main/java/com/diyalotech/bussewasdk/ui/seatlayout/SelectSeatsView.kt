@@ -16,15 +16,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.diyalotech.bussewasdk.R
+import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.sharedcomposables.ErrorMessage
 import com.diyalotech.bussewasdk.ui.sharedcomposables.ErrorMessageDialog
 import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
 import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SelectSeatsView(
     viewModel: SelectSeatsViewModel,
-    onBooked: () -> Unit,
+    onNavToConfirmBooking: () -> Unit,
     onBackPressed: () -> Unit = {}
 ) {
 
@@ -32,8 +34,27 @@ fun SelectSeatsView(
     val bookingState = viewModel.bookingUiState.collectAsState().value
     val selectedSeats = viewModel.selectSeatList
     val totalPrice = viewModel.totalPrice.value
-    val snackBarHostState = rememberScaffoldState()
     var alertDialogVisibility = remember { false }
+    val alertMessage = remember { mutableStateOf("message") }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventsFlow.collectLatest { value ->
+            when(value) {
+                is SelectSeatEvents.Error -> {
+                    alertMessage.value = value.msg
+                    alertDialogVisibility = true
+                }
+                is SelectSeatEvents.Navigation -> {
+                    when(value.direction) {
+                        NavDirection.FORWARD -> {
+                            onNavToConfirmBooking()
+                        }
+                        NavDirection.BACKWARD -> TODO()
+                    }
+                }
+            }
+        }
+    }
 
     Box {
         Column(
@@ -77,18 +98,9 @@ fun SelectSeatsView(
         }
     }
 
-    //side effects
-    when (bookingState) {
-        is BookingState.Error -> {
-            alertDialogVisibility = true
-            AnimatedVisibility(visible = alertDialogVisibility) {
-                ErrorMessageDialog(text = bookingState.message) {
-                    alertDialogVisibility = false
-                }
-            }
-        }
-        BookingState.Success -> {
-            onBooked()
+    AnimatedVisibility(visible = alertDialogVisibility) {
+        ErrorMessageDialog(text = alertMessage.value) {
+            alertDialogVisibility = false
         }
     }
 

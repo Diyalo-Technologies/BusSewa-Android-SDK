@@ -29,10 +29,7 @@ fun ExposedDropDown(
 
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
+    val interactionSource = remember { MutableInteractionSource() }
 
     if (interactionSource.collectIsPressedAsState().value) {
         expanded = !expanded
@@ -73,7 +70,10 @@ fun ExposedDropDown(
                 .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
             dropDownItems.forEach { item ->
-                DropdownMenuItem(onClick = { onItemSelected(item) }) {
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    onItemSelected(item)
+                }) {
                     Text(text = item)
                 }
             }

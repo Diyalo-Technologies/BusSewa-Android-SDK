@@ -1,6 +1,7 @@
 package com.diyalotech.bussewasdk.ui.sharedcomposables
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.DynamicTextFieldModel
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
 
@@ -19,21 +21,26 @@ fun SimpleTextField(
     icon: ImageVector? = null,
     prefix: String = "",
     modifier: Modifier = Modifier,
+    isNumberOnly: Boolean = false,
+    isLastField: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
 
-    val temp =
-        if (prefix.isNotEmpty()) prefix + " " + textFieldModel.value else textFieldModel.value
-
     OutlinedTextField(
-        value = temp,
-        leadingIcon = icon?.let {
-            { Icon(it, contentDescription = "") }
-        },
+        value = textFieldModel.value,
+        modifier = modifier,
         isError = textFieldModel.isError,
         onValueChange = onValueChange,
         label = { Text(label) },
-        modifier = modifier
+        visualTransformation = if (prefix.isNotEmpty()) PrefixTransformation(prefix) else VisualTransformation.None,
+        leadingIcon = icon?.let {
+            { Icon(it, contentDescription = "") }
+        },
+        singleLine = true,
+        keyboardOptions = if (isNumberOnly)
+            KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+        else
+            KeyboardOptions.Default,
     )
 }
 

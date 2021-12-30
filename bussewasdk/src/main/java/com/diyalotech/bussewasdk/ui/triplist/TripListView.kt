@@ -46,7 +46,7 @@ fun TripListView(
 ) {
 
     val uiState = tripListViewModel.uiState.collectAsState().value
-    val searchParams = tripListViewModel.searchTripState.getSearchTripModel()
+    val tripDataStore = tripListViewModel.tripDataStore.getSearchTripModel()
     val insets = LocalWindowInsets.current
 
     Box(
@@ -56,7 +56,7 @@ fun TripListView(
     ) {
         Column {
             TopAppBar(
-                title = "Trips: ${searchParams.source} - ${searchParams.destination}",
+                title = "Trips: ${tripDataStore.source} - ${tripDataStore.destination}",
                 showBack = true,
                 backAction = onBackPressed
             )
@@ -88,7 +88,7 @@ fun TripListView(
         }
 
         DateChangeView(
-            searchParams.date,
+            tripDataStore.date,
             uiState == TripListState.Loading,
             Modifier
                 .align(Alignment.BottomCenter)

@@ -70,12 +70,12 @@ fun NavigationGraph(
             }
             SelectSeatsView(
                 selectSeatsViewModel,
-                onBooked = navActions.navigateToBookConfirmation,
+                onNavToConfirmBooking = navActions.navigateToBookConfirmation,
                 onBackPressed = { navController.popBackStack() }
             )
         }
 
-        composable(NavDestinations.BOOKING_CONFIRMATION) {
+        composable(NavDestinations.BOOKING_CONFIRMATION_ROUTE) {
             val bookingConfirmViewModel: BookingConfirmViewModel = daggerViewModel(NavDestinations.TRIP_LIST_ROUTE) {
                 component.getBookingCustomerVM()
             }

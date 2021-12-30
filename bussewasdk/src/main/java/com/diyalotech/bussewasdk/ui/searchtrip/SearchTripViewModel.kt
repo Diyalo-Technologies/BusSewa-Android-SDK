@@ -13,10 +13,10 @@ class SearchTripViewModel(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
-    val searchTripState = dataStoreRepository.searchTripStore
+    val searchTripState = dataStoreRepository.tripDataStore
 
     fun setSearchDate(date: LocalDate) {
-        dataStoreRepository.setSearchDate(date)
+        dataStoreRepository.saveDate(date)
     }
 
     fun swapLocation() {
@@ -28,7 +28,5 @@ class SearchTripViewModel(
             dataStoreRepository.setLocationSelectionMode(locationSelectionMode)
         }
     }
-
-
 }
 

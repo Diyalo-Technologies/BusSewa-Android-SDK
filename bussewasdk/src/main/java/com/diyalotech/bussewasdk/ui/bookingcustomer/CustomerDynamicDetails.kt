@@ -1,14 +1,12 @@
 package com.diyalotech.bussewasdk.ui.bookingcustomer
 
 import android.content.res.Configuration
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -24,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.network.dto.InputType
 import com.diyalotech.bussewasdk.network.dto.PassengerDetail
-import com.diyalotech.bussewasdk.network.dto.SeatLayout
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.BasicFields
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.DynamicTextFieldModel
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
@@ -50,9 +47,9 @@ fun CustomerDynamicDetails(
 
     Column(
         modifier = Modifier
+            .shadow(6.dp)
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
-            .shadow(6.dp)
             .verticalScroll(scrollState)
     ) {
 
@@ -113,10 +110,10 @@ fun CustomerDynamicDetails(
 fun DynamicDetailsPreview() {
     BusSewaSDKTheme {
         val nameModelDynamic by remember {
-            mutableStateOf(DynamicTextFieldModel(1, "", false, ""))
+            mutableStateOf(DynamicTextFieldModel(1))
         }
         val nameModel by remember {
-            mutableStateOf(TextFieldModel("", false, ""))
+            mutableStateOf(TextFieldModel())
         }
 
         val passengerDetail = mutableListOf<PassengerDetail>()
@@ -146,20 +143,24 @@ fun DynamicDetailsPreview() {
                 boardingPoints,
                 passengerDetail,
                 mapOf(
-                    Pair("",listOf(
-                        nameModelDynamic,
-                        nameModelDynamic,
-                        nameModelDynamic,
-                        nameModelDynamic,
-                        nameModelDynamic
-                    )),
-                    Pair("",listOf(
-                        nameModelDynamic,
-                        nameModelDynamic,
-                        nameModelDynamic,
-                        nameModelDynamic,
-                        nameModelDynamic
-                    ))
+                    Pair(
+                        "", listOf(
+                            nameModelDynamic,
+                            nameModelDynamic,
+                            nameModelDynamic,
+                            nameModelDynamic,
+                            nameModelDynamic
+                        )
+                    ),
+                    Pair(
+                        "", listOf(
+                            nameModelDynamic,
+                            nameModelDynamic,
+                            nameModelDynamic,
+                            nameModelDynamic,
+                            nameModelDynamic
+                        )
+                    )
                 ),
                 nameModel,
                 onBasicDetailChanged = { a, b -> }

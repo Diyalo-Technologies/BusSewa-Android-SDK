@@ -31,10 +31,7 @@ fun PriceExposedDropDown(
 
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
+    val interactionSource = remember { MutableInteractionSource() }
 
     if (interactionSource.collectIsPressedAsState().value) {
         expanded = !expanded
@@ -75,7 +72,10 @@ fun PriceExposedDropDown(
                 .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
             dropDownItems.forEach { item ->
-                DropdownMenuItem(onClick = { onItemSelected(item) }) {
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    onItemSelected(item)
+                }) {
                     Text(text = item.passengerType)
                 }
             }
@@ -91,7 +91,7 @@ fun PriceDropDownPreview() {
 
             val multiPriceList = listOf(MultiPrice(1, "Adult", 10.0, 1000.0))
 
-            PriceExposedDropDown(PriceFieldModel(MultiPrice(1,"Adult", 0.0, 0.0)), "What", multiPriceList) {
+            PriceExposedDropDown(PriceFieldModel(), "What", multiPriceList) {
 
             }
         }

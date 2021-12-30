@@ -1,33 +1,40 @@
 package com.diyalotech.bussewasdk.ui.bookingcustomer.models
 
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.diyalotech.bussewasdk.network.dto.MultiPrice
 import com.diyalotech.bussewasdk.network.dto.PassengerDetail
-import com.diyalotech.bussewasdk.network.dto.SeatLayout
-import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatModel
-import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatState
 
-data class TextFieldModel(
-    val value: String = "",
-    val isError: Boolean = false,
-    val errorMessage: String = ""
-)
 
+@Stable
+class TextFieldModel {
+    var value by mutableStateOf("")
+    var isError by mutableStateOf(false)
+    var errorMessage by mutableStateOf("")
+}
+
+@Stable
+class PriceFieldModel {
+    var value by mutableStateOf<MultiPrice?>(null)
+    var isError by mutableStateOf(false)
+    var errorMessage by mutableStateOf("")
+}
+
+@Stable
+class DynamicTextFieldModel(
+    val id: Int
+) {
+    var value by mutableStateOf("")
+    var isError by mutableStateOf(false)
+    var errorMessage by mutableStateOf("")
+}
+
+@Stable
 data class PassengerPriceDetail(
-    val priceFieldModel: PriceFieldModel,
-    val textFieldModel: TextFieldModel
-)
-
-data class PriceFieldModel(
-    val value: MultiPrice? = null,
-    val isError: Boolean = false,
-    val errorMessage: String = ""
-)
-
-data class DynamicTextFieldModel(
-    val id: Int,
-    val value: String = "",
-    val isError: Boolean = false,
-    val errorMessage: String = ""
+    var priceFieldModel: PriceFieldModel,
+    var textFieldModel: TextFieldModel
 )
 
 enum class BasicFields {
