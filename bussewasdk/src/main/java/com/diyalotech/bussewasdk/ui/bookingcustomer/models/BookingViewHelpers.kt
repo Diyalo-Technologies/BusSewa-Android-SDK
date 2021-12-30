@@ -34,7 +34,7 @@ class DynamicTextFieldModel(
 @Stable
 data class PassengerPriceDetail(
     var priceFieldModel: PriceFieldModel,
-    var textFieldModel: TextFieldModel
+    var nameModel: TextFieldModel
 )
 
 enum class BasicFields {

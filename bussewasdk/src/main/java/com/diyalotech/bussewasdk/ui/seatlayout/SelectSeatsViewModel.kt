@@ -48,7 +48,7 @@ class SelectSeatsViewModel(
     //cache
     //seatModel
     private lateinit var seatModel: SelectSeatModel
-    private val trip = dataStoreRepository.getSelectedTrip()
+    val tripDataStore = dataStoreRepository.tripDataStore
 
     val selectSeatList = mutableStateListOf<SeatLayout>()
     val totalPrice = mutableStateOf<Double?>(null)
@@ -68,6 +68,7 @@ class SelectSeatsViewModel(
 
     private fun loadSeatDetails() {
         viewModelScope.launch {
+            val trip = tripDataStore.selectedTripDetails
             if (trip == null) {
                 _uiState.value = SelectSeatState.Error("Could not load trip details.")
                 return@launch
@@ -105,7 +106,8 @@ class SelectSeatsViewModel(
     }
 
     private fun calculatePrice() {
-        when (trip?.inputTypeCode) {
+        val trip = tripDataStore.selectedTripDetails ?: return
+        when (trip.inputTypeCode) {
             InputTypeCode.BASIC, InputTypeCode.DYNAMIC -> {
                 totalPrice.value = selectSeatList.size * trip.ticketPrice
             }
@@ -119,9 +121,10 @@ class SelectSeatsViewModel(
     fun bookSeats() {
         _bookingUiState.value = BookingState.Loading
         viewModelScope.launch {
-            val seats = dataStoreRepository.getSelectedSeats()
+            val trip = tripDataStore.selectedTripDetails ?: return@launch
+            val seats = tripDataStore.selectedSeats
 
-            when (val result = tripRepository.bookTrip(trip?.id!!, seats)) {
+            when (val result = tripRepository.bookTrip(trip.id, seats)) {
                 is ApiResult.Error -> {
                     eventsChannel.send(SelectSeatEvents.Error(result.error))
                 }

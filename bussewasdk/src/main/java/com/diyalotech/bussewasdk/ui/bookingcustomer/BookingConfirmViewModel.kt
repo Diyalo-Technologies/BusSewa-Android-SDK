@@ -10,7 +10,6 @@ import com.diyalotech.bussewasdk.repo.BookingRepository
 import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.*
-import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatEvents
 import com.diyalotech.bussewasdk.utils.Validator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +19,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 sealed class BookingConfirmEvent {
-    class Error(val msg: String): BookingConfirmEvent()
-    class Navigation(val direction: NavDirection): BookingConfirmEvent()
+    class Error(val msg: String) : BookingConfirmEvent()
+    class Navigation(val direction: NavDirection) : BookingConfirmEvent()
 }
 
 class BookingConfirmViewModel(
@@ -30,9 +29,10 @@ class BookingConfirmViewModel(
 ) : ViewModel() {
 
     //prefetch cache
-    private val bookingInfo = dataStoreRepo.getBookingInfo()
     private lateinit var passengerDetailList: List<PassengerDetail>
     private lateinit var ticketPriceList: List<MultiPrice>
+
+    val tripDataStore = dataStoreRepo.tripDataStore
 
     private val _uiState = MutableStateFlow<BookingDetailsState>(BookingDetailsState.Loading)
     val uiState: StateFlow<BookingDetailsState> = _uiState
@@ -47,23 +47,19 @@ class BookingConfirmViewModel(
     private lateinit var passengerPriceDetails: Map<String, PassengerPriceDetail>
 
     //dynamic passenger details SeatName : FieldHolders
-    private lateinit var valuesHolder: Map<String, List<DynamicTextFieldModel>>
-
-    private var _boardingPoints = MutableStateFlow(emptyList<String>())
-    val boardingPoints: StateFlow<List<String>> = _boardingPoints
+    private lateinit var passengerDetailValues: Map<String, List<DynamicTextFieldModel>>
 
     private val eventsChannel = Channel<BookingConfirmEvent>()
     val eventsFlow: Flow<BookingConfirmEvent> = eventsChannel.receiveAsFlow()
 
     init {
-        _boardingPoints.value = bookingInfo?.boardingPoints ?: emptyList()
         fetchInputConfig()
     }
 
     private fun fetchInputConfig() {
         viewModelScope.launch {
-            val trip = dataStoreRepo.getSelectedTrip() ?: return@launch
-            val seats = dataStoreRepo.getSelectedSeats()
+            val trip = tripDataStore.selectedTripDetails ?: return@launch
+            val seats = tripDataStore.selectedSeats
             val result = bookingRepo.fetchInputConfig(trip.id)
 
             when (result) {
@@ -97,7 +93,7 @@ class BookingConfirmViewModel(
         for (seat in seats) {
             passengerPriceDetails[seat] = PassengerPriceDetail(
                 priceFieldModel = PriceFieldModel(),
-                textFieldModel = TextFieldModel()
+                nameModel = TextFieldModel()
             )
         }
         this.passengerPriceDetails = passengerPriceDetails
@@ -111,16 +107,16 @@ class BookingConfirmViewModel(
         for (seat in seats) {
             val paramsList = mutableListOf<DynamicTextFieldModel>()
             passengerDetails.forEach { field ->
-                paramsList.add(DynamicTextFieldModel(id = field.tyepId))
+                paramsList.add(DynamicTextFieldModel(id = field.typeId))
             }
             holderList[seat] = paramsList
         }
-        valuesHolder = holderList
+        passengerDetailValues = holderList
     }
 
-    private fun updateDetailsBasedOnType(){
-        val trip = dataStoreRepo.getSelectedTrip() ?: return
-        val seats = dataStoreRepo.getSelectedSeats()
+    private fun updateDetailsBasedOnType() {
+        val trip = tripDataStore.selectedTripDetails ?: return
+        val seats = tripDataStore.selectedSeats
 
         when (trip.inputTypeCode) {
             InputTypeCode.BASIC -> {
@@ -139,7 +135,7 @@ class BookingConfirmViewModel(
                     mobileState,
                     boardingPointState,
                     passengerDetailList,
-                    valuesHolder
+                    passengerDetailValues
                 )
             }
             InputTypeCode.MULTI_PRICE -> {
@@ -156,8 +152,8 @@ class BookingConfirmViewModel(
         }
     }
 
-    fun onBasicDetailsChanged(field: BasicFields, value: String){
-        when(field) {
+    fun onBasicDetailsChanged(field: BasicFields, value: String) {
+        when (field) {
             BasicFields.NAME -> {
                 this.nameState.value = value
             }
@@ -168,7 +164,7 @@ class BookingConfirmViewModel(
                 this.mobileState.value = value
                 this.mobileState.isError = !Validator.isValidMobile(value)
             }
-            BasicFields.BOARDING_POINT ->  {
+            BasicFields.BOARDING_POINT -> {
                 this.boardingPointState.value = value
             }
         }
@@ -176,20 +172,34 @@ class BookingConfirmViewModel(
         updateDetailsBasedOnType()
     }
 
-    fun onDynamicDetailsChanged() {
+    fun onDynamicDetailsChanged(seat: String, id: Int, value: String) {
+        val detail = passengerDetailValues[seat] ?: return
+        detail.find { it.id == id }?.let {
+            it.value = value
+        }
+    }
 
+    fun onMultiPriceNameChanged(seat: String, value: String) {
+        passengerPriceDetails[seat]?.let {
+            it.nameModel.value = value
+        }
+    }
+
+    fun onMultiPricePriceChanged(seat: String, value: MultiPrice) {
+        passengerPriceDetails[seat]?.let {
+            it.priceFieldModel.value = value
+        }
     }
 
     fun cancelQueue() {
-        val trip = dataStoreRepo.getSelectedTrip() ?: return
-        bookingInfo?.ticketSrlNo?.let {
-            viewModelScope.launch {
-                val result = bookingRepo.cancelQueue(trip.id, it)
-                when(result) {
-                    is ApiResult.Error -> TODO()
-                    is ApiResult.Success -> {
-                        eventsChannel.send(BookingConfirmEvent.Navigation(NavDirection.BACKWARD))
-                    }
+        val trip = tripDataStore.selectedTripDetails ?: return
+        val bookingInfo = tripDataStore.bookingInfo
+        viewModelScope.launch {
+            val result = bookingRepo.cancelQueue(trip.id, bookingInfo.ticketSrlNo)
+            when (result) {
+                is ApiResult.Error -> TODO()
+                is ApiResult.Success -> {
+                    eventsChannel.send(BookingConfirmEvent.Navigation(NavDirection.BACKWARD))
                 }
             }
         }

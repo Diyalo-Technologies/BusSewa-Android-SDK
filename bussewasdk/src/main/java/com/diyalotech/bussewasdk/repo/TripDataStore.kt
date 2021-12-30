@@ -3,13 +3,11 @@ package com.diyalotech.bussewasdk.repo
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.diyalotech.bussewasdk.network.dto.InputTypeCode
 import com.diyalotech.bussewasdk.repo.model.BookingInfo
 import com.diyalotech.bussewasdk.repo.model.SelectedTripDetails
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import com.diyalotech.bussewasdk.utils.localDateNow
 import com.diyalotech.bussewasdk.utils.localTimeNow
-import com.diyalotech.bussewasdk.utils.toLocalInstant
 import kotlinx.datetime.*
 import java.lang.Exception
 import kotlin.time.Duration.Companion.seconds
@@ -21,7 +19,7 @@ import kotlin.time.ExperimentalTime
 class TripDataStore {
     var source by mutableStateOf("Kathmandu")
         private set
-    var destination by mutableStateOf("Pokhara")
+    var destination by mutableStateOf("")
         private set
     var date by mutableStateOf(localDateNow())
         private set
@@ -31,7 +29,7 @@ class TripDataStore {
         private set
     var selectedSeats by mutableStateOf(listOf<String>())
         private set
-    var bookingInfo by mutableStateOf<BookingInfo?>(null)
+    var bookingInfo = BookingInfo()
         private set
 
     fun saveRoute(route: String) {
@@ -76,8 +74,17 @@ class TripDataStore {
         this.selectedSeats = seats
     }
 
-    fun saveBookingInfo(bookingInfo: BookingInfo) {
-        this.bookingInfo = bookingInfo
+    @OptIn(ExperimentalTime::class)
+    fun saveBookingInfo(ticketSrlNo: String, timeoutString: String, boardingPoints: List<String>) {
+        this.bookingInfo.ticketSrlNo = ticketSrlNo
+        this.bookingInfo.timeout = try {
+            val secondsInt = timeoutString.toInt()
+            val instant = Clock.System.now().plus(secondsInt.seconds)
+            instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        } catch (ex: Exception) {
+            localTimeNow()
+        }
+        this.bookingInfo.boardingPoints = boardingPoints
     }
 }
 

@@ -10,7 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.BookingDetailsState
-import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatEvents
 import com.diyalotech.bussewasdk.ui.sharedcomposables.ErrorMessage
 import com.diyalotech.bussewasdk.ui.sharedcomposables.ErrorMessageDialog
 import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
@@ -20,20 +19,21 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPressed: () -> Unit) {
-    val boardingPoints = viewModel.boardingPoints.collectAsState().value
+
+    val boardingPoints = viewModel.tripDataStore.bookingInfo.boardingPoints
     val uiState = viewModel.uiState.collectAsState().value
     var alertDialogVisibility = remember { false }
     val alertMessage = remember { mutableStateOf("message") }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventsFlow.collectLatest { value ->
-            when(value) {
+            when (value) {
                 is BookingConfirmEvent.Error -> {
                     alertMessage.value = value.msg
                     alertDialogVisibility = true
                 }
                 is BookingConfirmEvent.Navigation -> {
-                    when(value.direction) {
+                    when (value.direction) {
                         NavDirection.FORWARD -> {
                         }
                         NavDirection.BACKWARD -> {
@@ -83,7 +83,7 @@ fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPressed: () -> 
                         viewModel.onBasicDetailsChanged(field, value)
                     },
                     onDynamicDetailsChanged = { seat, id, value ->
-
+                        viewModel.onDynamicDetailsChanged(seat, id, value)
                     })
             }
             is BookingDetailsState.SuccessMulti -> {
@@ -98,11 +98,11 @@ fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPressed: () -> 
                     onBasicDetailsChanged = { field, value ->
                         viewModel.onBasicDetailsChanged(field, value)
                     },
-                    onNameChanged = { field, value ->
-
+                    onNameChanged = { seat, value ->
+                        viewModel.onMultiPriceNameChanged(seat, value)
                     },
                     onPriceSelected = { seat, multiPrice ->
-
+                        viewModel.onMultiPricePriceChanged(seat, multiPrice)
                     })
             }
             is BookingDetailsState.SuccessMultiDynamic -> {

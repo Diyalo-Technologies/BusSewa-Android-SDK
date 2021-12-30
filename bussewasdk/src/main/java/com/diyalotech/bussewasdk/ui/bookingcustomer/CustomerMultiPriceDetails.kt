@@ -63,13 +63,16 @@ fun CustomerMultiPriceDetails(
                     )
 
                     SimpleTextField(
-                        passengerPriceDetails[seat]?.textFieldModel!!,
+                        passengerPriceDetails[seat]?.nameModel!!,
                         label = stringResource(id = R.string.full_name),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
                         onValueChange = { onNameChanged(seat, it) }
                     )
 
                     PriceExposedDropDown(
+                        label = stringResource(id = R.string.select_multi_price),
                         selectedItem = passengerPriceDetails[seat]?.priceFieldModel!!,
                         dropDownItems = priceList
                     ) {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -47,9 +48,6 @@ fun CustomerDynamicDetails(
 
     Column(
         modifier = Modifier
-            .shadow(6.dp)
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
             .verticalScroll(scrollState)
     ) {
 
@@ -60,47 +58,50 @@ fun CustomerDynamicDetails(
             boardingPoints,
             onValueChanged = onBasicDetailChanged
         )
+        Card(
+            elevation = 4.dp,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+        ) {
+            seatList.forEach { seat ->
+                Text(
+                    text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onSurface.copy(0.5f)
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        seatList.forEachIndexed { seatIndex, seat ->
-            Text(
-                text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
-                style = MaterialTheme.typography.subtitle1,
-                color = MaterialTheme.colors.onSurface.copy(0.5f)
-            )
+                details.forEachIndexed { i, detail ->
+                    if (detail.inputType == InputType.TEXT_FIELD) {
+                        DynamicTextField(
+                            dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
+                            label = detail.detailName
+                        ) {
+                            onDynamicDetailsChanged(seat, detail.typeId, it)
+                        }
+                    }
 
-            details.forEachIndexed { i, detail ->
-                if (detail.inputType == InputType.TEXT_FIELD) {
-                    DynamicTextField(
-                        dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
-                        label = detail.detailName
-                    ) {
-                        onDynamicDetailsChanged(seat, detail.tyepId, it)
+                    if (detail.inputType == InputType.DROP_DOWN) {
+                        ExposedDropDown(
+                            valueHolder[seat]?.get(i)!!.value,
+                            label = detail.detailName,
+                            dropDownItems = detail.valueList
+                        ) {
+                            onDynamicDetailsChanged(seat, detail.typeId, it)
+                        }
+                    }
+
+                    if (detail.inputType == InputType.NUMBER_RANGE) {
+                        DynamicTextField(
+                            dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
+                            label = detail.detailName,
+                            isNumberOnly = true
+                        ) {
+                            onDynamicDetailsChanged(seat, detail.typeId, it)
+                        }
                     }
                 }
 
-                if (detail.inputType == InputType.DROP_DOWN) {
-                    ExposedDropDown(
-                        valueHolder[seat]?.get(i)!!.value,
-                        label = detail.detailName,
-                        dropDownItems = detail.valueList
-                    ) {
-                        onDynamicDetailsChanged(seat, detail.tyepId, it)
-                    }
-                }
-
-                if (detail.inputType == InputType.NUMBER_RANGE) {
-                    DynamicTextField(
-                        dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
-                        label = detail.detailName,
-                        isNumberOnly = true
-                    ) {
-                        onDynamicDetailsChanged(seat, detail.tyepId, it)
-                    }
-                }
+                Spacer(modifier = Modifier.height(16.dp))
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
