@@ -4,6 +4,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,14 +16,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
 fun ExposedDropDown(
     selectedItem: String,
-    label: String? = null,
     dropDownItems: List<String>,
+    label: String? = null,
+    isError: Boolean = false,
+    errorMessage: String = "",
     leadingIcon: ImageVector? = null,
     onItemSelected: (String) -> Unit
 ) {
@@ -61,8 +65,10 @@ fun ExposedDropDown(
                     "drop down"
                 )
             },
+            isError = isError,
             interactionSource = interactionSource
         )
+        ErrorMessageTextField(isError, errorMessage)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -86,7 +92,7 @@ fun ExposedDropDown(
 fun DropDownPreview() {
     BusSewaSDKTheme {
         Surface {
-            ExposedDropDown("Test", "What", listOf("Hello", "Test", "Nepal", "What")) {
+            ExposedDropDown("Test", listOf("Hello", "Test", "Nepal", "What"), "label") {
 
             }
         }

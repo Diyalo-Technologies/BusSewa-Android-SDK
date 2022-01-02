@@ -2,12 +2,10 @@ package com.diyalotech.bussewasdk.ui.seatlayout
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -15,10 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.insets.navigationBarsPadding
 import com.diyalotech.bussewasdk.R
-import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
+import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import com.diyalotech.bussewasdk.utils.toNPRString
+import com.google.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun SelectedSeatsBottomBar(
@@ -26,6 +24,7 @@ fun SelectedSeatsBottomBar(
     selectedSeats: List<String>,
     totalPrice: Double?,
     modifier: Modifier = Modifier,
+    buttonLabel: String = stringResource(id = R.string.book_seats),
     onBookClicked: () -> Unit
 ) {
 
@@ -102,7 +101,7 @@ fun SelectedSeatsBottomBar(
                 )
             } else {
                 Text(
-                    text = stringResource(id = R.string.book_seats),
+                    text = buttonLabel,
                     Modifier.padding(vertical = 12.dp)
                 )
             }
@@ -118,7 +117,8 @@ fun SelectedSeatsBottomBarPreview() {
         listOf(
             "12", "14", "16"
         ),
-        1000.0
+        1000.0,
+        buttonLabel = stringResource(id = R.string.book_seats)
     ) {
 
     }

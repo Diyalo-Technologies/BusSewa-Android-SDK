@@ -11,6 +11,7 @@ import com.diyalotech.bussewasdk.network.dto.getSelectedSeatModel
 import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.repo.TripRepository
 import com.diyalotech.bussewasdk.ui.NavDirection
+import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,11 +23,6 @@ sealed class SelectSeatState {
     ) : SelectSeatState()
 
     class Error(val message: String) : SelectSeatState()
-}
-
-sealed class BookingState {
-    object Init : BookingState()
-    object Loading : BookingState()
 }
 
 sealed class SelectSeatEvents {
@@ -116,6 +112,7 @@ class SelectSeatsViewModel(
             }
             null -> {}
         }
+        dataStoreRepository.saveTicketPrice(totalPrice.value ?: 0.0)
     }
 
     fun bookSeats() {

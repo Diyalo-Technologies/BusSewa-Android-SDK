@@ -49,40 +49,42 @@ fun TripListView(
     val tripDataStore = tripListViewModel.tripDataStore.getSearchTripModel()
     val insets = LocalWindowInsets.current
 
-    Box(
+    Column(
         Modifier
             .navigationBarsPadding()
             .padding(bottom = 16.dp)
     ) {
-        Column {
-            TopAppBar(
-                title = "Trips: ${tripDataStore.source} - ${tripDataStore.destination}",
-                showBack = true,
-                backAction = onBackPressed
-            )
+        TopAppBar(
+            title = "Trips: ${tripDataStore.source} - ${tripDataStore.destination}",
+            showBack = true,
+            backAction = onBackPressed
+        )
 
-            Crossfade(targetState = uiState, animationSpec = tween(250)) { it ->
-                when (it) {
-                    TripListState.Loading -> {
-                        LoadingView()
-                    }
-                    is TripListState.Success -> {
-                        LazyColumn(
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(
-                                top = 16.dp,
-                                bottom = insets.navigationBars.bottom.dp + 48.dp
-                            )
-                        ) {
-                            items(it.tripList, { trip -> trip.id }) {
-                                TripView(trip = it, onTripClicked)
-                                Divider(modifier = Modifier.padding(bottom = 12.dp))
-                            }
+        Crossfade(
+            targetState = uiState,
+            animationSpec = tween(250),
+            modifier = Modifier.weight(1f)
+        ) { it ->
+            when (it) {
+                TripListState.Loading -> {
+                    LoadingView()
+                }
+                is TripListState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        contentPadding = PaddingValues(
+                            top = 16.dp,
+                            bottom = insets.navigationBars.bottom.dp + 48.dp
+                        )
+                    ) {
+                        items(it.tripList, { trip -> trip.id }) {
+                            TripView(trip = it, onTripClicked)
+                            Divider(modifier = Modifier.padding(bottom = 12.dp))
                         }
                     }
-                    is TripListState.Error -> {
-                        ErrorMessage(it.message)
-                    }
+                }
+                is TripListState.Error -> {
+                    ErrorMessage(it.message)
                 }
             }
         }
@@ -91,7 +93,6 @@ fun TripListView(
             tripDataStore.date,
             uiState == TripListState.Loading,
             Modifier
-                .align(Alignment.BottomCenter)
                 .widthIn(max = 480.dp)
         ) {
             tripListViewModel.onDateChanged(it)
@@ -102,7 +103,7 @@ fun TripListView(
 
 @Composable
 fun TripView(trip: Trip, onTripClicked: (Trip) -> Unit) {
-    Column(Modifier.clickable {
+    Column(Modifier.clickable(!trip.locked) {
         onTripClicked(trip)
     }) {
         Row(modifier = Modifier.padding(horizontal = 16.dp)) {

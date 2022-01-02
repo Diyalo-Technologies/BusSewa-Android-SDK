@@ -1,5 +1,7 @@
 package com.diyalotech.bussewasdk.utils
 
+import android.util.Patterns
+
 object Validator {
 
     /*
@@ -21,4 +23,12 @@ object Validator {
             false
         }
     }
+
+    /*
+    * Email validator
+    * */
+    fun isEmailValid(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
 }

@@ -81,7 +81,7 @@ fun NavigationGraph(
             }
             BookingConfirmView(
                 bookingConfirmViewModel,
-                onBackPressed = { navController.popBackStack() }
+                onBackPressed = { navController.popBackStack() },
             )
         }
 

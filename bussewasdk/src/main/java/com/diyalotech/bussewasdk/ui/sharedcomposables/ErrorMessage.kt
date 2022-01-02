@@ -28,6 +28,18 @@ fun ErrorMessage(text: String) {
 }
 
 @Composable
+fun ErrorMessageTextField(isError: Boolean, text: String) {
+    if (isError) {
+        Text(
+            text = text,
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+    }
+}
+
+@Composable
 fun ErrorMessageDialog(text: String, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = { onDismiss() },

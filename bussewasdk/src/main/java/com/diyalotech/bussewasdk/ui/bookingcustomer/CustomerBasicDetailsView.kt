@@ -41,7 +41,9 @@ fun CustomerBasicDetailsView(
 
     Card(
         elevation = 4.dp,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+            .fillMaxWidth()
     ) {
 
         Column(Modifier.padding(8.dp)) {
@@ -55,6 +57,8 @@ fun CustomerBasicDetailsView(
             ExposedDropDown(
                 selectedItem = boardingPointModel.value,
                 label = stringResource(id = R.string.boarding_point),
+                isError = boardingPointModel.isError,
+                errorMessage = boardingPointModel.errorMessage,
                 dropDownItems = boardingPoints,
                 leadingIcon = Icons.Default.AddLocation,
                 onItemSelected = { onValueChanged(BasicFields.BOARDING_POINT, it) }

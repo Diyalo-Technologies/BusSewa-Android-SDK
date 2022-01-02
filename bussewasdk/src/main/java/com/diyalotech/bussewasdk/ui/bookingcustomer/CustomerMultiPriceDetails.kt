@@ -41,7 +41,9 @@ fun CustomerMultiPriceDetails(
     Column(
         Modifier
             .verticalScroll(scrollState)
+            .fillMaxWidth()
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
         CustomerBasicDetailsView(
             boardingPointModel,
             emailModel,

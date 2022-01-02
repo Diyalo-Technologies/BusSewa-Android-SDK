@@ -7,12 +7,16 @@ import androidx.compose.runtime.setValue
 import com.diyalotech.bussewasdk.network.dto.MultiPrice
 import com.diyalotech.bussewasdk.network.dto.PassengerDetail
 
-
 @Stable
-class TextFieldModel {
+open class TextFieldModel {
     var value by mutableStateOf("")
     var isError by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
+
+    fun clearError() {
+        isError = false
+        errorMessage = ""
+    }
 }
 
 @Stable
@@ -20,16 +24,15 @@ class PriceFieldModel {
     var value by mutableStateOf<MultiPrice?>(null)
     var isError by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
+
+    fun clearError() {
+        isError = false
+        errorMessage = ""
+    }
 }
 
 @Stable
-class DynamicTextFieldModel(
-    val id: Int
-) {
-    var value by mutableStateOf("")
-    var isError by mutableStateOf(false)
-    var errorMessage by mutableStateOf("")
-}
+class DynamicTextFieldModel(val id: Int): TextFieldModel()
 
 @Stable
 data class PassengerPriceDetail(

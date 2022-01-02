@@ -1,10 +1,7 @@
 package com.diyalotech.bussewasdk.ui.bookingcustomer
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
@@ -49,8 +46,9 @@ fun CustomerDynamicDetails(
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
+            .fillMaxWidth()
     ) {
-
+        Spacer(modifier = Modifier.height(16.dp))
         CustomerBasicDetailsView(
             boardingPointModel,
             emailModel,
@@ -60,47 +58,55 @@ fun CustomerDynamicDetails(
         )
         Card(
             elevation = 4.dp,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
         ) {
-            seatList.forEach { seat ->
-                Text(
-                    text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
-                    style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.onSurface.copy(0.5f)
-                )
+            Column(Modifier.padding(8.dp)) {
+                seatList.forEach { seat ->
+                    Text(
+                        text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
+                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colors.onSurface.copy(0.5f)
+                    )
 
-                details.forEachIndexed { i, detail ->
-                    if (detail.inputType == InputType.TEXT_FIELD) {
-                        DynamicTextField(
-                            dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
-                            label = detail.detailName
-                        ) {
-                            onDynamicDetailsChanged(seat, detail.typeId, it)
+                    details.forEachIndexed { i, detail ->
+
+                        val detailName = detail.detailName +
+                                if (!detail.manditory) " ${stringResource(R.string.optional)}"
+                                else ""
+
+                        if (detail.inputType == InputType.TEXT_FIELD) {
+                            DynamicTextField(
+                                dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
+                                label = detailName
+                            ) {
+                                onDynamicDetailsChanged(seat, detail.typeId, it)
+                            }
+                        }
+
+                        if (detail.inputType == InputType.DROP_DOWN) {
+                            ExposedDropDown(
+                                valueHolder[seat]?.get(i)!!.value,
+                                label = detailName,
+                                dropDownItems = detail.valueList
+                            ) {
+                                onDynamicDetailsChanged(seat, detail.typeId, it)
+                            }
+                        }
+
+                        if (detail.inputType == InputType.NUMBER_RANGE) {
+                            DynamicTextField(
+                                dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
+                                label = detailName,
+                                isNumberOnly = true
+                            ) {
+                                onDynamicDetailsChanged(seat, detail.typeId, it)
+                            }
                         }
                     }
 
-                    if (detail.inputType == InputType.DROP_DOWN) {
-                        ExposedDropDown(
-                            valueHolder[seat]?.get(i)!!.value,
-                            label = detail.detailName,
-                            dropDownItems = detail.valueList
-                        ) {
-                            onDynamicDetailsChanged(seat, detail.typeId, it)
-                        }
-                    }
-
-                    if (detail.inputType == InputType.NUMBER_RANGE) {
-                        DynamicTextField(
-                            dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
-                            label = detail.detailName,
-                            isNumberOnly = true
-                        ) {
-                            onDynamicDetailsChanged(seat, detail.typeId, it)
-                        }
-                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -129,8 +135,8 @@ fun DynamicDetailsPreview() {
             )
         )
         passengerDetail.add(PassengerDetail(4, "Name", InputType.TEXT_FIELD))
-        passengerDetail.add(PassengerDetail(4, "Age", InputType.NUMBER_RANGE))
-        val seatList = mutableListOf("Vjbw", "qfk727", "go11q80n", "3x1", "5Gd5Ko6w")
+        passengerDetail.add(PassengerDetail(5, "Age", InputType.NUMBER_RANGE))
+        val seatList = mutableListOf("Vjbw", "qfk727")
         val boardingPoints = listOf(
             "k9006", "XlMK7b", "Bc67", "516GT", "2d44d4r"
         )
@@ -145,7 +151,7 @@ fun DynamicDetailsPreview() {
                 passengerDetail,
                 mapOf(
                     Pair(
-                        "", listOf(
+                        "Vjbw", listOf(
                             nameModelDynamic,
                             nameModelDynamic,
                             nameModelDynamic,
@@ -154,7 +160,7 @@ fun DynamicDetailsPreview() {
                         )
                     ),
                     Pair(
-                        "", listOf(
+                        "qfk727", listOf(
                             nameModelDynamic,
                             nameModelDynamic,
                             nameModelDynamic,

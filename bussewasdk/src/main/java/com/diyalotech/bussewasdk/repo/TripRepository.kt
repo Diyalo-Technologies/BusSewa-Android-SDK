@@ -1,9 +1,6 @@
 package com.diyalotech.bussewasdk.repo
 
-import com.diyalotech.bussewasdk.network.dto.BookSeatsRequestDTO
-import com.diyalotech.bussewasdk.network.dto.SeatLayout
-import com.diyalotech.bussewasdk.network.dto.SeatLayoutDTO
-import com.diyalotech.bussewasdk.network.dto.TripListRequestDTO
+import com.diyalotech.bussewasdk.network.dto.*
 import com.diyalotech.bussewasdk.network.retrofit.ApiService
 import com.diyalotech.bussewasdk.network.retrofit.safeApiCall
 import com.diyalotech.bussewasdk.ui.seatlayout.testString
@@ -26,9 +23,24 @@ class TripRepository @Inject constructor(
     }
 
     suspend fun bookTrip(id: String, seats: List<String>) = safeApiCall {
-        apiService.bookSeats(BookSeatsRequestDTO(
-            id = id,
-            seat = seats
-        ))
+        apiService.bookSeats(
+            BookSeatsRequestDTO(
+                id = id,
+                seat = seats
+            )
+        )
+    }
+
+    suspend fun savePassengerInfo(
+        id: String,
+        ticketSrlNo: String,
+        mobile: String,
+        boardingPoint: String,
+        name: String? = null,
+        email: String? = null,
+        passengerDetails: List<PassengerTypeDetail>?,
+        passengerPriceDetails: List<PassengerPriceDetail>?
+    ) = safeApiCall {
+
     }
 }

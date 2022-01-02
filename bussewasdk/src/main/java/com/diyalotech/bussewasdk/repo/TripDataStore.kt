@@ -31,6 +31,8 @@ class TripDataStore {
         private set
     var bookingInfo = BookingInfo()
         private set
+    var ticketPrice by mutableStateOf(0.0)
+        private set
 
     fun saveRoute(route: String) {
         when (selectionMode) {
@@ -72,6 +74,11 @@ class TripDataStore {
 
     fun saveSelectedSeats(seats: List<String>) {
         this.selectedSeats = seats
+    }
+
+    //for multi price only
+    fun saveTicketPrice(price: Double) {
+        this.ticketPrice = price
     }
 
     @OptIn(ExperimentalTime::class)

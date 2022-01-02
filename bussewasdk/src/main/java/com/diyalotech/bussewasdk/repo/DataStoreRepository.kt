@@ -39,4 +39,9 @@ class DataStoreRepository {
     fun saveBookingInfo(ticketSrlNo: String, timeoutString: String, boardingPoints: List<String>) {
         tripDataStore.saveBookingInfo(ticketSrlNo, timeoutString, boardingPoints)
     }
+
+    //for multi price only
+    fun saveTicketPrice(price: Double) {
+        tripDataStore.saveTicketPrice(price)
+    }
 }

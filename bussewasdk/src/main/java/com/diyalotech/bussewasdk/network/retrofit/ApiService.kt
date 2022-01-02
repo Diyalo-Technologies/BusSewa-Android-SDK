@@ -22,4 +22,7 @@ interface ApiService {
 
     @POST("v2/booking/cancelQueue/")
     suspend fun cancelQueue(@Body cancelQueueRequestDTO: CancelQueueRequestDTO): Any
+
+    @POST("v2/booking/passengerInfo/")
+    suspend fun savePassengerInfo(@Body basicDetails: BasicPassengerInfoDTO): Any
 }

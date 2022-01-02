@@ -17,4 +17,6 @@
     <string name="passenger_detail">Passenger Detail</string>
     <string name="failed_to_fetch_config">Could not load required details. Please try again.</string>
     <string name="select_multi_price">Passenger type</string>
+    <string name="optional">(Optional)</string>
+    <string name="confirm_booking">CONFIRM BOOKING</string>
 </resources>

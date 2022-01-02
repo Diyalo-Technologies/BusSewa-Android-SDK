@@ -10,6 +10,7 @@ import com.diyalotech.bussewasdk.repo.BookingRepository
 import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.*
+import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import com.diyalotech.bussewasdk.utils.Validator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -33,9 +34,13 @@ class BookingConfirmViewModel(
     private lateinit var ticketPriceList: List<MultiPrice>
 
     val tripDataStore = dataStoreRepo.tripDataStore
+    val ticketPrice = dataStoreRepo.tripDataStore.selectedTripDetails?.ticketPrice ?: 0
 
     private val _uiState = MutableStateFlow<BookingDetailsState>(BookingDetailsState.Loading)
     val uiState: StateFlow<BookingDetailsState> = _uiState
+
+    private val _bookingUiState = MutableStateFlow<BookingState>(BookingState.Init)
+    val bookingUiState: StateFlow<BookingState> = _bookingUiState
 
     //for basic details
     var nameState = TextFieldModel()
@@ -156,39 +161,46 @@ class BookingConfirmViewModel(
         when (field) {
             BasicFields.NAME -> {
                 this.nameState.value = value
+                this.nameState.clearError()
             }
             BasicFields.EMAIL -> {
                 this.emailState.value = value
+                this.emailState.clearError()
             }
             BasicFields.PHONE -> {
                 this.mobileState.value = value
-                this.mobileState.isError = !Validator.isValidMobile(value)
+                this.mobileState.clearError()
             }
             BasicFields.BOARDING_POINT -> {
                 this.boardingPointState.value = value
+                this.boardingPointState.clearError()
             }
         }
-
-        updateDetailsBasedOnType()
     }
 
     fun onDynamicDetailsChanged(seat: String, id: Int, value: String) {
         val detail = passengerDetailValues[seat] ?: return
         detail.find { it.id == id }?.let {
             it.value = value
+            it.clearError()
         }
     }
 
     fun onMultiPriceNameChanged(seat: String, value: String) {
         passengerPriceDetails[seat]?.let {
             it.nameModel.value = value
+            it.nameModel.clearError()
         }
     }
 
     fun onMultiPricePriceChanged(seat: String, value: MultiPrice) {
         passengerPriceDetails[seat]?.let {
             it.priceFieldModel.value = value
+            it.priceFieldModel.clearError()
         }
+        val sum = passengerPriceDetails.map { it.value.priceFieldModel.value }.filterNotNull()
+            .sumOf { it.priceInRs }
+        dataStoreRepo.saveTicketPrice(sum)
     }
 
     fun cancelQueue() {
@@ -205,4 +217,102 @@ class BookingConfirmViewModel(
         }
     }
 
+    private fun validateBasicDetails(): Boolean {
+        val trip = tripDataStore.selectedTripDetails ?: return false
+
+        if (boardingPointState.value.isBlank()) {
+            this.boardingPointState.isError = true
+            this.boardingPointState.errorMessage = "Please select boarding point."
+            return false
+        }
+
+        when (trip.inputTypeCode) {
+            InputTypeCode.BASIC -> {
+                if (nameState.value.isBlank()) {
+                    nameState.isError = true
+                    nameState.errorMessage = "Required."
+                    return false
+                }
+            }
+            else -> {}
+        }
+
+        if (emailState.value.isNotBlank()) {
+            if (!Validator.isEmailValid(emailState.value)) {
+                emailState.isError = true
+                emailState.errorMessage = "Invalid email."
+                return false
+            }
+        }
+
+        if (mobileState.value.isBlank()) {
+            mobileState.isError = true
+            mobileState.errorMessage = "Required."
+            return false
+        }
+
+        if (!Validator.isValidMobile(mobileState.value)) {
+            mobileState.isError = true
+            mobileState.errorMessage = "Invalid phone number."
+            return false
+        }
+
+        return true
+    }
+
+    private fun validateDynamicDetails(): Boolean {
+        if (!validateBasicDetails()) return false
+
+        passengerDetailValues.forEach { map ->
+            map.value.forEach { model ->
+                val mandatory =
+                    passengerDetailList.find { it.typeId == model.id }?.manditory ?: false
+
+                if (mandatory && model.value.isBlank()) {
+                    model.isError = true
+                    model.errorMessage = "Required."
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    private fun validateMultiPriceDetails(): Boolean {
+        if (!validateBasicDetails()) return false
+
+        passengerPriceDetails.values.forEach { value ->
+            if(value.nameModel.value.isBlank()) {
+                value.nameModel.isError = true
+                value.nameModel.errorMessage = "Required."
+                return false
+            }
+
+            if(value.priceFieldModel.value == null) {
+                value.priceFieldModel.isError = true
+                value.priceFieldModel.errorMessage = "Required."
+                return false
+            }
+        }
+
+        return true
+    }
+
+    fun confirmBooking() {
+        val trip = tripDataStore.selectedTripDetails ?: return
+
+        when(trip.inputTypeCode) {
+            InputTypeCode.BASIC -> {
+                validateBasicDetails()
+            }
+            InputTypeCode.DYNAMIC -> {
+                validateDynamicDetails()
+            }
+            InputTypeCode.MULTI_PRICE -> {
+                validateMultiPriceDetails()
+            }
+            InputTypeCode.MULTI_DYNAMIC -> TODO()
+        }
+    }
 }

@@ -71,6 +71,7 @@ fun TripListDTO.getTripList(): List<Trip> {
             it.availableSeat,
             it.inputTypeCode,
             (it.availableSeat / it.totalSeat) * 100f,
+            it.lockStatus
         )
     } ?: emptyList()
 }
@@ -85,7 +86,8 @@ fun TripDTO.getTrip(): Trip {
         ticketPrice,
         availableSeat,
         inputTypeCode,
-        (availableSeat / totalSeat) * 100f
+        (availableSeat / totalSeat) * 100f,
+        lockStatus
     )
 }
 

@@ -24,6 +24,7 @@ data class Trip(
     val availableSeat: Int,
     val inputTypeCode: Int,
     val availablePercent: Float,
+    val locked: Boolean,
 )
 
 sealed class TripListState {
