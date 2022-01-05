@@ -2,7 +2,7 @@ package com.diyalotech.bussewasdk.utils
 
 import android.util.Patterns
 
-object Validator {
+internal object Validator {
 
     /*
     * just used as a filter for nepali mobile numbers

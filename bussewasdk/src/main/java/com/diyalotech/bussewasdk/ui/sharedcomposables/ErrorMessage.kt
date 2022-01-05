@@ -18,7 +18,7 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 
 @Composable
-fun ErrorMessage(text: String) {
+internal fun ErrorMessage(text: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -28,7 +28,7 @@ fun ErrorMessage(text: String) {
 }
 
 @Composable
-fun ErrorMessageTextField(isError: Boolean, text: String) {
+internal fun ErrorMessageTextField(isError: Boolean, text: String) {
     if (isError) {
         Text(
             text = text,
@@ -40,7 +40,7 @@ fun ErrorMessageTextField(isError: Boolean, text: String) {
 }
 
 @Composable
-fun ErrorMessageDialog(text: String, onDismiss: () -> Unit) {
+internal fun ErrorMessageDialog(text: String, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
         buttons = {

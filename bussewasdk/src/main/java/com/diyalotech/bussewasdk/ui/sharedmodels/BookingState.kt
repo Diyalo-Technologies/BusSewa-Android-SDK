@@ -1,6 +1,6 @@
 package com.diyalotech.bussewasdk.ui.sharedmodels
 
-sealed class BookingState {
+internal sealed class BookingState {
     object Init : BookingState()
     object Loading : BookingState()
 }

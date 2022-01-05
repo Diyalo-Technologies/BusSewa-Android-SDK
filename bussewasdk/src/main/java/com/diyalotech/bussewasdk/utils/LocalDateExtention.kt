@@ -2,7 +2,7 @@ package com.diyalotech.bussewasdk.utils
 
 import kotlinx.datetime.*
 
-fun localDateNow(): LocalDate {
+internal fun localDateNow(): LocalDate {
     return Clock.System.todayAt(TimeZone.currentSystemDefault())
 }
 
@@ -10,7 +10,7 @@ fun localDateNow(): LocalDate {
 * Do not use this if time needs to be accurate
 * Only for dates
 * */
-fun LocalDate.toLocalDateTime(): LocalDateTime {
+internal fun LocalDate.toLocalDateTime(): LocalDateTime {
     return LocalDateTime(year, month, dayOfMonth, 1, 1, 1)
 }
 
@@ -18,15 +18,15 @@ fun LocalDate.toLocalDateTime(): LocalDateTime {
 * Do not use this if time needs to be accurate
 * Only for dates
 * */
-fun LocalDate.toInstant(): Instant {
+internal fun LocalDate.toInstant(): Instant {
     return toLocalDateTime()
         .toInstant(TimeZone.currentSystemDefault())
 }
 
-fun localTimeNow(): LocalDateTime {
+internal fun localTimeNow(): LocalDateTime {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 }
 
-fun LocalDateTime.toLocalInstant(): Instant {
+internal fun LocalDateTime.toLocalInstant(): Instant {
     return this.toInstant(TimeZone.currentSystemDefault())
 }

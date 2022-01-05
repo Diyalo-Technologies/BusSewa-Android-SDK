@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
-class PrefixTransformation(val prefix: String) : VisualTransformation {
+internal class PrefixTransformation(val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         return PrefixFilter(text, prefix)
     }

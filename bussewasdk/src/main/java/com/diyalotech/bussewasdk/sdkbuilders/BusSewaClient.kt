@@ -30,9 +30,9 @@ data class BusTheme(
 
 /**
  * @property DEFAULT follows system theme
- *
  * */
-enum class BusThemeDarkLight {
+@Parcelize
+enum class BusThemeDarkLight: Parcelable {
     LIGHT,
     DARK,
     DEFAULT

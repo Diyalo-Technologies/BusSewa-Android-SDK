@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Component(modules = [NetworkModule::class, ViewModelModule::class, RepositoryModule::class])
 @Singleton
-interface LibraryComponent {
+internal interface LibraryComponent {
 
     @Component.Builder
     interface Builder {

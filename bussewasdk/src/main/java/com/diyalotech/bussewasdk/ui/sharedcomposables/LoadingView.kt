@@ -13,7 +13,7 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 
 @Composable
-fun LoadingView() {
+internal fun LoadingView() {
     Box(
         modifier = Modifier
             .fillMaxSize()

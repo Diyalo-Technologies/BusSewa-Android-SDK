@@ -27,7 +27,7 @@ import com.diyalotech.bussewasdk.ui.theme.Shapes
 import com.google.gson.Gson
 
 @Composable
-fun SeatLayoutView(
+internal fun SeatLayoutView(
     noOfColumn: Int,
     seatLayout: List<SeatLayout>,
     selectedSeats: List<SeatLayout>,
@@ -72,7 +72,7 @@ fun SeatLayoutView(
 }
 
 @Composable
-fun Seat(
+internal fun Seat(
     bookingStatus: BookingStatus,
     isSelected: Boolean,
     displayName: String,

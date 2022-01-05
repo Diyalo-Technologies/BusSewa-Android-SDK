@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
-fun LocationView(
+internal fun LocationView(
     text: String = "",
     label: String,
     leadingIcon: ImageVector? = null,

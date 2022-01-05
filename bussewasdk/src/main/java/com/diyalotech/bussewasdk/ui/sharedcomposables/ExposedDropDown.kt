@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.toSize
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
-fun ExposedDropDown(
+internal fun ExposedDropDown(
     selectedItem: String,
     dropDownItems: List<String>,
     label: String? = null,

@@ -16,7 +16,7 @@ import kotlin.time.ExperimentalTime
 /*
 * working in memory cache object managed using singleton.
 * */
-class TripDataStore {
+internal class TripDataStore {
     var source by mutableStateOf("Kathmandu")
         private set
     var destination by mutableStateOf("")

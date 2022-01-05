@@ -2,14 +2,12 @@ package com.diyalotech.bussewasdk.ui.bookingcustomer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.diyalotech.bussewasdk.network.dto.ApiResult
-import com.diyalotech.bussewasdk.network.dto.InputTypeCode
-import com.diyalotech.bussewasdk.network.dto.MultiPrice
-import com.diyalotech.bussewasdk.network.dto.PassengerDetail
+import com.diyalotech.bussewasdk.network.dto.*
 import com.diyalotech.bussewasdk.repo.BookingRepository
 import com.diyalotech.bussewasdk.repo.DataStoreRepository
 import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.*
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PassengerPriceValues
 import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import com.diyalotech.bussewasdk.utils.Validator
 import kotlinx.coroutines.channels.Channel
@@ -19,12 +17,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-sealed class BookingConfirmEvent {
+internal sealed class BookingConfirmEvent {
     class Error(val msg: String) : BookingConfirmEvent()
     class Navigation(val direction: NavDirection) : BookingConfirmEvent()
 }
 
-class BookingConfirmViewModel(
+internal class BookingConfirmViewModel(
     private val dataStoreRepo: DataStoreRepository,
     private val bookingRepo: BookingRepository,
 ) : ViewModel() {
@@ -49,7 +47,7 @@ class BookingConfirmViewModel(
     var boardingPointState = TextFieldModel()
 
     //for multi price type
-    private lateinit var passengerPriceDetails: Map<String, PassengerPriceDetail>
+    private lateinit var passengerPriceValues: Map<String, PassengerPriceValues>
 
     //dynamic passenger details SeatName : FieldHolders
     private lateinit var passengerDetailValues: Map<String, List<DynamicTextFieldModel>>
@@ -84,7 +82,12 @@ class BookingConfirmViewModel(
                             ticketPriceList = result.data.ticketPriceList
                             createMultiPriceFieldHolder(seats)
                         }
-                        InputTypeCode.MULTI_DYNAMIC -> TODO()
+                        InputTypeCode.MULTI_DYNAMIC -> {
+                            passengerDetailList = result.data.inputDetailList
+                            ticketPriceList = result.data.ticketPriceList
+                            createMultiPriceFieldHolder(seats)
+                            createDynamicFieldHolderList(seats, result.data.inputDetailList)
+                        }
                     }
 
                     updateDetailsBasedOnType()
@@ -94,14 +97,14 @@ class BookingConfirmViewModel(
     }
 
     private fun createMultiPriceFieldHolder(seats: List<String>) {
-        val passengerPriceDetails = mutableMapOf<String, PassengerPriceDetail>()
+        val passengerPriceDetails = mutableMapOf<String, PassengerPriceValues>()
         for (seat in seats) {
-            passengerPriceDetails[seat] = PassengerPriceDetail(
+            passengerPriceDetails[seat] = PassengerPriceValues(
                 priceFieldModel = PriceFieldModel(),
                 nameModel = TextFieldModel()
             )
         }
-        this.passengerPriceDetails = passengerPriceDetails
+        this.passengerPriceValues = passengerPriceDetails
     }
 
     private fun createDynamicFieldHolderList(
@@ -150,10 +153,21 @@ class BookingConfirmViewModel(
                     mobileState,
                     boardingPointState,
                     ticketPriceList,
-                    passengerPriceDetails
+                    passengerPriceValues
                 )
             }
-            InputTypeCode.MULTI_DYNAMIC -> TODO()
+            InputTypeCode.MULTI_DYNAMIC -> {
+                _uiState.value = BookingDetailsState.SuccessMultiDynamic(
+                    seats,
+                    emailState,
+                    mobileState,
+                    boardingPointState,
+                    ticketPriceList,
+                    passengerPriceValues,
+                    passengerDetailList,
+                    passengerDetailValues
+                )
+            }
         }
     }
 
@@ -187,18 +201,18 @@ class BookingConfirmViewModel(
     }
 
     fun onMultiPriceNameChanged(seat: String, value: String) {
-        passengerPriceDetails[seat]?.let {
+        passengerPriceValues[seat]?.let {
             it.nameModel.value = value
             it.nameModel.clearError()
         }
     }
 
     fun onMultiPricePriceChanged(seat: String, value: MultiPrice) {
-        passengerPriceDetails[seat]?.let {
+        passengerPriceValues[seat]?.let {
             it.priceFieldModel.value = value
             it.priceFieldModel.clearError()
         }
-        val sum = passengerPriceDetails.map { it.value.priceFieldModel.value }.filterNotNull()
+        val sum = passengerPriceValues.map { it.value.priceFieldModel.value }.filterNotNull()
             .sumOf { it.priceInRs }
         dataStoreRepo.saveTicketPrice(sum)
     }
@@ -261,8 +275,6 @@ class BookingConfirmViewModel(
     }
 
     private fun validateDynamicDetails(): Boolean {
-        if (!validateBasicDetails()) return false
-
         passengerDetailValues.forEach { map ->
             map.value.forEach { model ->
                 val mandatory =
@@ -280,16 +292,14 @@ class BookingConfirmViewModel(
     }
 
     private fun validateMultiPriceDetails(): Boolean {
-        if (!validateBasicDetails()) return false
-
-        passengerPriceDetails.values.forEach { value ->
-            if(value.nameModel.value.isBlank()) {
+        passengerPriceValues.values.forEach { value ->
+            if (value.nameModel.value.isBlank()) {
                 value.nameModel.isError = true
                 value.nameModel.errorMessage = "Required."
                 return false
             }
 
-            if(value.priceFieldModel.value == null) {
+            if (value.priceFieldModel.value == null) {
                 value.priceFieldModel.isError = true
                 value.priceFieldModel.errorMessage = "Required."
                 return false
@@ -299,20 +309,87 @@ class BookingConfirmViewModel(
         return true
     }
 
+    /*
+    * validate all fields
+    * */
     fun confirmBooking() {
         val trip = tripDataStore.selectedTripDetails ?: return
+        val bookingInfo = tripDataStore.bookingInfo
+        val mobileNumber = mobileState.value
+        val boardingPoint = boardingPointState.value
+        val name = if (nameState.value.isBlank()) null else nameState.value
+        val email = if (emailState.value.isBlank()) null else emailState.value
+        var passengerDynamicValues: List<PassengerTypeDetail>? = null
+        var passengerMultiPriceValues: List<PassengerPriceDetail>? = null
 
-        when(trip.inputTypeCode) {
+        when (trip.inputTypeCode) {
             InputTypeCode.BASIC -> {
-                validateBasicDetails()
+                if(!validateBasicDetails()) return
             }
             InputTypeCode.DYNAMIC -> {
-                validateDynamicDetails()
+                if (validateDynamicDetails() && validateBasicDetails()) {
+                    passengerDynamicValues = passengerDetailValues.map { map ->
+                        PassengerTypeDetail(
+                            map.key,
+                            map.value.map { PassengerDetailValues(it.id, it.value) })
+                    }
+                } else {
+                    return
+                }
             }
             InputTypeCode.MULTI_PRICE -> {
-                validateMultiPriceDetails()
+                if (validateMultiPriceDetails() && validateBasicDetails()) {
+                    passengerMultiPriceValues = passengerPriceValues.map { map ->
+                        PassengerPriceDetail(
+                            map.value.priceFieldModel.value?.id!!,
+                            map.value.nameModel.value,
+                            map.key
+                        )
+                    }
+                } else {
+                    return
+                }
             }
-            InputTypeCode.MULTI_DYNAMIC -> TODO()
+            InputTypeCode.MULTI_DYNAMIC -> {
+                if (validateBasicDetails() && validateMultiPriceDetails() && validateDynamicDetails()) {
+                    passengerDynamicValues = passengerDetailValues.map { map ->
+                        PassengerTypeDetail(
+                            map.key,
+                            map.value.map { PassengerDetailValues(it.id, it.value) })
+                    }
+                    passengerMultiPriceValues = passengerPriceValues.map { map ->
+                        PassengerPriceDetail(
+                            map.value.priceFieldModel.value?.id!!,
+                            map.value.nameModel.value,
+                            map.key
+                        )
+                    }
+                } else {
+                    return
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            val result = bookingRepo.savePassengerInfo(
+                trip.id,
+                bookingInfo.ticketSrlNo,
+                mobileNumber,
+                boardingPoint,
+                name,
+                email,
+                passengerDynamicValues,
+                passengerMultiPriceValues
+            )
+
+            when (result) {
+                is ApiResult.Error -> {
+                    println("Result: failed ${result.error}")
+                }
+                is ApiResult.Success -> {
+                    println("Result: Success")
+                }
+            }
         }
     }
 }

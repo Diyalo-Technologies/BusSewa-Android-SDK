@@ -9,7 +9,7 @@ import kotlinx.datetime.LocalDate
 
 data class SearchTripModel(val source: String, val destination: String, val date: LocalDate)
 
-class SearchTripViewModel(
+internal class SearchTripViewModel(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 

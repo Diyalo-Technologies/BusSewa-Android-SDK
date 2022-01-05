@@ -3,7 +3,7 @@ package com.diyalotech.bussewasdk.network.retrofit
 import com.diyalotech.bussewasdk.network.dto.*
 import retrofit2.http.*
 
-interface ApiService {
+internal interface ApiService {
 
     @GET("v2/booking/routes")
     suspend fun getRoutes(): RouteListDTO
@@ -24,5 +24,5 @@ interface ApiService {
     suspend fun cancelQueue(@Body cancelQueueRequestDTO: CancelQueueRequestDTO): Any
 
     @POST("v2/booking/passengerInfo/")
-    suspend fun savePassengerInfo(@Body basicDetails: BasicPassengerInfoDTO): Any
+    suspend fun savePassengerInfo(@Body details: PassengerInfoDTO): Any
 }

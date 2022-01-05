@@ -18,7 +18,7 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SearchLocationView(
+internal fun SearchLocationView(
     viewModel: SearchLocationViewModel,
     onBackPressed: () -> Unit
 ) {

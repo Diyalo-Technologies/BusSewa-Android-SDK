@@ -20,7 +20,7 @@ import kotlinx.datetime.LocalDate
 import com.diyalotech.bussewasdk.R
 
 @Composable
-fun DatePicker(
+internal fun DatePicker(
     date: LocalDate = localDateNow(),
     onDateSelected: (LocalDate) -> Unit,
     onDismissRequest: () -> Unit

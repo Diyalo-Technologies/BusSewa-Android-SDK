@@ -8,7 +8,7 @@ import com.diyalotech.bussewasdk.network.dto.MultiPrice
 import com.diyalotech.bussewasdk.network.dto.PassengerDetail
 
 @Stable
-open class TextFieldModel {
+internal open class TextFieldModel {
     var value by mutableStateOf("")
     var isError by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
@@ -20,7 +20,7 @@ open class TextFieldModel {
 }
 
 @Stable
-class PriceFieldModel {
+internal class PriceFieldModel {
     var value by mutableStateOf<MultiPrice?>(null)
     var isError by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
@@ -32,20 +32,20 @@ class PriceFieldModel {
 }
 
 @Stable
-class DynamicTextFieldModel(val id: Int): TextFieldModel()
+internal class DynamicTextFieldModel(val id: Int) : TextFieldModel()
 
 @Stable
-data class PassengerPriceDetail(
+internal data class PassengerPriceValues(
     var priceFieldModel: PriceFieldModel,
     var nameModel: TextFieldModel
 )
 
-enum class BasicFields {
+internal enum class BasicFields {
     NAME, EMAIL, PHONE, BOARDING_POINT
 }
 
 //ui state holder
-sealed class BookingDetailsState() {
+internal sealed class BookingDetailsState() {
     object Loading : BookingDetailsState()
     class SuccessBasic(
         val seatList: List<String>,
@@ -70,9 +70,19 @@ sealed class BookingDetailsState() {
         val mobileState: TextFieldModel,
         val boardingPoint: TextFieldModel,
         val priceList: List<MultiPrice>,
-        val passengerPriceDetails: Map<String, PassengerPriceDetail>,
+        val passengerPriceValues: Map<String, PassengerPriceValues>,
     ) : BookingDetailsState()
 
-    class SuccessMultiDynamic() : BookingDetailsState()
+    class SuccessMultiDynamic(
+        val seatList: List<String>,
+        val emailState: TextFieldModel,
+        val mobileState: TextFieldModel,
+        val boardingPoint: TextFieldModel,
+        val priceList: List<MultiPrice>,
+        val passengerPriceValues: Map<String, PassengerPriceValues>,
+        val passengerDetail: List<PassengerDetail>,
+        val valuesHolder: Map<String, List<DynamicTextFieldModel>>,
+    ) : BookingDetailsState()
+
     class Error(val message: String) : BookingDetailsState()
 }

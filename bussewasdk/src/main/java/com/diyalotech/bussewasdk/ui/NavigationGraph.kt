@@ -1,6 +1,7 @@
 package com.diyalotech.bussewasdk.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +18,7 @@ import com.diyalotech.bussewasdk.ui.triplist.TripListView
 import com.diyalotech.bussewasdk.ui.triplist.TripListViewModel
 
 @Composable
-fun NavigationGraph(
+internal fun NavigationGraph(
     navActions: BusNavigationActions,
     navController: NavHostController,
     startDestination: String = NavDestinations.HOME_ROUTE,

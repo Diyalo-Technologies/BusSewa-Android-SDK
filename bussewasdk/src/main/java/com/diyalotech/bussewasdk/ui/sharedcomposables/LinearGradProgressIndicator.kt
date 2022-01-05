@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun LinearGradProgressIndicator(
+internal fun LinearGradProgressIndicator(
     progress: Float,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colors.primary,

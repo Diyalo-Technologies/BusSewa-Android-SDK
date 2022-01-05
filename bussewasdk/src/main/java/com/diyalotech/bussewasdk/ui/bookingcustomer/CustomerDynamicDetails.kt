@@ -28,85 +28,62 @@ import com.diyalotech.bussewasdk.ui.sharedcomposables.ExposedDropDown
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
-fun CustomerDynamicDetails(
-    mobileModel: TextFieldModel,
-    emailModel: TextFieldModel,
-    boardingPointModel: TextFieldModel,
+internal fun CustomerDynamicDetails(
     seatList: List<String>,
-    boardingPoints: List<String>,
     details: List<PassengerDetail>,
     valueHolder: Map<String, List<DynamicTextFieldModel>>,
-    nameModel: TextFieldModel? = null,
-    onBasicDetailChanged: (BasicFields, String) -> Unit,
     onDynamicDetailsChanged: (seat: String, detailId: Int, value: String) -> Unit
 ) {
-
-    val scrollState = rememberScrollState()
-
-    Column(
+    Card(
+        elevation = 4.dp,
         modifier = Modifier
-            .verticalScroll(scrollState)
-            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        CustomerBasicDetailsView(
-            boardingPointModel,
-            emailModel,
-            mobileModel,
-            boardingPoints,
-            onValueChanged = onBasicDetailChanged
-        )
-        Card(
-            elevation = 4.dp,
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-        ) {
-            Column(Modifier.padding(8.dp)) {
-                seatList.forEach { seat ->
-                    Text(
-                        text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onSurface.copy(0.5f)
-                    )
+        Column(Modifier.padding(8.dp)) {
+            seatList.forEach { seat ->
+                Text(
+                    text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onSurface.copy(0.5f)
+                )
 
-                    details.forEachIndexed { i, detail ->
+                details.forEachIndexed { i, detail ->
 
-                        val detailName = detail.detailName +
-                                if (!detail.manditory) " ${stringResource(R.string.optional)}"
-                                else ""
+                    val detailName = detail.detailName +
+                            if (!detail.manditory) " ${stringResource(R.string.optional)}"
+                            else ""
 
-                        if (detail.inputType == InputType.TEXT_FIELD) {
-                            DynamicTextField(
-                                dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
-                                label = detailName
-                            ) {
-                                onDynamicDetailsChanged(seat, detail.typeId, it)
-                            }
-                        }
-
-                        if (detail.inputType == InputType.DROP_DOWN) {
-                            ExposedDropDown(
-                                valueHolder[seat]?.get(i)!!.value,
-                                label = detailName,
-                                dropDownItems = detail.valueList
-                            ) {
-                                onDynamicDetailsChanged(seat, detail.typeId, it)
-                            }
-                        }
-
-                        if (detail.inputType == InputType.NUMBER_RANGE) {
-                            DynamicTextField(
-                                dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
-                                label = detailName,
-                                isNumberOnly = true
-                            ) {
-                                onDynamicDetailsChanged(seat, detail.typeId, it)
-                            }
+                    if (detail.inputType == InputType.TEXT_FIELD) {
+                        DynamicTextField(
+                            dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
+                            label = detailName
+                        ) {
+                            onDynamicDetailsChanged(seat, detail.typeId, it)
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    if (detail.inputType == InputType.DROP_DOWN) {
+                        ExposedDropDown(
+                            valueHolder[seat]?.get(i)!!.value,
+                            label = detailName,
+                            dropDownItems = detail.valueList
+                        ) {
+                            onDynamicDetailsChanged(seat, detail.typeId, it)
+                        }
+                    }
+
+                    if (detail.inputType == InputType.NUMBER_RANGE) {
+                        DynamicTextField(
+                            dynamicTextFieldModel = valueHolder[seat]?.get(i)!!,
+                            label = detailName,
+                            isNumberOnly = true
+                        ) {
+                            onDynamicDetailsChanged(seat, detail.typeId, it)
+                        }
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -143,11 +120,7 @@ fun DynamicDetailsPreview() {
 
         Surface {
             CustomerDynamicDetails(
-                nameModel,
-                nameModel,
-                nameModel,
                 seatList,
-                boardingPoints,
                 passengerDetail,
                 mapOf(
                     Pair(
@@ -169,8 +142,6 @@ fun DynamicDetailsPreview() {
                         )
                     )
                 ),
-                nameModel,
-                onBasicDetailChanged = { a, b -> }
             ) { seat, id, value ->
 
             }

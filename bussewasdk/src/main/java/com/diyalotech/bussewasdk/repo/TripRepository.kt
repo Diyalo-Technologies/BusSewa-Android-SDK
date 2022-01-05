@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
-class TripRepository @Inject constructor(
+internal class TripRepository @Inject constructor(
     private val apiService: ApiService
 ) {
     suspend fun findTrips(from: String, to: String,/*yyyy-MM-dd*/ date: String) = safeApiCall {
@@ -29,18 +29,5 @@ class TripRepository @Inject constructor(
                 seat = seats
             )
         )
-    }
-
-    suspend fun savePassengerInfo(
-        id: String,
-        ticketSrlNo: String,
-        mobile: String,
-        boardingPoint: String,
-        name: String? = null,
-        email: String? = null,
-        passengerDetails: List<PassengerTypeDetail>?,
-        passengerPriceDetails: List<PassengerPriceDetail>?
-    ) = safeApiCall {
-
     }
 }

@@ -35,7 +35,7 @@ private val LightColorPalette = lightColors(
 fun createDefaultTheme() = BusTheme()
 
 @Composable
-fun BusSewaSDKTheme(busTheme: BusTheme = createDefaultTheme(), content: @Composable() () -> Unit) {
+internal fun BusSewaSDKTheme(busTheme: BusTheme = createDefaultTheme(), content: @Composable() () -> Unit) {
 
 //    val systemUiController = rememberSystemUiController()
 

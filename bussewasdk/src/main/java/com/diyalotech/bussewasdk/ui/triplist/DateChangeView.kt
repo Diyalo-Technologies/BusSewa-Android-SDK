@@ -24,7 +24,7 @@ import java.util.*
 
 @ExperimentalAnimationApi
 @Composable
-fun DateChangeView(
+internal fun DateChangeView(
     date: LocalDate,
     disable: Boolean,
     modifier: Modifier = Modifier,

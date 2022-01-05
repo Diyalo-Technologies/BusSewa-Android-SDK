@@ -19,7 +19,7 @@ import com.diyalotech.bussewasdk.ui.bookingcustomer.models.DynamicTextFieldModel
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
 
 @Composable
-fun SimpleTextField(
+internal fun SimpleTextField(
     textFieldModel: TextFieldModel,
     label: String,
     modifier: Modifier = Modifier,
@@ -54,7 +54,7 @@ fun SimpleTextField(
 }
 
 @Composable
-fun DynamicTextField(
+internal fun DynamicTextField(
     dynamicTextFieldModel: DynamicTextFieldModel,
     label: String,
     modifier: Modifier = Modifier,

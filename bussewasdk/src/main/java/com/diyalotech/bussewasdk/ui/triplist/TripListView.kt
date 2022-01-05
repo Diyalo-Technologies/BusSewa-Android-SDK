@@ -39,7 +39,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TripListView(
+internal fun TripListView(
     tripListViewModel: TripListViewModel,
     onBackPressed: () -> Unit,
     onTripClicked: (Trip) -> Unit
@@ -102,7 +102,7 @@ fun TripListView(
 }
 
 @Composable
-fun TripView(trip: Trip, onTripClicked: (Trip) -> Unit) {
+internal fun TripView(trip: Trip, onTripClicked: (Trip) -> Unit) {
     Column(Modifier.clickable(!trip.locked) {
         onTripClicked(trip)
     }) {

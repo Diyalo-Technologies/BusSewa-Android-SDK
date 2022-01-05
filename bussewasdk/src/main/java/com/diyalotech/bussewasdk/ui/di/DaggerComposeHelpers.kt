@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-inline fun <reified T : ViewModel> daggerViewModel(
+internal inline fun <reified T : ViewModel> daggerViewModel(
     key: String? = null,
     crossinline viewModelInstanceCreator: () -> T
 ): T =

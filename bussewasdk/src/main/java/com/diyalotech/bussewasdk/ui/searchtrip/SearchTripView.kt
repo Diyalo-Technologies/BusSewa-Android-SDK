@@ -26,7 +26,7 @@ import com.diyalotech.bussewasdk.utils.localDateNow
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun SearchTripView(
+internal fun SearchTripView(
     state: SearchTripModel,
     onDateSelected: (LocalDate?) -> Unit,
     onSwap: () -> Unit,

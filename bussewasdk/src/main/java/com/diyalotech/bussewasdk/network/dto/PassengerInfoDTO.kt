@@ -1,10 +1,10 @@
 package com.diyalotech.bussewasdk.network.dto
 
 //for basic info
-data class BasicPassengerInfoDTO(
+internal data class PassengerInfoDTO(
     val boardingPoint: String,
     val contactNumber: String,
-    val email: String,
+    val email: String? = null,
     val id: String,
     val name: String? = null,
     val ticketSrlNo: String,
@@ -12,17 +12,17 @@ data class BasicPassengerInfoDTO(
     val passengerPriceDetail: List<PassengerPriceDetail>? = null
 )
 
-data class PassengerTypeDetail(
-    val passengerDetail: List<PassengerDetailValues>,
-    val seat: String
+internal data class PassengerTypeDetail(
+    val seat: String,
+    val passengerDetail: List<PassengerDetailValues>
 )
 
-data class PassengerDetailValues(
-    var detail: String,
-    val id: Int
+internal data class PassengerDetailValues(
+    val id: Int,
+    var detail: String
 )
 
-data class PassengerPriceDetail(
+internal data class PassengerPriceDetail(
     val id: Int,
     val name: String,
     val seat: String

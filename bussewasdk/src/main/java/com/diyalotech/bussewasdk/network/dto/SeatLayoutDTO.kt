@@ -3,7 +3,7 @@ package com.diyalotech.bussewasdk.network.dto
 import com.diyalotech.bussewasdk.ui.seatlayout.BookingStatus
 import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatModel
 
-data class SeatLayoutDTO(
+internal data class SeatLayoutDTO(
     val isLocked: Boolean,
     val noOfColumn: Int,
     val price: Double,
@@ -11,7 +11,7 @@ data class SeatLayoutDTO(
     val status: String
 )
 
-data class SeatLayout(
+internal data class SeatLayout(
     val displayName: String,
     val bookingStatus: String = "na",
     val bookedByCustomer: String? = null
@@ -28,7 +28,7 @@ data class SeatLayout(
         }
 }
 
-fun SeatLayoutDTO.getSelectedSeatModel(): SelectSeatModel {
+internal fun SeatLayoutDTO.getSelectedSeatModel(): SelectSeatModel {
     return SelectSeatModel(
         isLocked = isLocked,
         noOfColumn = noOfColumn,

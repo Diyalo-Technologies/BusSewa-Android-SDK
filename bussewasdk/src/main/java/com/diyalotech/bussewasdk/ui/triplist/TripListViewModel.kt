@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
-data class Trip(
+internal data class Trip(
     val id: String,
     val amenities: List<String>,
     val operatorName: String,
@@ -27,16 +27,20 @@ data class Trip(
     val locked: Boolean,
 )
 
-sealed class TripListState {
+internal sealed class TripListState {
     object Loading : TripListState()
     class Success(val tripList: List<Trip>) : TripListState()
     class Error(val message: String) : TripListState()
 }
 
-class TripListViewModel constructor(
+internal class TripListViewModel constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val tripRepository: TripRepository
 ) : ViewModel() {
+
+    init {
+        println("trip list init")
+    }
 
     //cancellable jobs
     private var job: Job? = null

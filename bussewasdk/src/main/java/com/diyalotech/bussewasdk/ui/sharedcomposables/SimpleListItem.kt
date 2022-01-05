@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SimpleListItem(text: String, onItemClicked: (() -> Unit)? = null) {
+internal fun SimpleListItem(text: String, onItemClicked: (() -> Unit)? = null) {
     Text(
         text,
         Modifier

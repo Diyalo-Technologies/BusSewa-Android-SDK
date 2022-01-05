@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-sealed class SearchLocationState {
+internal sealed class SearchLocationState {
     object Loading : SearchLocationState()
     class Success(val locationList: List<String>) : SearchLocationState()
 }
 
-class SearchLocationViewModel(
+internal class SearchLocationViewModel(
     private val locationRepository: LocationRepository,
     private val dataStoreRepo: DataStoreRepository
 ) : ViewModel() {

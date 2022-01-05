@@ -6,10 +6,13 @@ import com.diyalotech.bussewasdk.network.retrofit.ApiService
 import com.diyalotech.bussewasdk.network.retrofit.safeApiCall
 import javax.inject.Inject
 
-class LocationRepository @Inject constructor(
+internal class LocationRepository @Inject constructor(
     private val apiService: ApiService
 ) {
 
+    init {
+        println("initialized")
+    }
     private var apiCache: ApiResult<RouteListDTO>? = null
 
     suspend fun fetchLocationList(): ApiResult<RouteListDTO> {

@@ -14,7 +14,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class ViewModelModule {
+internal class ViewModelModule {
 
     @Provides
     fun provideSearchTripVM(dataStoreRepository: DataStoreRepository): SearchTripViewModel {

@@ -6,7 +6,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RepositoryModule {
+internal class RepositoryModule {
     @Provides
     @Singleton
     fun provideSearchParamRepo(): DataStoreRepository {

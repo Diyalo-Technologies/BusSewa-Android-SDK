@@ -11,7 +11,7 @@ import com.diyalotech.bussewasdk.utils.toInstant
 import kotlinx.datetime.*
 
 @Composable
-fun Calendar(date: LocalDate, onDateSelected: (LocalDate) -> Unit) {
+internal fun Calendar(date: LocalDate, onDateSelected: (LocalDate) -> Unit) {
     AndroidView(
         modifier = Modifier.fillMaxWidth(),
         factory = {

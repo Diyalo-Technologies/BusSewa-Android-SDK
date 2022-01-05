@@ -4,7 +4,7 @@ import com.diyalotech.bussewasdk.repo.model.SelectedTripDetails
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import kotlinx.datetime.LocalDate
 
-class DataStoreRepository {
+internal class DataStoreRepository {
 
     val tripDataStore = TripDataStore()
 

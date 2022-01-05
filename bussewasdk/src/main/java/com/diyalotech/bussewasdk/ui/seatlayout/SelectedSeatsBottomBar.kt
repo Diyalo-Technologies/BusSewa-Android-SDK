@@ -19,7 +19,7 @@ import com.diyalotech.bussewasdk.utils.toNPRString
 import com.google.accompanist.insets.navigationBarsPadding
 
 @Composable
-fun SelectedSeatsBottomBar(
+internal fun SelectedSeatsBottomBar(
     bookingState: BookingState,
     selectedSeats: List<String>,
     totalPrice: Double?,

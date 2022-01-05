@@ -15,7 +15,7 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
-fun BusSewaSDKApp(component: LibraryComponent) {
+internal fun BusSewaSDKApp(component: LibraryComponent) {
     val navController = rememberNavController()
     val navigationActions = remember(navController) {
         BusNavigationActions(navController)

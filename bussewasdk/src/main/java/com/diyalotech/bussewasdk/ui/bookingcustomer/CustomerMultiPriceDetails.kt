@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.network.dto.MultiPrice
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.BasicFields
-import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PassengerPriceDetail
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PassengerPriceValues
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PriceFieldModel
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
 import com.diyalotech.bussewasdk.ui.sharedcomposables.PriceExposedDropDown
@@ -24,65 +24,44 @@ import com.diyalotech.bussewasdk.ui.sharedcomposables.SimpleTextField
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
-fun CustomerMultiPriceDetails(
-    mobileModel: TextFieldModel,
-    emailModel: TextFieldModel,
-    boardingPointModel: TextFieldModel,
-    boardingPoints: List<String>,
+internal fun CustomerMultiPriceDetails(
     seatList: List<String>,
     priceList: List<MultiPrice>,
-    passengerPriceDetails: Map<String, PassengerPriceDetail>,
-    onBasicDetailsChanged: (field: BasicFields, value: String) -> Unit,
+    passengerPriceDetails: Map<String, PassengerPriceValues>,
     onNameChanged: (seat: String, String) -> Unit,
     onPriceSelected: (seat: String, MultiPrice) -> Unit
 ) {
-    val scrollState = rememberScrollState()
-
-    Column(
-        Modifier
-            .verticalScroll(scrollState)
-            .fillMaxWidth()
+    Card(
+        elevation = 4.dp,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        CustomerBasicDetailsView(
-            boardingPointModel,
-            emailModel,
-            mobileModel,
-            boardingPoints,
-            onValueChanged = onBasicDetailsChanged
-        )
-        Card(
-            elevation = 4.dp,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-        ) {
-            Column(Modifier.padding(8.dp)) {
-                seatList.forEachIndexed { i, seat ->
+        Column(Modifier.padding(8.dp)) {
+            seatList.forEachIndexed { i, seat ->
 
-                    Text(
-                        text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.onSurface.copy(0.5f)
-                    )
+                Text(
+                    text = stringResource(id = R.string.passenger_detail) + " (Seat: $seat)",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.onSurface.copy(0.5f)
+                )
 
-                    SimpleTextField(
-                        passengerPriceDetails[seat]?.nameModel!!,
-                        label = stringResource(id = R.string.full_name),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
-                        onValueChange = { onNameChanged(seat, it) }
-                    )
+                SimpleTextField(
+                    passengerPriceDetails[seat]?.nameModel!!,
+                    label = stringResource(id = R.string.full_name),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    onValueChange = { onNameChanged(seat, it) }
+                )
 
-                    PriceExposedDropDown(
-                        label = stringResource(id = R.string.select_multi_price),
-                        selectedItem = passengerPriceDetails[seat]?.priceFieldModel!!,
-                        dropDownItems = priceList
-                    ) {
-                        onPriceSelected(seat, it)
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                PriceExposedDropDown(
+                    label = stringResource(id = R.string.select_multi_price),
+                    selectedItem = passengerPriceDetails[seat]?.priceFieldModel!!,
+                    dropDownItems = priceList
+                ) {
+                    onPriceSelected(seat, it)
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -98,8 +77,8 @@ fun MultiPricePreview() {
                 MultiPrice(2, "Child", 10.0, 1000.0),
             )
             val nameHolderDynamic = mutableMapOf(
-                Pair("81XnSiL", PassengerPriceDetail(PriceFieldModel(), TextFieldModel())),
-                Pair("3vsxuiG", PassengerPriceDetail(PriceFieldModel(), TextFieldModel())),
+                Pair("81XnSiL", PassengerPriceValues(PriceFieldModel(), TextFieldModel())),
+                Pair("3vsxuiG", PassengerPriceValues(PriceFieldModel(), TextFieldModel())),
             )
             val nameHolder = TextFieldModel()
             val boardingPoints = listOf(
@@ -110,14 +89,9 @@ fun MultiPricePreview() {
             )
 
             CustomerMultiPriceDetails(
-                nameHolder,
-                nameHolder,
-                nameHolder,
-                boardingPoints,
                 seatList,
                 multiPriceList,
                 nameHolderDynamic,
-                { a, b -> },
                 { a, b -> },
                 { a, b -> }
             )

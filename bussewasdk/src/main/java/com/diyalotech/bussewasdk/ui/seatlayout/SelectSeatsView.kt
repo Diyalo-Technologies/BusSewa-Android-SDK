@@ -16,7 +16,7 @@ import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SelectSeatsView(
+internal fun SelectSeatsView(
     viewModel: SelectSeatsViewModel,
     onNavToConfirmBooking: () -> Unit,
     onBackPressed: () -> Unit = {}

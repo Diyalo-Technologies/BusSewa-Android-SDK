@@ -30,7 +30,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CustomerBasicDetailsView(
+internal fun CustomerBasicDetailsView(
     boardingPointModel: TextFieldModel,
     emailModel: TextFieldModel,
     mobileModel: TextFieldModel,
@@ -101,7 +101,7 @@ fun CustomerBasicDetailsView(
 }
 
 @Composable
-fun BoardingPointView(
+internal fun BoardingPointView(
     title: String,
     boardingPoints: List<String>,
     onItemClicked: (String) -> Unit

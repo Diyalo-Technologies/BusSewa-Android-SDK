@@ -15,7 +15,7 @@ import com.diyalotech.bussewasdk.R
 
 
 @Composable
-fun HomeView(
+internal fun HomeView(
     searchTripViewModel: SearchTripViewModel,
     onSearchClicked: () -> Unit,
     onLocationClicked: () -> Unit

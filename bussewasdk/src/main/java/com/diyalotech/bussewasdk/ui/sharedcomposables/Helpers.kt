@@ -18,10 +18,10 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
 
 @Composable
-fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
+internal fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
 
 @Composable
-fun Chip(
+internal fun Chip(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit

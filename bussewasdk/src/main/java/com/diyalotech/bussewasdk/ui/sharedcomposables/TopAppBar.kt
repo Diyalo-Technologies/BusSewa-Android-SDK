@@ -19,7 +19,7 @@ import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
-fun TopAppBar(
+internal fun TopAppBar(
     title: String,
     subtitle: String = "",
     showBack: Boolean,

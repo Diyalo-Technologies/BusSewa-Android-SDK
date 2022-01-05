@@ -31,7 +31,7 @@ import kotlinx.datetime.plus
 
 
 @Composable
-fun DateSelectionView(
+internal fun DateSelectionView(
     label: String,
     date: String,
     onDateSelected: (date: LocalDate?) -> Unit

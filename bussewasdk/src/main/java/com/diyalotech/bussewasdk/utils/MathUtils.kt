@@ -1,5 +1,5 @@
 package com.diyalotech.bussewasdk.utils
 
-fun Double.toNPRString(): String {
+internal fun Double.toNPRString(): String {
     return "NPR $this"
 }

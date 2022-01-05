@@ -3,7 +3,7 @@ package com.diyalotech.bussewasdk.ui
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 
-object NavDestinations {
+internal object NavDestinations {
     const val HOME_ROUTE = "home"
     const val SEARCH_LOCATION_ROUTE = "search_location"
     const val TRIP_LIST_ROUTE = "trip_list"
@@ -11,12 +11,12 @@ object NavDestinations {
     const val BOOKING_CONFIRMATION_ROUTE = "booking_confirm_layout"
 }
 
-enum class NavDirection {
+internal enum class NavDirection {
     FORWARD,
     BACKWARD
 }
 
-class BusNavigationActions(navController: NavController) {
+internal class BusNavigationActions(navController: NavController) {
     val navigateToHome: () -> Unit = {
         navController.navigate(NavDestinations.HOME_ROUTE) {
             popUpTo(navController.graph.findStartDestination().id) {

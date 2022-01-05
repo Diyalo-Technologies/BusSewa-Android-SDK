@@ -23,7 +23,7 @@ import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PriceFieldModel
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
-fun PriceExposedDropDown(
+internal fun PriceExposedDropDown(
     selectedItem: PriceFieldModel,
     label: String? = null,
     dropDownItems: List<MultiPrice>,

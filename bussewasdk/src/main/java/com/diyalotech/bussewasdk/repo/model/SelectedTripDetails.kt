@@ -10,7 +10,7 @@ import com.diyalotech.bussewasdk.utils.toLocalInstant
 import kotlinx.datetime.LocalDateTime
 import kotlin.time.ExperimentalTime
 
-data class SelectedTripDetails(
+internal data class SelectedTripDetails(
     val id: String,
     val operatorName: String,
     val ticketPrice: Double,
@@ -18,7 +18,7 @@ data class SelectedTripDetails(
 )
 
 @Stable
-class BookingInfo {
+internal class BookingInfo {
     var ticketSrlNo by mutableStateOf("")
     var timeout by mutableStateOf(localTimeNow())
     var boardingPoints by mutableStateOf(emptyList<String>())

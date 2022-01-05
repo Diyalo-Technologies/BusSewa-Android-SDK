@@ -4,13 +4,13 @@ import com.diyalotech.bussewasdk.ui.triplist.Trip
 import com.google.gson.Gson
 import java.lang.reflect.Type
 
-data class TripListDTO(
+internal data class TripListDTO(
     val status: Int,
     val trips: List<TripDTO>?,
     val message: String?
 )
 
-data class TripDTO(
+internal data class TripDTO(
     val id: String,
     val inputTypeCode: Int,
     val amenities: List<String>,
@@ -33,13 +33,13 @@ data class TripDTO(
 )
 
 //
-data class TripListRequestDTO(
+internal data class TripListRequestDTO(
     val from: String,
     val to: String,
     val date: String
 )
 
-enum class InputTypeCode(val code: Int) {
+internal enum class InputTypeCode(val code: Int) {
     BASIC(1),
     DYNAMIC(2),
     MULTI_PRICE(3),
@@ -59,7 +59,7 @@ enum class InputTypeCode(val code: Int) {
 }
 
 //map to ui model
-fun TripListDTO.getTripList(): List<Trip> {
+internal fun TripListDTO.getTripList(): List<Trip> {
     return trips?.map {
         Trip(
             it.id,
@@ -76,7 +76,7 @@ fun TripListDTO.getTripList(): List<Trip> {
     } ?: emptyList()
 }
 
-fun TripDTO.getTrip(): Trip {
+internal fun TripDTO.getTrip(): Trip {
     return Trip(
         id,
         amenities,
@@ -91,7 +91,7 @@ fun TripDTO.getTrip(): Trip {
     )
 }
 
-fun singleTrip() = Gson().fromJson(testTripString, TripDTO::class.java).getTrip()
+internal fun singleTrip() = Gson().fromJson(testTripString, TripDTO::class.java).getTrip()
 
 val testTripString = """{
     "id" : "NTgwNzc3OjA6MA==",

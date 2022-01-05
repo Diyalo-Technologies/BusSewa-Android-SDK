@@ -16,7 +16,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-sealed class SelectSeatState {
+internal sealed class SelectSeatState {
     object Loading : SelectSeatState()
     class Success(
         val selectSeatModel: SelectSeatModel
@@ -25,18 +25,18 @@ sealed class SelectSeatState {
     class Error(val message: String) : SelectSeatState()
 }
 
-sealed class SelectSeatEvents {
+internal sealed class SelectSeatEvents {
     class Error(val msg: String) : SelectSeatEvents()
     class Navigation(val direction: NavDirection) : SelectSeatEvents()
 }
 
-data class SelectSeatModel(
+internal data class SelectSeatModel(
     val isLocked: Boolean,
     val noOfColumn: Int,
     val seatLayout: List<SeatLayout>
 )
 
-class SelectSeatsViewModel(
+internal class SelectSeatsViewModel(
     private val tripRepository: TripRepository,
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
