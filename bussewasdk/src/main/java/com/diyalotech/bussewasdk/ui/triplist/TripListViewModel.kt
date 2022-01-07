@@ -58,11 +58,10 @@ internal class TripListViewModel constructor(
         job?.cancel()
         _uiState.value = TripListState.Loading
         job = viewModelScope.launch {
-            val searchModel = dataStoreRepository.getSearchModel()
             val result = tripRepository.findTrips(
-                searchModel.source,
-                searchModel.destination,
-                "${searchModel.date.year}-${searchModel.date.monthNumber}-${searchModel.date.dayOfMonth}"
+                tripDataStore.source,
+                tripDataStore.destination,
+                "${tripDataStore.date.year}-${tripDataStore.date.monthNumber}-${tripDataStore.date.dayOfMonth}"
             )
 
             when (result) {

@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.diyalotech.bussewasdk.repo.model.BookingInfo
 import com.diyalotech.bussewasdk.repo.model.SelectedTripDetails
-import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import com.diyalotech.bussewasdk.utils.localDateNow
 import com.diyalotech.bussewasdk.utils.localTimeNow
 import kotlinx.datetime.*
@@ -47,15 +46,6 @@ internal class TripDataStore {
 
     fun saveDate(date: LocalDate) {
         this.date = date
-    }
-
-    fun getSearchTripModel(): SearchTripModel {
-        val temp = SearchTripModel(
-            source,
-            destination,
-            date
-        )
-        return temp
     }
 
     fun saveSelectedTrip(trip: SelectedTripDetails) {

@@ -12,10 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -34,7 +32,6 @@ import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -46,7 +43,7 @@ internal fun TripListView(
 ) {
 
     val uiState = tripListViewModel.uiState.collectAsState().value
-    val tripDataStore = tripListViewModel.tripDataStore.getSearchTripModel()
+    val tripDataStore = tripListViewModel.tripDataStore
     val insets = LocalWindowInsets.current
 
     Column(

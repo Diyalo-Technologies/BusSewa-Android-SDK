@@ -68,7 +68,7 @@ internal fun ExposedDropDown(
             isError = isError,
             interactionSource = interactionSource
         )
-        ErrorMessageTextField(isError, errorMessage)
+        ErrorMessageTextField(isError, errorMessage, Modifier.padding(start = 4.dp))
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },

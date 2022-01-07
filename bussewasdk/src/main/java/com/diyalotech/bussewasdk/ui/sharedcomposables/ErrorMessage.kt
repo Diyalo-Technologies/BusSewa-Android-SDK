@@ -1,6 +1,8 @@
 package com.diyalotech.bussewasdk.ui.sharedcomposables
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,13 +30,17 @@ internal fun ErrorMessage(text: String) {
 }
 
 @Composable
-internal fun ErrorMessageTextField(isError: Boolean, text: String) {
-    if (isError) {
+internal fun ErrorMessageTextField(isError: Boolean, text: String, modifier: Modifier = Modifier) {
+    AnimatedVisibility(
+        isError,
+        enter = expandVertically(expandFrom = Alignment.CenterVertically),
+        exit = shrinkVertically(shrinkTowards = Alignment.CenterVertically),
+    ) {
         Text(
             text = text,
             color = MaterialTheme.colors.error,
             style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(start = 4.dp)
+            modifier = modifier
         )
     }
 }

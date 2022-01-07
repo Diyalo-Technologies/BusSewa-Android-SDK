@@ -21,13 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.repo.LocationType
+import com.diyalotech.bussewasdk.repo.TripDataStore
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.ErrorModel
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.utils.localDateNow
 import kotlinx.datetime.LocalDate
 
 @Composable
 internal fun SearchTripView(
-    state: SearchTripModel,
+    sourceErrorModel: ErrorModel,
+    destinationErrorModel: ErrorModel,
+    tripDataStore: TripDataStore,
     onDateSelected: (LocalDate?) -> Unit,
     onSwap: () -> Unit,
     onLocationClicked: (LocationType) -> Unit,
@@ -48,7 +53,8 @@ internal fun SearchTripView(
         ) {
             Column {
                 LocationView(
-                    state.source,
+                    tripDataStore.source,
+                    sourceErrorModel,
                     "Source",
                     Icons.Outlined.MyLocation
                 ) {
@@ -56,7 +62,8 @@ internal fun SearchTripView(
                 }
                 Divider(Modifier.padding(vertical = 8.dp))
                 LocationView(
-                    state.destination,
+                    tripDataStore.destination,
+                    destinationErrorModel,
                     "Destination",
                     Icons.Outlined.Place
                 ) {
@@ -87,9 +94,9 @@ internal fun SearchTripView(
         ) {
             DateSelectionView(
                 label = stringResource(id = R.string.departure_date),
-                date = "${state.date.year}-${
-                    state.date.month.name.substring(0, 3)
-                }-${state.date.dayOfMonth}",
+                date = "${tripDataStore.date.year}-${
+                    tripDataStore.date.month.name.substring(0, 3)
+                }-${tripDataStore.date.dayOfMonth}",
                 onDateSelected
             )
         }
@@ -113,11 +120,7 @@ internal fun SearchTripView(
 fun DateChangePreview() {
     Surface {
         SearchTripView(
-            SearchTripModel(
-                "Ktm",
-                "Pokhara",
-                localDateNow()
-            ), {}, {}, {}) {
+            ErrorModel(), ErrorModel(), tripDataStore = TripDataStore(), {}, {}, {}) {
         }
     }
 }
@@ -128,11 +131,7 @@ fun DateChangePreview2() {
     BusSewaSDKTheme {
         Surface {
             SearchTripView(
-                SearchTripModel(
-                    "Ktm",
-                    "Pokhara",
-                    localDateNow()
-                ), {}, {}, {}) {
+                ErrorModel(), ErrorModel(),tripDataStore = TripDataStore(), {}, {}, {}) {
             }
         }
     }

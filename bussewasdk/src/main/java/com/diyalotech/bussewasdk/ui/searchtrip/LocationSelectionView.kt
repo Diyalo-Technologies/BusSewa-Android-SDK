@@ -19,11 +19,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.ErrorModel
+import com.diyalotech.bussewasdk.ui.bookingcustomer.models.TextFieldModel
+import com.diyalotech.bussewasdk.ui.sharedcomposables.ErrorMessageTextField
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 
 @Composable
 internal fun LocationView(
-    text: String = "",
+    value: String,
+    errorModel: ErrorModel,
     label: String,
     leadingIcon: ImageVector? = null,
     onClick: () -> Unit
@@ -61,10 +65,11 @@ internal fun LocationView(
                 fontSize = 12.sp
             )
             Text(
-                text = if (text.isEmpty()) "Kathmandu" else text,
+                text = if (value.isEmpty()) "Select location" else value,
                 modifier = Modifier,
-                color = if (text.isEmpty()) MaterialTheme.colors.onSurface.copy(0.5f) else MaterialTheme.colors.primary
+                color = if (value.isEmpty()) MaterialTheme.colors.onSurface.copy(0.5f) else MaterialTheme.colors.primary
             )
+            ErrorMessageTextField(errorModel.isError, errorModel.errorMessage)
         }
     }
 }
@@ -74,8 +79,7 @@ internal fun LocationView(
 fun LocationPreview() {
     BusSewaSDKTheme {
         Surface {
-            LocationView("", "Source", Icons.Outlined.Place) {
-            }
+            LocationView("test", ErrorModel(), "Source", Icons.Outlined.Place) {}
         }
     }
 }

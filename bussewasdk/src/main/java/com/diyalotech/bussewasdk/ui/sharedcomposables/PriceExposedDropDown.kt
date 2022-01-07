@@ -67,7 +67,7 @@ internal fun PriceExposedDropDown(
             },
             interactionSource = interactionSource
         )
-        ErrorMessageTextField(selectedItem.isError, selectedItem.errorMessage)
+        ErrorMessageTextField(selectedItem.isError, selectedItem.errorMessage, Modifier.padding(start = 4.dp))
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },

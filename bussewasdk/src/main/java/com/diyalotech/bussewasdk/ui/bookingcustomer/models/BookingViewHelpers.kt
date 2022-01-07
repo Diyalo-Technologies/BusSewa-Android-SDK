@@ -8,26 +8,44 @@ import com.diyalotech.bussewasdk.network.dto.MultiPrice
 import com.diyalotech.bussewasdk.network.dto.PassengerDetail
 
 @Stable
-internal open class TextFieldModel {
-    var value by mutableStateOf("")
+internal open class ErrorModel {
     var isError by mutableStateOf(false)
+        private set
     var errorMessage by mutableStateOf("")
+        private set
 
     fun clearError() {
         isError = false
         errorMessage = ""
     }
+
+    fun setError(msg: String) {
+        isError = true
+        errorMessage = msg
+    }
+}
+
+@Stable
+internal open class TextFieldModel : ErrorModel() {
+    var value by mutableStateOf("")
 }
 
 @Stable
 internal class PriceFieldModel {
     var value by mutableStateOf<MultiPrice?>(null)
     var isError by mutableStateOf(false)
+        private set
     var errorMessage by mutableStateOf("")
+        private set
 
     fun clearError() {
         isError = false
         errorMessage = ""
+    }
+
+    fun setError(msg: String) {
+        isError = true
+        errorMessage = msg
     }
 }
 

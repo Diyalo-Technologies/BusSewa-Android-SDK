@@ -235,16 +235,14 @@ internal class BookingConfirmViewModel(
         val trip = tripDataStore.selectedTripDetails ?: return false
 
         if (boardingPointState.value.isBlank()) {
-            this.boardingPointState.isError = true
-            this.boardingPointState.errorMessage = "Please select boarding point."
+            this.boardingPointState.setError("Please select boarding point.")
             return false
         }
 
         when (trip.inputTypeCode) {
             InputTypeCode.BASIC -> {
                 if (nameState.value.isBlank()) {
-                    nameState.isError = true
-                    nameState.errorMessage = "Required."
+                    this.nameState.setError("Required.")
                     return false
                 }
             }
@@ -253,21 +251,18 @@ internal class BookingConfirmViewModel(
 
         if (emailState.value.isNotBlank()) {
             if (!Validator.isEmailValid(emailState.value)) {
-                emailState.isError = true
-                emailState.errorMessage = "Invalid email."
+                this.emailState.setError("Invalid email.")
                 return false
             }
         }
 
         if (mobileState.value.isBlank()) {
-            mobileState.isError = true
-            mobileState.errorMessage = "Required."
+            this.mobileState.setError("Required.")
             return false
         }
 
         if (!Validator.isValidMobile(mobileState.value)) {
-            mobileState.isError = true
-            mobileState.errorMessage = "Invalid phone number."
+            this.mobileState.setError("Invalid phone number.")
             return false
         }
 
@@ -281,8 +276,7 @@ internal class BookingConfirmViewModel(
                     passengerDetailList.find { it.typeId == model.id }?.manditory ?: false
 
                 if (mandatory && model.value.isBlank()) {
-                    model.isError = true
-                    model.errorMessage = "Required."
+                    model.setError("Required.")
                     return false
                 }
             }
@@ -294,14 +288,12 @@ internal class BookingConfirmViewModel(
     private fun validateMultiPriceDetails(): Boolean {
         passengerPriceValues.values.forEach { value ->
             if (value.nameModel.value.isBlank()) {
-                value.nameModel.isError = true
-                value.nameModel.errorMessage = "Required."
+                value.nameModel.setError("Required.")
                 return false
             }
 
             if (value.priceFieldModel.value == null) {
-                value.priceFieldModel.isError = true
-                value.priceFieldModel.errorMessage = "Required."
+                value.priceFieldModel.setError("Required.")
                 return false
             }
         }

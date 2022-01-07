@@ -6,23 +6,40 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.diyalotech.bussewasdk.DaggerLibraryComponent
 import com.diyalotech.bussewasdk.ui.calendar.DatePicker
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripView
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripViewModel
 import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.R
+import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripEvent
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
 internal fun HomeView(
     searchTripViewModel: SearchTripViewModel,
-    onSearchClicked: () -> Unit,
+    onNavigateToTrip: () -> Unit,
     onLocationClicked: () -> Unit
 ) {
-    val searchTripModel = searchTripViewModel.searchTripState.getSearchTripModel()
     var showDatePicker: Boolean by remember {
         mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        searchTripViewModel.eventsFlow.collectLatest { value ->
+            when (value) {
+                is SearchTripEvent.Navigation -> {
+                    when (value.direction) {
+                        NavDirection.FORWARD -> {
+                            onNavigateToTrip()
+                        }
+                        NavDirection.BACKWARD -> TODO()
+                    }
+                }
+            }
+        }
     }
 
     Column(Modifier.fillMaxSize()) {
@@ -33,8 +50,12 @@ internal fun HomeView(
 
         }
         SearchTripView(
-            state = searchTripModel,
-            onSearchClicked = onSearchClicked,
+            sourceErrorModel = searchTripViewModel.sourceErrorModel,
+            destinationErrorModel = searchTripViewModel.destinationErrorModel,
+            tripDataStore = searchTripViewModel.searchTripState,
+            onSearchClicked = {
+                searchTripViewModel.onSearchClicked()
+            },
             onSwap = {
                 searchTripViewModel.swapLocation()
             },
@@ -66,7 +87,9 @@ internal fun HomeView(
 @Composable
 fun DefaultPreview() {
     BusSewaSDKTheme {
-        /*val searchTripViewModel = SearchTripViewModel()
-        Greeting(searchTripViewModel, {}) {}*/
+        val component = DaggerLibraryComponent.builder()
+            .build()
+        val searchTripViewModel = component.getSearchTripVM()
+        HomeView(searchTripViewModel, {}) {}
     }
 }

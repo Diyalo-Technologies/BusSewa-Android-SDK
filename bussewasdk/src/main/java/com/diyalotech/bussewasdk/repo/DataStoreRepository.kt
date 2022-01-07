@@ -1,7 +1,6 @@
 package com.diyalotech.bussewasdk.repo
 
 import com.diyalotech.bussewasdk.repo.model.SelectedTripDetails
-import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripModel
 import kotlinx.datetime.LocalDate
 
 internal class DataStoreRepository {
@@ -22,10 +21,6 @@ internal class DataStoreRepository {
 
     fun swapLocation() {
         tripDataStore.swapLocation()
-    }
-
-    fun getSearchModel(): SearchTripModel {
-        return tripDataStore.getSearchTripModel()
     }
 
     fun setSelectedTrip(trip: SelectedTripDetails) {

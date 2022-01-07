@@ -34,7 +34,7 @@ internal fun NavigationGraph(
 
             HomeView(
                 searchTripViewModel = searchTripViewModel,
-                onSearchClicked = navActions.navigateToTripList,
+                onNavigateToTrip = navActions.navigateToTripList,
                 onLocationClicked = navActions.navigateToSearchLocation
             )
         }

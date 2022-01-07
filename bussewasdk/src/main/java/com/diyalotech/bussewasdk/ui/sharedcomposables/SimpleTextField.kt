@@ -49,7 +49,11 @@ internal fun SimpleTextField(
             else
                 KeyboardOptions.Default,
         )
-        ErrorMessageTextField(textFieldModel.isError, textFieldModel.errorMessage)
+        ErrorMessageTextField(
+            textFieldModel.isError,
+            textFieldModel.errorMessage,
+            Modifier.padding(start = 4.dp)
+        )
     }
 }
 
@@ -78,7 +82,11 @@ internal fun DynamicTextField(
             else
                 KeyboardOptions.Default
         )
-        ErrorMessageTextField(dynamicTextFieldModel.isError, dynamicTextFieldModel.errorMessage)
+        ErrorMessageTextField(
+            dynamicTextFieldModel.isError,
+            dynamicTextFieldModel.errorMessage,
+            Modifier.padding(start = 4.dp)
+        )
     }
 
 }
