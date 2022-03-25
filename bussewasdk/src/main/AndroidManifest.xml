@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.diyalotech.bussewasdk">
+
+    <application>
+        <activity
+            android:name=".BusSewaSDKActivity"
+            android:exported="true"
+            android:label="@string/title_activity_bus_sewa_sdkactivity"
+            android:theme="@style/Theme.BusSewaSDK.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.LaunchSDK" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
