@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.BusSewaSDK.NoActionBar">
+    <style name="Theme.BusSewaSDK.NoActionBar" parent="Theme.MaterialComponents.DayNight">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

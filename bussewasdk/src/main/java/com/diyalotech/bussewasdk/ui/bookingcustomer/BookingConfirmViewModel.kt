@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.HashMap
 
 internal sealed class BookingConfirmEvent {
     class Error(val msg: String) : BookingConfirmEvent()
@@ -343,12 +345,10 @@ internal class BookingConfirmViewModel(
                     propertiesForResponse["contactInfo"] = mobileNumber
                     passengerDetailValues.onEachIndexed { index, entry ->
                         propertiesForResponse["seat_$index"] = entry.key
-                        entry.value.forEach { field ->
-                            val fieldName =
-                                passengerDetailList.find { it.typeId == field.id }?.detailName
-                                    ?: "unknown"
-                            propertiesForResponse["${fieldName}_${index}"] = field.value
-                        }
+                        propertiesForResponse["passengerDetails_$index"] =
+                            entry.value.joinToString(separator = ", ") {
+                                it.value.trim()
+                            }
                     }
                 } else {
                     return
@@ -403,13 +403,10 @@ internal class BookingConfirmViewModel(
                             entry.value.priceFieldModel.value?.passengerType
                     }
                     passengerDetailValues.onEachIndexed { index, entry ->
-                        propertiesForResponse["seat_$index"] = entry.key
-                        entry.value.forEach { field ->
-                            val fieldName =
-                                passengerDetailList.find { it.typeId == field.id }?.detailName
-                                    ?: "unknown"
-                            propertiesForResponse["${fieldName}_${index}"] = field.value
-                        }
+                        propertiesForResponse["passengerDetails_$index"] =
+                            entry.value.joinToString(separator = ", ") {
+                                it.value.trim()
+                            }
                     }
                 } else {
                     return

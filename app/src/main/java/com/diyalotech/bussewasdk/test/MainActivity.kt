@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.diyalotech.bussewasdk.BusSewaSDKActivity
 import com.diyalotech.bussewasdk.sdkbuilders.*
 import com.diyalotech.bussewasdk.test.ui.theme.BusSewaSDKTheme
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
 
@@ -54,9 +55,12 @@ class MainActivity : ComponentActivity() {
             val data =
                 (activityResult.data?.getSerializableExtra(BUS_SDK_RESPONSE) as HashMap<String, Any>?)
 
-            println("RESULT_MAP: $data")
 
-            println(data?.get(BUS_SDK_REQ_ID))
+            println("RESULT_MAP: $data")
+            val jsonString = Gson().toJson(data)
+            println(jsonString)
+
+            /*println(data?.get(BUS_SDK_REQ_ID))
             println(data?.get(BUS_SDK_AMOUNT))
 
             val props = (data?.get(BUS_SDK_PROPERTIES) as HashMap<String, String>?)
@@ -66,7 +70,7 @@ class MainActivity : ComponentActivity() {
             //iterate on properties
             props?.forEach { map ->
                 println("${map.key} - ${map.value}")
-            }
+            }*/
         }
     }
 }
