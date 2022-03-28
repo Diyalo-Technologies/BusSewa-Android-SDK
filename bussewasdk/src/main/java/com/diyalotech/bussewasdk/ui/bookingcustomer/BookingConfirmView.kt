@@ -1,5 +1,7 @@
 package com.diyalotech.bussewasdk.ui.bookingcustomer
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -9,11 +11,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.diyalotech.bussewasdk.R
+import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_RESPONSE
 import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.BookingDetailsState
 import com.diyalotech.bussewasdk.ui.seatlayout.SelectedSeatsBottomBar
@@ -35,6 +39,7 @@ internal fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPresse
     var alertDialogVisibility = remember { false }
     val alertMessage = remember { mutableStateOf("message") }
     val scrollState = rememberScrollState()
+    val activity = (LocalContext.current as? Activity)
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventsFlow.collectLatest { value ->
@@ -51,6 +56,12 @@ internal fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPresse
                             onBackPressed()
                         }
                     }
+                }
+                is BookingConfirmEvent.Success -> {
+                    val resultIntent = Intent()
+                    resultIntent.putExtra(BUS_SDK_RESPONSE, value.responseMap)
+                    activity?.setResult(Activity.RESULT_OK, resultIntent)
+                    activity?.finish()
                 }
             }
         }

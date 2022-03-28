@@ -37,7 +37,7 @@ class BusSewaSDKActivity : AppCompatActivity() {
             val data = Intent()
             val message = "No client info provided..."
             data.putExtra(BUS_SDK_MESSAGE, message)
-            setResult(RESULT_OK, data)
+            setResult(RESULT_CANCELED, data)
             finish()
         }
         return client

@@ -1,5 +1,8 @@
 package com.diyalotech.bussewasdk.ui
 
+import android.app.Activity
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -7,6 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.diyalotech.bussewasdk.LibraryComponent
+import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_MESSAGE
+import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_RESPONSE
 import com.diyalotech.bussewasdk.ui.bookingcustomer.BookingConfirmView
 import com.diyalotech.bussewasdk.ui.bookingcustomer.BookingConfirmViewModel
 import com.diyalotech.bussewasdk.ui.di.daggerViewModel
@@ -33,11 +38,18 @@ internal fun NavigationGraph(
                 component.getSearchTripVM()
             }
 
+            val activity = (LocalContext.current as Activity?)
+
             HomeView(
                 searchTripViewModel = searchTripViewModel,
                 onNavigateToTrip = navActions.navigateToTripList,
                 onLocationClicked = navActions.navigateToSearchLocation
-            )
+            ) {
+                val data = Intent()
+                data.putExtra(BUS_SDK_MESSAGE, "User cancelled.")
+                activity?.setResult(AppCompatActivity.RESULT_CANCELED, data)
+                activity?.finish()
+            }
         }
 
         composable(NavDestinations.SEARCH_LOCATION_ROUTE) {

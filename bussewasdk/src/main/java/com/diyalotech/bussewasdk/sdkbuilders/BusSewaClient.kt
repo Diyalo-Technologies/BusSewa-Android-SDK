@@ -6,8 +6,17 @@ import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.ui.theme.createDefaultTheme
 import kotlinx.parcelize.Parcelize
 
+//keys for activity intent/results
 const val BUS_SDK_CLIENT_INFO = "bus_sdk_client_info"
 const val BUS_SDK_MESSAGE = "bus_sdk_message"
+const val BUS_SDK_RESPONSE = "bus_sdk_result"
+
+//known keys for required data
+const val BUS_SDK_AMOUNT = "amount"
+const val BUS_SDK_REQ_ID = "requestId"
+const val BUS_SDK_PROPERTIES = "properties"
+const val BUS_SDK_TRIP_ID = "tripId"
+const val BUS_SDK_TICKET = "ticketSerialNo"
 
 @Parcelize
 data class BusSewaClient(

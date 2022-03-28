@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.diyalotech.bussewasdk.network.dto.*
 import com.diyalotech.bussewasdk.repo.BookingRepository
 import com.diyalotech.bussewasdk.repo.DataStoreRepository
+import com.diyalotech.bussewasdk.sdkbuilders.*
 import com.diyalotech.bussewasdk.ui.NavDirection
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.*
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PassengerPriceValues
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 internal sealed class BookingConfirmEvent {
     class Error(val msg: String) : BookingConfirmEvent()
     class Navigation(val direction: NavDirection) : BookingConfirmEvent()
+    class Success(val responseMap: HashMap<String, Any>) : BookingConfirmEvent()
 }
 
 internal class BookingConfirmViewModel(
@@ -305,18 +307,28 @@ internal class BookingConfirmViewModel(
     * validate all fields
     * */
     fun confirmBooking() {
+
+        _bookingUiState.value = BookingState.Loading
         val trip = tripDataStore.selectedTripDetails ?: return
         val bookingInfo = tripDataStore.bookingInfo
         val mobileNumber = mobileState.value
         val boardingPoint = boardingPointState.value
-        val name = if (nameState.value.isBlank()) null else nameState.value
-        val email = if (emailState.value.isBlank()) null else emailState.value
+        val name = nameState.value.ifBlank { null }
+        val email = emailState.value.ifBlank { null }
         var passengerDynamicValues: List<PassengerTypeDetail>? = null
         var passengerMultiPriceValues: List<PassengerPriceDetail>? = null
 
+        val propertiesForResponse = mutableMapOf<String, Any?>()
+        propertiesForResponse[BUS_SDK_TICKET] = tripDataStore.bookingInfo.ticketSrlNo
+        propertiesForResponse[BUS_SDK_TRIP_ID] = tripDataStore.selectedTripDetails?.id
+
         when (trip.inputTypeCode) {
             InputTypeCode.BASIC -> {
-                if(!validateBasicDetails()) return
+                propertiesForResponse["name"] = name
+                propertiesForResponse["email"] = email
+                propertiesForResponse["boardingPoint"] = boardingPoint
+                propertiesForResponse["contactInfo"] = mobileNumber
+                if (!validateBasicDetails()) return
             }
             InputTypeCode.DYNAMIC -> {
                 if (validateDynamicDetails() && validateBasicDetails()) {
@@ -324,6 +336,19 @@ internal class BookingConfirmViewModel(
                         PassengerTypeDetail(
                             map.key,
                             map.value.map { PassengerDetailValues(it.id, it.value) })
+                    }
+
+                    propertiesForResponse["email"] = email
+                    propertiesForResponse["boardingPoint"] = boardingPoint
+                    propertiesForResponse["contactInfo"] = mobileNumber
+                    passengerDetailValues.onEachIndexed { index, entry ->
+                        propertiesForResponse["seat_$index"] = entry.key
+                        entry.value.forEach { field ->
+                            val fieldName =
+                                passengerDetailList.find { it.typeId == field.id }?.detailName
+                                    ?: "unknown"
+                            propertiesForResponse["${fieldName}_${index}"] = field.value
+                        }
                     }
                 } else {
                     return
@@ -337,6 +362,16 @@ internal class BookingConfirmViewModel(
                             map.value.nameModel.value,
                             map.key
                         )
+                    }
+
+                    propertiesForResponse["email"] = email
+                    propertiesForResponse["boardingPoint"] = boardingPoint
+                    propertiesForResponse["contactInfo"] = mobileNumber
+                    passengerPriceValues.onEachIndexed { index, entry ->
+                        propertiesForResponse["seat_$index"] = entry.key
+                        propertiesForResponse["name_$index"] = entry.value.nameModel.value
+                        propertiesForResponse["passengerType_$index"] =
+                            entry.value.priceFieldModel.value?.passengerType
                     }
                 } else {
                     return
@@ -355,6 +390,26 @@ internal class BookingConfirmViewModel(
                             map.value.nameModel.value,
                             map.key
                         )
+                    }
+
+                    propertiesForResponse["email"] = email
+                    propertiesForResponse["boardingPoint"] = boardingPoint
+                    propertiesForResponse["contactInfo"] = mobileNumber
+
+                    passengerPriceValues.onEachIndexed { index, entry ->
+                        propertiesForResponse["seat_$index"] = entry.key
+                        propertiesForResponse["name_$index"] = entry.value.nameModel.value
+                        propertiesForResponse["passengerType_$index"] =
+                            entry.value.priceFieldModel.value?.passengerType
+                    }
+                    passengerDetailValues.onEachIndexed { index, entry ->
+                        propertiesForResponse["seat_$index"] = entry.key
+                        entry.value.forEach { field ->
+                            val fieldName =
+                                passengerDetailList.find { it.typeId == field.id }?.detailName
+                                    ?: "unknown"
+                            propertiesForResponse["${fieldName}_${index}"] = field.value
+                        }
                     }
                 } else {
                     return
@@ -376,10 +431,24 @@ internal class BookingConfirmViewModel(
 
             when (result) {
                 is ApiResult.Error -> {
-                    println("Result: failed ${result.error}")
+                    //handle error case
+                    _bookingUiState.value = BookingState.Init
+                    eventsChannel.send(BookingConfirmEvent.Error("Network error."))
                 }
                 is ApiResult.Success -> {
-                    println("Result: Success")
+                    if (result.data.status == 1) {
+                        val responseMap = HashMap<String, Any>()
+                        responseMap[BUS_SDK_REQ_ID] = tripDataStore.bookingInfo.ticketSrlNo
+                        responseMap[BUS_SDK_AMOUNT] = ticketPrice
+                        responseMap[BUS_SDK_PROPERTIES] = propertiesForResponse
+
+                        eventsChannel.send(
+                            BookingConfirmEvent.Success(responseMap)
+                        )
+                    } else {
+                        _bookingUiState.value = BookingState.Init
+                        eventsChannel.send(BookingConfirmEvent.Error("Server error."))
+                    }
                 }
             }
         }
