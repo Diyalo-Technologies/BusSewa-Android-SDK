@@ -74,6 +74,7 @@ internal fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPresse
     Column {
         TopAppBar(
             title = stringResource(id = R.string.booking_confirmation),
+            subtitle = "Expires in: ${viewModel.remainingTime}",
             showBack = true,
             backAction = {
                 viewModel.cancelQueue()
@@ -85,6 +86,7 @@ internal fun BookingConfirmView(viewModel: BookingConfirmViewModel, onBackPresse
                 .weight(1f)
                 .verticalScroll(scrollState)
                 .fillMaxWidth()
+                .padding(top = 16.dp)
         ) {
             when (uiState) {
                 is BookingDetailsState.Loading -> {

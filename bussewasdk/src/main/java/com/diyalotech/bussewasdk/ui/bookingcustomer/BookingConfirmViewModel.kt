@@ -1,5 +1,8 @@
 package com.diyalotech.bussewasdk.ui.bookingcustomer
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diyalotech.bussewasdk.network.dto.*
@@ -11,12 +14,13 @@ import com.diyalotech.bussewasdk.ui.bookingcustomer.models.*
 import com.diyalotech.bussewasdk.ui.bookingcustomer.models.PassengerPriceValues
 import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import com.diyalotech.bussewasdk.utils.Validator
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -44,6 +48,9 @@ internal class BookingConfirmViewModel(
     private val _bookingUiState = MutableStateFlow<BookingState>(BookingState.Init)
     val bookingUiState: StateFlow<BookingState> = _bookingUiState
 
+    var remainingTime by mutableStateOf("00:00")
+        private set
+
     //for basic details
     var nameState = TextFieldModel()
     var emailState = TextFieldModel()
@@ -59,8 +66,17 @@ internal class BookingConfirmViewModel(
     private val eventsChannel = Channel<BookingConfirmEvent>()
     val eventsFlow: Flow<BookingConfirmEvent> = eventsChannel.receiveAsFlow()
 
+    private var countDownJob: Job? = null
+
     init {
         fetchInputConfig()
+
+        countDownJob = viewModelScope.launch {
+            while (true) {
+                remainingTime = tripDataStore.bookingInfo.remainingCountDown()
+                delay(1000)
+            }
+        }
     }
 
     private fun fetchInputConfig() {
@@ -222,14 +238,16 @@ internal class BookingConfirmViewModel(
     }
 
     fun cancelQueue() {
+        println("Cancelling.................................")
         val trip = tripDataStore.selectedTripDetails ?: return
         val bookingInfo = tripDataStore.bookingInfo
         viewModelScope.launch {
-            val result = bookingRepo.cancelQueue(trip.id, bookingInfo.ticketSrlNo)
-            when (result) {
-                is ApiResult.Error -> TODO()
+            when (bookingRepo.cancelQueue(trip.id, bookingInfo.ticketSrlNo)) {
+                is ApiResult.Error -> {
+                }
                 is ApiResult.Success -> {
                     eventsChannel.send(BookingConfirmEvent.Navigation(NavDirection.BACKWARD))
+                    countDownJob?.cancel()
                 }
             }
         }
@@ -323,6 +341,7 @@ internal class BookingConfirmViewModel(
         val propertiesForResponse = mutableMapOf<String, Any?>()
         propertiesForResponse[BUS_SDK_TICKET] = tripDataStore.bookingInfo.ticketSrlNo
         propertiesForResponse[BUS_SDK_TRIP_ID] = tripDataStore.selectedTripDetails?.id
+        propertiesForResponse[BUS_SDK_SERVICE_CODE] = tripDataStore.selectedTripDetails?.serviceCode
 
         when (trip.inputTypeCode) {
             InputTypeCode.BASIC -> {

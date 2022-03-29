@@ -16,11 +16,13 @@ const val BUS_SDK_AMOUNT = "amount"
 const val BUS_SDK_REQ_ID = "requestId"
 const val BUS_SDK_PROPERTIES = "properties"
 const val BUS_SDK_TRIP_ID = "tripId"
+const val BUS_SDK_SERVICE_CODE = "serviceCode"
 const val BUS_SDK_TICKET = "ticketSerialNo"
 
 @Parcelize
 data class BusSewaClient(
-    val clientId: String,
+    val user: String,
+    val password: String,
     val busTheme: BusTheme = createDefaultTheme()
 ) : Parcelable
 

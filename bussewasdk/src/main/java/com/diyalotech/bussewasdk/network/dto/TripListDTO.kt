@@ -13,6 +13,7 @@ internal data class TripListDTO(
 internal data class TripDTO(
     val id: String,
     val inputTypeCode: Int,
+    val serviceCode: String?,
     val amenities: List<String>,
     val availableSeat: Int,
     val busNo: String,
@@ -71,6 +72,7 @@ internal fun TripListDTO.getTripList(): List<Trip> {
             it.availableSeat,
             it.inputTypeCode,
             (it.availableSeat / it.totalSeat) * 100f,
+            it.serviceCode,
             it.lockStatus
         )
     } ?: emptyList()
@@ -87,6 +89,7 @@ internal fun TripDTO.getTrip(): Trip {
         availableSeat,
         inputTypeCode,
         (availableSeat / totalSeat) * 100f,
+        serviceCode,
         lockStatus
     )
 }

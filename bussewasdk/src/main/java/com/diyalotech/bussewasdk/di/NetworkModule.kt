@@ -2,9 +2,11 @@ package com.diyalotech.bussewasdk.di
 
 import com.diyalotech.bussewasdk.BASE_URL
 import com.diyalotech.bussewasdk.network.retrofit.ApiService
+import com.diyalotech.bussewasdk.network.retrofit.AuthenticationInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
+import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,19 +20,13 @@ internal class NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(
-        // Potential dependencies of this type
+        authenticationInterceptor: AuthenticationInterceptor
     ): Retrofit {
         val gson = GsonBuilder().setLenient().create()
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder()
-            .addInterceptor {
-                val request: Request = it.request().newBuilder()
-                    .addHeader("Authorization", "Basic bW9iaWxlQDEyMzptb2JpbGVAMTIz")
-                    .addHeader("user", "mobile")
-                    .build()
-                it.proceed(request)
-            }
+            .addInterceptor(authenticationInterceptor)
             .addInterceptor(interceptor)
             .build()
 

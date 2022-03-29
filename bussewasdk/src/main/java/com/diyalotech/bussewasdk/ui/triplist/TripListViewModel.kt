@@ -24,6 +24,7 @@ internal data class Trip(
     val availableSeat: Int,
     val inputTypeCode: Int,
     val availablePercent: Float,
+    val serviceCode: String?,
     val locked: Boolean,
 )
 
@@ -90,7 +91,8 @@ internal class TripListViewModel constructor(
             id = trip.id,
             inputTypeCode = InputTypeCode.getType(trip.inputTypeCode),
             operatorName = trip.operatorName,
-            ticketPrice = trip.ticketPrice
+            ticketPrice = trip.ticketPrice,
+            serviceCode = trip.serviceCode
         )
         dataStoreRepository.setSelectedTrip(selectedTripDetails)
     }
