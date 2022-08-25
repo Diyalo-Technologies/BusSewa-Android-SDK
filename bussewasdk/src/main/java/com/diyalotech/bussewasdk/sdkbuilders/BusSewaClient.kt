@@ -13,7 +13,8 @@ const val BUS_SDK_MESSAGE = "bus_sdk_message"
 data class BusSewaClient(
     val clientId: String,
     val clientSecret: String,
-    val busTheme: BusTheme = createDefaultTheme()
+    val busTheme: BusTheme = createDefaultTheme(),
+    val environment: BusSewaSdkEnv = BusSewaSdkEnv.TEST
 ) : Parcelable
 
 /**
@@ -39,6 +40,13 @@ enum class BusThemeDarkLight: Parcelable {
     LIGHT,
     DARK,
     DEFAULT
+}
+
+
+@Parcelize
+enum class BusSewaSdkEnv : Parcelable {
+    TEST,
+    PROD
 }
 
 

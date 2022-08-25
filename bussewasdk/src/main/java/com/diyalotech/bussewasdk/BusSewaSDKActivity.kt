@@ -10,6 +10,7 @@ import com.diyalotech.bussewasdk.network.retrofit.AuthenticationInterceptor
 import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_CLIENT_INFO
 import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_MESSAGE
 import com.diyalotech.bussewasdk.sdkbuilders.BusSewaClient
+import com.diyalotech.bussewasdk.sdkbuilders.BusSewaSdkEnv
 import com.diyalotech.bussewasdk.ui.BusSewaSDKApp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import okhttp3.Credentials
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class BusSewaSDKActivity : AppCompatActivity() {
 
     private lateinit var component: LibraryComponent
-    @Inject lateinit var authenticationInterceptor: AuthenticationInterceptor
+    @Inject
+    internal lateinit var authenticationInterceptor: AuthenticationInterceptor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         component = DaggerLibraryComponent.builder()
@@ -30,9 +32,11 @@ class BusSewaSDKActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val client = getClient()!!
 
-        val token = Credentials.basic(client.user, client.password)
-        authenticationInterceptor.setToken(token)
-
+        val token = Credentials.basic(client.clientId, client.clientSecret)
+        authenticationInterceptor.setToken(token, applicationContext.packageName)
+        authenticationInterceptor.setHost(
+            if(client.environment== BusSewaSdkEnv.PROD) LIVE_URL else null
+        )
         setContent {
             BusSewaSDKTheme(client.busTheme) {
                 BusSewaSDKApp(component)
