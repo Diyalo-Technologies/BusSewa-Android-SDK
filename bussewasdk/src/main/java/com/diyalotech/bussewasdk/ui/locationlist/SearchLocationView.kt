@@ -3,12 +3,13 @@ package com.diyalotech.bussewasdk.ui.locationlist
 import android.content.res.Configuration
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,12 +24,12 @@ internal fun SearchLocationView(
     onBackPressed: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState().value
-    val searchString = viewModel.searchString.collectAsState().value
 
     Column {
         Card(elevation = 4.dp, shape = RectangleShape) {
             SearchBarView(
-                text = searchString,
+                text = viewModel.searchString,
+                requestFocus = true,
                 onValueChanged = { viewModel.onSearchChanged(it) },
                 onBackPressed = onBackPressed
             )
@@ -40,7 +41,9 @@ internal fun SearchLocationView(
                     LoadingView()
                 }
                 is SearchLocationState.Success -> {
-                    LazyColumn {
+                    LazyColumn(
+                        contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                    ) {
                         items(it.locationList) {
                             ListItem(Modifier.clickable {
                                 viewModel.saveSelectedLocation(it)
@@ -48,6 +51,27 @@ internal fun SearchLocationView(
                             }) {
                                 Text(text = it)
                             }
+                        }
+                    }
+                }
+                is SearchLocationState.Error -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = it.msg,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 32.dp)
+                        )
+                        OutlinedButton(
+                            onClick = {
+                                viewModel.fetchLocationList()
+                            },
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        ) {
+                            Text(text = "Reload")
                         }
                     }
                 }

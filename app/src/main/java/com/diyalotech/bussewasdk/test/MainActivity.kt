@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
     fun launch() {
         val intent = Intent(this, BusSewaSDKActivity::class.java)
-        val client = BusSewaClient(clientId = "")
+        val client = BusSewaClient(clientId = "", clientSecret = "")
         intent.putExtra(BUS_SDK_CLIENT_INFO, client)
         startActivity(intent)
     }

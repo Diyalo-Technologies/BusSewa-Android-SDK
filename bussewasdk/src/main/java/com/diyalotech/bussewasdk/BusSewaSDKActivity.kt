@@ -39,6 +39,7 @@ class BusSewaSDKActivity : AppCompatActivity() {
             data.putExtra(BUS_SDK_MESSAGE, message)
             setResult(RESULT_OK, data)
             finish()
+            return null
         }
         return client
     }

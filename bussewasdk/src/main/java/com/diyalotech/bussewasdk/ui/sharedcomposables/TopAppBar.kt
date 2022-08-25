@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
-import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 internal fun TopAppBar(

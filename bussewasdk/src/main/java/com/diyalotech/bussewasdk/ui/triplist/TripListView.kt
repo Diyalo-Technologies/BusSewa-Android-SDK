@@ -31,8 +31,6 @@ import com.diyalotech.bussewasdk.ui.sharedcomposables.LoadingView
 import com.diyalotech.bussewasdk.ui.sharedcomposables.TopAppBar
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
 import com.diyalotech.bussewasdk.ui.theme.Shapes
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -44,7 +42,6 @@ internal fun TripListView(
 
     val uiState = tripListViewModel.uiState.collectAsState().value
     val tripDataStore = tripListViewModel.tripDataStore
-    val insets = LocalWindowInsets.current
 
     Column(
         Modifier
@@ -71,7 +68,7 @@ internal fun TripListView(
                         modifier = Modifier.weight(1f),
                         contentPadding = PaddingValues(
                             top = 16.dp,
-                            bottom = insets.navigationBars.bottom.dp + 48.dp
+                            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 48.dp
                         )
                     ) {
                         items(it.tripList, { trip -> trip.id }) {

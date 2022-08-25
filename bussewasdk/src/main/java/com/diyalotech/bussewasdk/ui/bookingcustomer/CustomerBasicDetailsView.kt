@@ -3,6 +3,7 @@ package com.diyalotech.bussewasdk.ui.bookingcustomer
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,9 +27,7 @@ import com.diyalotech.bussewasdk.ui.sharedcomposables.ExposedDropDown
 import com.diyalotech.bussewasdk.ui.sharedcomposables.SimpleListItem
 import com.diyalotech.bussewasdk.ui.sharedcomposables.SimpleTextField
 import com.diyalotech.bussewasdk.ui.theme.BusSewaSDKTheme
-import com.google.accompanist.insets.navigationBarsPadding
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun CustomerBasicDetailsView(
     boardingPointModel: TextFieldModel,

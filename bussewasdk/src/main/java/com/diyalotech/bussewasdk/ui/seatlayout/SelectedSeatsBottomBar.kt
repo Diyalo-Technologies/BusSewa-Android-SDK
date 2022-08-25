@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import com.diyalotech.bussewasdk.R
 import com.diyalotech.bussewasdk.ui.sharedmodels.BookingState
 import com.diyalotech.bussewasdk.utils.toNPRString
-import com.google.accompanist.insets.navigationBarsPadding
 
 @Composable
 internal fun SelectedSeatsBottomBar(

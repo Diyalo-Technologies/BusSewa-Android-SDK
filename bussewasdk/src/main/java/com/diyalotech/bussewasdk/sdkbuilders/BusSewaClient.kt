@@ -12,6 +12,7 @@ const val BUS_SDK_MESSAGE = "bus_sdk_message"
 @Parcelize
 data class BusSewaClient(
     val clientId: String,
+    val clientSecret: String,
     val busTheme: BusTheme = createDefaultTheme()
 ) : Parcelable
 

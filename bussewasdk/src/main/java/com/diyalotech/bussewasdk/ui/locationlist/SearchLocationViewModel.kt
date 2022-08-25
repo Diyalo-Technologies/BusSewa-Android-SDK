@@ -1,5 +1,8 @@
 package com.diyalotech.bussewasdk.ui.locationlist
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diyalotech.bussewasdk.network.dto.ApiResult
@@ -12,6 +15,7 @@ import kotlinx.coroutines.launch
 internal sealed class SearchLocationState {
     object Loading : SearchLocationState()
     class Success(val locationList: List<String>) : SearchLocationState()
+    class Error(val msg: String) : SearchLocationState()
 }
 
 internal class SearchLocationViewModel(
@@ -26,14 +30,14 @@ internal class SearchLocationViewModel(
     //private data store
     private var locationList: List<String> = emptyList()
 
-    private var _searchString = MutableStateFlow("")
-    val searchString: StateFlow<String> = _searchString
+    var searchString by mutableStateOf("")
+        private set
 
     private var _uiState = MutableStateFlow<SearchLocationState>(SearchLocationState.Loading)
     val uiState: StateFlow<SearchLocationState> = _uiState
 
     fun onSearchChanged(searchString: String) {
-        _searchString.value = searchString
+        this.searchString = searchString
 
         if(locationList.isNotEmpty()) {
             val filteredList = locationList.filter {
@@ -48,11 +52,11 @@ internal class SearchLocationViewModel(
         fetchLocationList()
     }
 
-    private fun fetchLocationList() {
+    fun fetchLocationList() {
         viewModelScope.launch {
             when (val result = locationRepository.fetchLocationList()) {
                 is ApiResult.Error -> {
-                    println(result.error)
+                    _uiState.value = SearchLocationState.Error(result.error)
                 }
                 is ApiResult.Success -> {
                     locationList = result.data.routes
