@@ -85,7 +85,7 @@ internal class TripDataStore {
     }
 }
 
-enum class LocationType {
+internal enum class LocationType {
     SOURCE,
     DESTINATION
 }

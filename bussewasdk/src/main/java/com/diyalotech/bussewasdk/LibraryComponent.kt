@@ -3,6 +3,8 @@ package com.diyalotech.bussewasdk
 import android.content.Context
 import com.diyalotech.bussewasdk.di.NetworkModule
 import com.diyalotech.bussewasdk.di.RepositoryModule
+import com.diyalotech.bussewasdk.network.retrofit.ApiService
+import com.diyalotech.bussewasdk.network.retrofit.AuthenticationInterceptor
 import com.diyalotech.bussewasdk.ui.bookingcustomer.BookingConfirmViewModel
 import com.diyalotech.bussewasdk.ui.di.ViewModelModule
 import com.diyalotech.bussewasdk.ui.locationlist.SearchLocationViewModel
@@ -21,7 +23,7 @@ internal interface LibraryComponent {
         fun build(): LibraryComponent
     }
 
-    fun inject(context: Context)
+    fun inject(context: BusSewaSDKActivity)
 
     fun getSearchTripVM(): SearchTripViewModel
 

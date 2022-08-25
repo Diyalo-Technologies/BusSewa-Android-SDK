@@ -24,5 +24,5 @@ internal interface ApiService {
     suspend fun cancelQueue(@Body cancelQueueRequestDTO: CancelQueueRequestDTO): Any
 
     @POST("v2/booking/passengerInfo/")
-    suspend fun savePassengerInfo(@Body details: PassengerInfoDTO): Any
+    suspend fun savePassengerInfo(@Body details: PassengerInfoDTO): BookingConfirmResDTO
 }

@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import com.diyalotech.bussewasdk.network.dto.InputTypeCode
 import com.diyalotech.bussewasdk.utils.localTimeNow
 import com.diyalotech.bussewasdk.utils.toLocalInstant
-import kotlinx.datetime.LocalDateTime
+import kotlin.math.max
 import kotlin.time.ExperimentalTime
 
 internal data class SelectedTripDetails(
@@ -15,6 +15,7 @@ internal data class SelectedTripDetails(
     val operatorName: String,
     val ticketPrice: Double,
     val inputTypeCode: InputTypeCode,
+    val serviceCode: String?,
 )
 
 @Stable
@@ -23,8 +24,11 @@ internal class BookingInfo {
     var timeout by mutableStateOf(localTimeNow())
     var boardingPoints by mutableStateOf(emptyList<String>())
 
-    @OptIn(ExperimentalTime::class)
-    fun remainingCountDown(): Long {
-        return (timeout.toLocalInstant() - localTimeNow().toLocalInstant()).inWholeSeconds
+    fun remainingCountDown(): String {
+        val remaining =
+            max(0, (timeout.toLocalInstant() - localTimeNow().toLocalInstant()).inWholeSeconds)
+        val seconds = (remaining % 60).toInt()
+        val minutes = ((remaining / 60) % 60).toInt()
+        return "%02d:%02d".format(minutes, seconds)
     }
 }

@@ -21,7 +21,8 @@ import kotlinx.coroutines.flow.collectLatest
 internal fun HomeView(
     searchTripViewModel: SearchTripViewModel,
     onNavigateToTrip: () -> Unit,
-    onLocationClicked: () -> Unit
+    onLocationClicked: () -> Unit,
+    onExit: () -> Unit
 ) {
     var showDatePicker: Boolean by remember {
         mutableStateOf(false)
@@ -45,10 +46,9 @@ internal fun HomeView(
     Column(Modifier.fillMaxSize()) {
         TopAppBar(
             title = stringResource(R.string.find_trips_title),
-            showBack = true
-        ) {
-
-        }
+            showBack = true,
+            backAction = onExit
+        )
         SearchTripView(
             sourceErrorModel = searchTripViewModel.sourceErrorModel,
             destinationErrorModel = searchTripViewModel.destinationErrorModel,
@@ -90,6 +90,6 @@ fun DefaultPreview() {
         val component = DaggerLibraryComponent.builder()
             .build()
         val searchTripViewModel = component.getSearchTripVM()
-        HomeView(searchTripViewModel, {}) {}
+        HomeView(searchTripViewModel, {}, {}) {}
     }
 }
