@@ -8,6 +8,14 @@ import kotlinx.parcelize.Parcelize
 
 const val BUS_SDK_CLIENT_INFO = "bus_sdk_client_info"
 const val BUS_SDK_MESSAGE = "bus_sdk_message"
+const val BUS_SDK_RESPONSE = "bus_sdk_response"
+
+const val BUS_SDK_TICKET = "ticketSerialNo"
+const val BUS_SDK_TRIP_ID = "tripId"
+const val BUS_SDK_SERVICE_CODE = "serviceCode"
+const val BUS_SDK_REQ_ID = "requestId" //String
+const val BUS_SDK_AMOUNT = "amount" //Double
+const val BUS_SDK_PROPERTIES = "properties" //HashMap
 
 @Parcelize
 data class BusSewaClient(

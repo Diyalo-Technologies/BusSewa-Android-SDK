@@ -25,6 +25,7 @@ class BusSewaSDKActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         component = DaggerLibraryComponent.builder()
+            .activity(this)
             .build()
         component.inject(this)
 

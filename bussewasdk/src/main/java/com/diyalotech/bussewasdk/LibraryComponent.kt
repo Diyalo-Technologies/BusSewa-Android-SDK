@@ -11,6 +11,7 @@ import com.diyalotech.bussewasdk.ui.locationlist.SearchLocationViewModel
 import com.diyalotech.bussewasdk.ui.searchtrip.SearchTripViewModel
 import com.diyalotech.bussewasdk.ui.seatlayout.SelectSeatsViewModel
 import com.diyalotech.bussewasdk.ui.triplist.TripListViewModel
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
@@ -21,6 +22,9 @@ internal interface LibraryComponent {
     @Component.Builder
     interface Builder {
         fun build(): LibraryComponent
+
+        @BindsInstance
+        fun activity(trainSDKActivity: BusSewaSDKActivity): Builder
     }
 
     fun inject(context: BusSewaSDKActivity)
