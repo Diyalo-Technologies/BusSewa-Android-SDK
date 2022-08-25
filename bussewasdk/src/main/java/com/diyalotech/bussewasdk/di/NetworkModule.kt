@@ -3,6 +3,7 @@ package com.diyalotech.bussewasdk.di
 import com.diyalotech.bussewasdk.BASE_URL
 import com.diyalotech.bussewasdk.network.retrofit.ApiService
 import com.diyalotech.bussewasdk.network.retrofit.AuthenticationInterceptor
+import com.diyalotech.bussewasdk.network.retrofit.UnauthorizedInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -20,13 +21,15 @@ internal class NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(
-        authenticationInterceptor: AuthenticationInterceptor
+        authenticationInterceptor: AuthenticationInterceptor,
+        unauthorizedInterceptor: UnauthorizedInterceptor
     ): Retrofit {
         val gson = GsonBuilder().setLenient().create()
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder()
             .addInterceptor(authenticationInterceptor)
+            .addInterceptor(unauthorizedInterceptor)
             .addInterceptor(interceptor)
             .build()
 
