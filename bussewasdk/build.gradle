@@ -5,6 +5,16 @@ plugins {
     id "kotlin-kapt"
 }
 
+ext {
+    // Provide your own coordinates here
+    PUBLISH_GROUP_ID = 'com.diyalotech'
+    PUBLISH_VERSION = '0.0.1-alpha01'
+    PUBLISH_ARTIFACT_ID = 'bus-sewa-android-sdk'
+}
+
+apply from: "${rootProject.projectDir}/bussewasdk/scripts/publish-module.gradle"
+
+
 android {
     compileSdk 32
 
