@@ -1,4 +1,4 @@
-`Latest realease: <mark>0.0.1-alpha01</mark>`
+`Latest realease: 0.0.1-alpha01`
 
 ##### Step: 1 Add dependency
 
@@ -6,7 +6,7 @@ Add the following dependency in app gradle file.
 
 ```groovy
 dependencies {
-   implementation 'com.diyalotech:trainSdk:1.0.2'
+   implementation 'com.diyalotech:bus-sewa-android-sdk:0.0.1-alpha01'
 }
 ```
 
