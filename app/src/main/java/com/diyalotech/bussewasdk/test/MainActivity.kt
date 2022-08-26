@@ -11,9 +11,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.diyalotech.bussewasdk.BusSewaSDKActivity
-import com.diyalotech.bussewasdk.sdkbuilders.BUS_SDK_CLIENT_INFO
-import com.diyalotech.bussewasdk.sdkbuilders.BusSewaClient
+import com.diyalotech.bussewasdk.sdkbuilders.*
 import com.diyalotech.bussewasdk.test.ui.theme.BusSewaSDKTheme
+import com.diyalotech.bussewasdk.ui.theme.createDefaultTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,17 @@ class MainActivity : ComponentActivity() {
 
     fun launch() {
         val intent = Intent(this, BusSewaSDKActivity::class.java)
-        val client = BusSewaClient(clientId = "admin", clientSecret = "admin")
+        val client = BusSewaClient(
+            clientId = "admin",
+            clientSecret = "admin",
+            environment = BusSewaSdkEnv.TEST,
+            busTheme = BusTheme(
+                primary = R.color.purple_200,
+                primaryVariant = R.color.purple_200,
+                secondary = R.color.purple_200,
+                busThemeDarkLight = BusThemeDarkLight.LIGHT
+            )
+        )
         intent.putExtra(BUS_SDK_CLIENT_INFO, client)
         startActivity(intent)
     }
