@@ -4,14 +4,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('/home/diyalo/diyaloprojects/keystores/diyaloKeyStoreMetermarkV2')
-            storePassword 'D!y@l0@metermarkv2'
-            keyPassword 'D!y@l0@metermarkv2'
-            keyAlias 'key0'
-        }
-    }
     compileSdk 32
 
     defaultConfig {
